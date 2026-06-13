@@ -3,8 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Truth-AI</title>
-<script src="/frontend/support.js"></script>
+<script src="./support.js"></script>
 </head>
 <body>
 <x-dc>
@@ -25,45 +24,14 @@
     #ta-hero-grid, #ta-trust-grid, #ta-dash-grid { grid-template-columns: 1fr !important; }
     #ta-problem-grid, #ta-features-grid, #ta-workflow-grid, #ta-usecase-grid, #ta-footer-grid { grid-template-columns: repeat(2,1fr) !important; }
     #ta-workflow-line { display: none !important; }
-    .ta-shell { min-width: 0 !important; }
-    .ta-frame { overflow: hidden !important; }
+    .ta-shell { min-width: 880px; }
+    .ta-frame { overflow-x: auto !important; }
     h1 { font-size: 42px !important; }
-  }
-  @media (max-width: 760px) {
-    header > div { height: auto !important; min-height: 64px !important; padding: 12px 18px !important; }
-    header > div > div:last-child { gap: 8px !important; }
-    header > div > div:last-child a:first-child { display: none !important; }
-    #app > div:first-child { padding: 34px 18px 20px !important; }
-    #app > div:nth-child(2) { padding: 0 12px 44px !important; }
-    .ta-frame { border-radius: 12px !important; box-shadow: 0 1px 2px rgba(15,23,42,0.05) !important; }
-    .ta-shell { width: 100% !important; min-height: 0 !important; flex-direction: column !important; }
-    .ta-shell nav { width: 100% !important; min-height: 0 !important; height: auto !important; border-right: 0 !important; border-bottom: 1px solid #e6ecf4 !important; padding: 10px !important; flex-direction: row !important; gap: 8px !important; overflow-x: auto !important; overscroll-behavior-x: contain; }
-    .ta-shell nav > div:first-child,
-    .ta-shell nav > div:nth-child(2),
-    .ta-shell nav > div:last-child { display: none !important; }
-    .ta-shell nav > div:nth-child(3) { display: flex !important; flex-direction: row !important; gap: 6px !important; min-width: max-content !important; }
-    .ta-shell nav a { flex: 0 0 auto !important; width: auto !important; min-width: 0 !important; white-space: nowrap !important; padding: 8px 10px !important; box-shadow: none !important; }
-    .ta-shell > div { width: 100% !important; min-width: 0 !important; }
-    .ta-shell > div > div:first-child { padding: 14px 16px !important; flex-direction: column !important; align-items: flex-start !important; }
-    .ta-shell > div > div:first-child > div:last-child { width: 100% !important; flex-wrap: wrap !important; }
-    .ta-shell [style*="grid-template-columns:repeat(4"] { grid-template-columns: repeat(2,1fr) !important; }
-    .ta-shell [style*="grid-template-columns:1.55fr 1fr"],
-    .ta-shell [style*="grid-template-columns:1fr 1fr"],
-    .ta-shell [style*="grid-template-columns:1.2fr 0.8fr"],
-    .ta-shell [style*="grid-template-columns:1fr 290px"],
-    .ta-shell [style*="grid-template-columns:1fr 300px"] { grid-template-columns: 1fr !important; }
-    .ta-shell [style*="grid-template-columns:150px 100px 100px 1fr 96px 110px"] { min-width: 760px !important; }
-    .ta-shell [style*="overflow:hidden"] { max-width: 100% !important; }
-    .ta-shell button,
-    .ta-shell input { max-width: 100% !important; }
   }
   @media (max-width: 560px) {
     #ta-problem-grid, #ta-features-grid, #ta-workflow-grid, #ta-usecase-grid, #ta-footer-grid { grid-template-columns: 1fr !important; }
     h1 { font-size: 32px !important; }
     h2 { font-size: 28px !important; }
-    #app > div:first-child h2 { font-size: 26px !important; }
-    #app > div:first-child p { font-size: 14px !important; }
-    .ta-shell [style*="grid-template-columns:repeat(4"] { grid-template-columns: 1fr !important; }
   }
 </style>
 </helmet>
@@ -73,23 +41,23 @@
   <!-- ================= NAV ================= -->
   <header style="position:sticky;top:0;z-index:50;background:rgba(245,248,252,0.82);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid #e4eaf2;">
     <div style="max-width:1240px;margin:0 auto;padding:0 32px;height:68px;display:flex;align-items:center;justify-content:space-between;gap:24px;">
-      <a href="/" style="display:flex;align-items:center;gap:11px;">
+      <a href="#top" style="display:flex;align-items:center;gap:11px;">
         <span style="width:30px;height:30px;border-radius:9px;background:linear-gradient(135deg,#2563eb,#06b6d4);display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(37,99,235,0.35);">
           <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 5.5V11c0 5 3.4 8.4 8 10 4.6-1.6 8-5 8-10V5.5L12 2Z"/><path d="m9 11.5 2 2 4-4.5"/></svg>
         </span>
         <span style="font-weight:700;font-size:17px;letter-spacing:-0.01em;color:#0f172a;">Truth&#8209;AI</span>
       </a>
       <nav id="ta-nav-links" style="display:flex;align-items:center;gap:28px;font-size:14px;color:#475569;font-weight:500;white-space:nowrap;">
-        <a href="/problem" style="transition:color .15s;" style-hover="color:#0f172a;">Problem</a>
-        <a href="/workflow" style="transition:color .15s;" style-hover="color:#0f172a;">Workflow</a>
-        <a href="/features" style="transition:color .15s;" style-hover="color:#0f172a;">Features</a>
-        <a href="/integrity" style="transition:color .15s;" style-hover="color:#0f172a;">Integrity</a>
-        <a href="/use-cases" style="transition:color .15s;" style-hover="color:#0f172a;">Use cases</a>
-        <a href="/app/overview" style="transition:color .15s;" style-hover="color:#0f172a;">Product</a>
+        <a href="#problem" style="transition:color .15s;" style-hover="color:#0f172a;">Problem</a>
+        <a href="#workflow" style="transition:color .15s;" style-hover="color:#0f172a;">Workflow</a>
+        <a href="#features" style="transition:color .15s;" style-hover="color:#0f172a;">Features</a>
+        <a href="#trust" style="transition:color .15s;" style-hover="color:#0f172a;">Integrity</a>
+        <a href="#usecases" style="transition:color .15s;" style-hover="color:#0f172a;">Use cases</a>
+        <a href="#app" style="transition:color .15s;" style-hover="color:#0f172a;">Product</a>
       </nav>
       <div style="display:flex;align-items:center;gap:12px;">
-        <a href="/app/overview" style="font-size:14px;font-weight:500;color:#0f172a;padding:9px 14px;border:1px solid #d4dde8;border-radius:9px;background:#fff;transition:border-color .15s;white-space:nowrap;" style-hover="border-color:#2563eb;">View demo</a>
-        <a href="/waitlist" style="font-size:14px;font-weight:600;color:#fff;padding:10px 16px;border-radius:9px;background:#2563eb;box-shadow:0 1px 2px rgba(37,99,235,0.5),0 4px 14px rgba(37,99,235,0.22);transition:background .15s;" style-hover="background:#1d4ed8;">Join waitlist</a>
+        <a href="#app" style="font-size:14px;font-weight:500;color:#0f172a;padding:9px 14px;border:1px solid #d4dde8;border-radius:9px;background:#fff;transition:border-color .15s;white-space:nowrap;" style-hover="border-color:#2563eb;">View demo</a>
+        <a href="#waitlist" style="font-size:14px;font-weight:600;color:#fff;padding:10px 16px;border-radius:9px;background:#2563eb;box-shadow:0 1px 2px rgba(37,99,235,0.5),0 4px 14px rgba(37,99,235,0.22);transition:background .15s;" style-hover="background:#1d4ed8;">Join waitlist</a>
       </div>
     </div>
   </header>
@@ -108,9 +76,8 @@
         <h1 style="margin:22px 0 0;font-size:54px;line-height:1.04;letter-spacing:-0.025em;font-weight:700;color:#0b1220;text-wrap:balance;">Verifiable truth infrastructure for the AI era</h1>
         <p style="margin:22px 0 0;font-size:18px;line-height:1.62;color:#475569;max-width:556px;text-wrap:pretty;">Check what an LLM tells you against a verifiable source of truth. Truth&#8209;AI grounds every claim in trusted online sources and references, then produces auditable decision bundles with cryptographic integrity.</p>
         <div style="display:flex;gap:13px;margin-top:32px;flex-wrap:wrap;">
-          <a href="/app/chat" style="font-size:15px;font-weight:600;color:#fff;padding:13px 22px;border-radius:11px;background:#2563eb;box-shadow:0 1px 2px rgba(37,99,235,0.5),0 8px 22px rgba(37,99,235,0.24);transition:background .15s;" style-hover="background:#1d4ed8;">Open verified chat</a>
-          <a href="/waitlist" style="font-size:15px;font-weight:600;color:#fff;padding:13px 22px;border-radius:11px;background:#2563eb;box-shadow:0 1px 2px rgba(37,99,235,0.5),0 8px 22px rgba(37,99,235,0.24);transition:background .15s;" style-hover="background:#1d4ed8;">Join waitlist</a>
-          <a href="/app/overview" style="font-size:15px;font-weight:600;color:#0f172a;padding:13px 22px;border-radius:11px;background:#fff;border:1px solid #d4dde8;transition:border-color .15s;display:inline-flex;align-items:center;gap:8px;" style-hover="border-color:#2563eb;">View demo
+          <a href="#waitlist" style="font-size:15px;font-weight:600;color:#fff;padding:13px 22px;border-radius:11px;background:#2563eb;box-shadow:0 1px 2px rgba(37,99,235,0.5),0 8px 22px rgba(37,99,235,0.24);transition:background .15s;" style-hover="background:#1d4ed8;">Join waitlist</a>
+          <a href="#app" style="font-size:15px;font-weight:600;color:#0f172a;padding:13px 22px;border-radius:11px;background:#fff;border:1px solid #d4dde8;transition:border-color .15s;display:inline-flex;align-items:center;gap:8px;" style-hover="border-color:#2563eb;">View demo
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
           </a>
         </div>
@@ -1087,123 +1054,6 @@
         </div>
       </div>
 
-      <!-- ===== SCREEN 08: VERIFIED CHAT ===== -->
-      <div data-screen-label="App · Verified Chat">
-        <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;">
-          <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:#64748b;background:#fff;border:1px solid #dde5ef;border-radius:7px;padding:4px 10px;">08 &middot; Verified Chat</span>
-          <span style="height:1px;flex:1;background:#dde5ef;"></span>
-          <span style="font-size:12px;color:#94a3b8;">Chat interface &middot; model routed through kernel</span>
-        </div>
-        <div class="ta-frame" style="border:1px solid #dde5ef;border-radius:16px;overflow:hidden;box-shadow:0 1px 2px rgba(15,23,42,0.05),0 30px 60px -34px rgba(15,23,42,0.32);background:#fff;">
-          <div style="display:flex;align-items:center;gap:14px;padding:11px 16px;background:#f3f6fb;border-bottom:1px solid #e6ecf4;">
-            <div style="display:flex;gap:7px;"><span style="width:11px;height:11px;border-radius:50%;background:#e2554f;"></span><span style="width:11px;height:11px;border-radius:50%;background:#e8b13b;"></span><span style="width:11px;height:11px;border-radius:50%;background:#4caf63;"></span></div>
-            <div style="flex:1;max-width:380px;margin:0 auto;display:flex;align-items:center;gap:8px;background:#fff;border:1px solid #e0e7f0;border-radius:8px;padding:6px 12px;font-family:'IBM Plex Mono',monospace;font-size:12px;color:#64748b;">app.truthai.tech/chat</div>
-            <div style="width:54px;"></div>
-          </div>
-          <div class="ta-shell" style="display:flex;min-height:620px;">
-            <dc-import name="TASidebar" active="chat" hint-size="230px,100%"></dc-import>
-            <div style="flex:1;background:#f5f8fc;min-width:0;">
-              <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 24px;background:#fff;border-bottom:1px solid #e6ecf4;">
-                <div><h3 style="margin:0;font-size:19px;font-weight:700;color:#0f172a;letter-spacing:-0.01em;">Verified chat</h3><p style="margin:3px 0 0;font-size:12.5px;color:#94a3b8;">Prompt in &middot; model output &middot; kernel verification &middot; clean answer out</p></div>
-                <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
-                  <label style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:#94a3b8;">Model</label>
-                  <select style="font-family:'IBM Plex Sans',sans-serif;font-size:13px;color:#0f172a;background:#fff;border:1px solid #d8e0ec;border-radius:9px;padding:8px 11px;">
-                    <option>Gemini 2.0 Flash &middot; default</option>
-                    <option>Use my OpenAI key</option>
-                    <option>Use my Anthropic key</option>
-                    <option>Local Ollama model</option>
-                  </select>
-                </div>
-              </div>
-              <div style="display:grid;grid-template-columns:1.08fr 0.92fr;gap:16px;padding:22px 24px;">
-                <div style="display:flex;flex-direction:column;gap:14px;">
-                  <div style="background:#fff;border:1px solid #e6ecf4;border-radius:13px;padding:16px;">
-                    <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:#94a3b8;">Customer input</div>
-                    <textarea style="margin-top:10px;width:100%;min-height:190px;resize:vertical;border:1px solid #d8e0ec;border-radius:11px;background:#fbfdff;padding:13px 14px;font-family:'IBM Plex Sans',sans-serif;font-size:13.5px;line-height:1.55;color:#0f172a;" spellcheck="false">Draft a technical specification for a fire door installation in a UK commercial building. Include material, inspection and compliance requirements.</textarea>
-                    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;">
-                      <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#475569;background:#f8fafd;border:1px solid #eef2f7;border-radius:6px;padding:4px 8px;">Prompt</span>
-                      <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#475569;background:#f8fafd;border:1px solid #eef2f7;border-radius:6px;padding:4px 8px;">Technical specification</span>
-                      <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#475569;background:#f8fafd;border:1px solid #eef2f7;border-radius:6px;padding:4px 8px;">UK standards</span>
-                    </div>
-                  </div>
-                  <a href="/app/truth-output" style="display:inline-flex;align-items:center;justify-content:center;gap:8px;width:max-content;font-size:13px;font-weight:600;color:#fff;background:#2563eb;border-radius:9px;padding:10px 15px;box-shadow:0 1px 2px rgba(37,99,235,0.4);">Run through truth kernel</a>
-                </div>
-                <div style="display:flex;flex-direction:column;gap:14px;">
-                  <div style="background:#0f172a;border:1px solid #1e293b;border-radius:13px;padding:16px;color:#e2e8f0;">
-                    <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;"><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:#64748b;">Generation route</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#7dd3fc;">Gemini Flash</span></div>
-                    <div style="margin-top:14px;display:flex;flex-direction:column;gap:10px;">
-                      <div style="display:flex;gap:9px;"><span style="color:#38bdf8;">1</span><span style="font-size:13px;line-height:1.55;">Prompt is sent to selected model adapter.</span></div>
-                      <div style="display:flex;gap:9px;"><span style="color:#38bdf8;">2</span><span style="font-size:13px;line-height:1.55;">Draft output is decomposed into semantic claims.</span></div>
-                      <div style="display:flex;gap:9px;"><span style="color:#38bdf8;">3</span><span style="font-size:13px;line-height:1.55;">Truth kernel checks claims against standards, supplied files and ledger continuity.</span></div>
-                      <div style="display:flex;gap:9px;"><span style="color:#38bdf8;">4</span><span style="font-size:13px;line-height:1.55;">Unsupported wording is corrected, marked for review, or removed.</span></div>
-                    </div>
-                  </div>
-                  <div style="background:#fff;border:1px solid #e6ecf4;border-radius:13px;padding:16px;">
-                    <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:#94a3b8;">Truth sources</div>
-                    <div style="margin-top:11px;display:flex;flex-direction:column;gap:8px;">
-                      <div style="display:flex;justify-content:space-between;gap:12px;font-size:12.5px;"><span style="color:#475569;">Uploaded specification pack</span><span style="font-family:'IBM Plex Mono',monospace;color:#059669;">ready</span></div>
-                      <div style="display:flex;justify-content:space-between;gap:12px;font-size:12.5px;"><span style="color:#475569;">British Standards references</span><span style="font-family:'IBM Plex Mono',monospace;color:#059669;">indexed</span></div>
-                      <div style="display:flex;justify-content:space-between;gap:12px;font-size:12.5px;"><span style="color:#475569;">Continuity ledger</span><span style="font-family:'IBM Plex Mono',monospace;color:#059669;">verified</span></div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- ===== SCREEN 09: TRUTH OUTPUT ===== -->
-      <div data-screen-label="App · Clean Output">
-        <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;">
-          <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:#64748b;background:#fff;border:1px solid #dde5ef;border-radius:7px;padding:4px 10px;">09 &middot; Clean truthful output</span>
-          <span style="height:1px;flex:1;background:#dde5ef;"></span>
-          <span style="font-size:12px;color:#94a3b8;">Kernel-cleaned response &middot; auditable changes</span>
-        </div>
-        <div class="ta-frame" style="border:1px solid #dde5ef;border-radius:16px;overflow:hidden;box-shadow:0 1px 2px rgba(15,23,42,0.05),0 30px 60px -34px rgba(15,23,42,0.32);background:#fff;">
-          <div style="display:flex;align-items:center;gap:14px;padding:11px 16px;background:#f3f6fb;border-bottom:1px solid #e6ecf4;">
-            <div style="display:flex;gap:7px;"><span style="width:11px;height:11px;border-radius:50%;background:#e2554f;"></span><span style="width:11px;height:11px;border-radius:50%;background:#e8b13b;"></span><span style="width:11px;height:11px;border-radius:50%;background:#4caf63;"></span></div>
-            <div style="flex:1;max-width:380px;margin:0 auto;display:flex;align-items:center;gap:8px;background:#fff;border:1px solid #e0e7f0;border-radius:8px;padding:6px 12px;font-family:'IBM Plex Mono',monospace;font-size:12px;color:#64748b;">app.truthai.tech/truth-output</div>
-            <div style="width:54px;"></div>
-          </div>
-          <div class="ta-shell" style="display:flex;min-height:620px;">
-            <dc-import name="TASidebar" active="truth-output" hint-size="230px,100%"></dc-import>
-            <div style="flex:1;background:#f5f8fc;min-width:0;">
-              <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 24px;background:#fff;border-bottom:1px solid #e6ecf4;">
-                <div><h3 style="margin:0;font-size:19px;font-weight:700;color:#0f172a;letter-spacing:-0.01em;">Clean truthful version</h3><p style="margin:3px 0 0;font-size:12.5px;color:#94a3b8;">Draft output aligned to known truth sources and continuity ledger</p></div>
-                <span style="display:flex;align-items:center;gap:7px;font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;color:#047857;background:#ecfdf5;border:1px solid #c7ead7;border-radius:8px;padding:6px 10px;">Kernel verified</span>
-              </div>
-              <div style="display:grid;grid-template-columns:1.2fr 0.8fr;gap:16px;padding:22px 24px;">
-                <div style="background:#fff;border:1px solid #e6ecf4;border-radius:13px;overflow:hidden;">
-                  <div style="padding:14px 16px;border-bottom:1px solid #eef2f7;display:flex;justify-content:space-between;gap:12px;"><span style="font-size:14px;font-weight:600;color:#0f172a;">Cleaned technical response</span><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#059669;">truthful version</span></div>
-                  <div style="padding:18px 18px 20px;font-size:13.5px;line-height:1.68;color:#334155;">
-                    <p style="margin:0 0 12px;">The specification should state that the fire door set, frame, seals, ironmongery and installation method must be selected and installed as a tested system, with evidence retained for the declared fire-resistance performance.</p>
-                    <p style="margin:0 0 12px;">References to compliance must identify the applicable approved documents, British Standards or project-specific authority requirements. Where a named standard is not supplied in the evidence pack, the output marks the requirement for reviewer confirmation instead of asserting it as fact.</p>
-                    <p style="margin:0;">Inspection records should include product identification, installer details, installation date, retained certificates, photographic evidence and any deviations from the manufacturer installation instructions.</p>
-                  </div>
-                </div>
-                <div style="display:flex;flex-direction:column;gap:14px;">
-                  <div style="background:#fff;border:1px solid #e6ecf4;border-radius:13px;padding:16px;">
-                    <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:#94a3b8;">Kernel changes</div>
-                    <div style="margin-top:12px;display:flex;flex-direction:column;gap:10px;">
-                      <div style="font-size:12.5px;color:#475569;"><strong style="color:#0f172a;">3 unsupported claims</strong> changed to review-required wording.</div>
-                      <div style="font-size:12.5px;color:#475569;"><strong style="color:#0f172a;">2 vague duties</strong> replaced with auditable inspection records.</div>
-                      <div style="font-size:12.5px;color:#475569;"><strong style="color:#0f172a;">1 compliance assertion</strong> linked to evidence pack reference.</div>
-                    </div>
-                  </div>
-                  <div style="background:#0f172a;border:1px solid #1e293b;border-radius:13px;padding:16px;">
-                    <div style="display:flex;justify-content:space-between;gap:12px;"><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:#64748b;">Decision bundle</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#34d399;">appended</span></div>
-                    <div style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#7dd3fc;margin-top:10px;word-break:break-all;line-height:1.5;">truth-output: b7e1d0...a4c2</div>
-                    <div style="margin-top:12px;font-size:12px;line-height:1.5;color:#94a3b8;">The cleaned answer is stored with source hashes, model route, rule pack version and ledger head for replay.</div>
-                  </div>
-                  <a href="/app/chat" style="display:inline-flex;align-items:center;justify-content:center;width:max-content;font-size:13px;font-weight:600;color:#0f172a;background:#fff;border:1px solid #d8e0ec;border-radius:9px;padding:9px 13px;">Back to prompt</a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
       <!-- MORE-SCREENS -->
     </div>
   </section>
@@ -1213,7 +1063,7 @@
     <div style="max-width:1240px;margin:0 auto;padding:60px 32px 40px;">
       <div id="ta-footer-grid" style="display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:32px;">
         <div>
-          <a href="/" style="display:flex;align-items:center;gap:11px;">
+          <a href="#top" style="display:flex;align-items:center;gap:11px;">
             <span style="width:30px;height:30px;border-radius:9px;background:linear-gradient(135deg,#2563eb,#06b6d4);display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(37,99,235,0.35);"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 5.5V11c0 5 3.4 8.4 8 10 4.6-1.6 8-5 8-10V5.5L12 2Z"/><path d="m9 11.5 2 2 4-4.5"/></svg></span>
             <span style="font-weight:700;font-size:17px;letter-spacing:-0.01em;color:#0f172a;">Truth&#8209;AI</span>
           </a>
@@ -1223,27 +1073,27 @@
         <div>
           <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:#94a3b8;">Product</div>
           <div style="margin-top:14px;display:flex;flex-direction:column;gap:10px;font-size:14px;color:#475569;">
-            <a href="/features" style="transition:color .15s;" style-hover="color:#2563eb;">Features</a>
-            <a href="/workflow" style="transition:color .15s;" style-hover="color:#2563eb;">Workflow</a>
-            <a href="/app/overview" style="transition:color .15s;" style-hover="color:#2563eb;">Console</a>
-            <a href="/waitlist" style="transition:color .15s;" style-hover="color:#2563eb;">Waitlist</a>
+            <a href="#features" style="transition:color .15s;" style-hover="color:#2563eb;">Features</a>
+            <a href="#workflow" style="transition:color .15s;" style-hover="color:#2563eb;">Workflow</a>
+            <a href="#app" style="transition:color .15s;" style-hover="color:#2563eb;">Console</a>
+            <a href="#waitlist" style="transition:color .15s;" style-hover="color:#2563eb;">Waitlist</a>
           </div>
         </div>
         <div>
           <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:#94a3b8;">Resources</div>
           <div style="margin-top:14px;display:flex;flex-direction:column;gap:10px;font-size:14px;color:#475569;">
-            <a href="/integrity" style="transition:color .15s;" style-hover="color:#2563eb;">Docs</a>
-            <a href="/integrity" style="transition:color .15s;" style-hover="color:#2563eb;">GitHub</a>
-            <a href="/integrity" style="transition:color .15s;" style-hover="color:#2563eb;">Spec v0.1</a>
-            <a href="/integrity" style="transition:color .15s;" style-hover="color:#2563eb;">Changelog</a>
+            <a href="#trust" style="transition:color .15s;" style-hover="color:#2563eb;">Docs</a>
+            <a href="#trust" style="transition:color .15s;" style-hover="color:#2563eb;">GitHub</a>
+            <a href="#trust" style="transition:color .15s;" style-hover="color:#2563eb;">Spec v0.1</a>
+            <a href="#trust" style="transition:color .15s;" style-hover="color:#2563eb;">Changelog</a>
           </div>
         </div>
         <div>
           <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:#94a3b8;">Company</div>
           <div style="margin-top:14px;display:flex;flex-direction:column;gap:10px;font-size:14px;color:#475569;">
-            <a href="/waitlist" style="transition:color .15s;" style-hover="color:#2563eb;">Contact</a>
-            <a href="/integrity" style="transition:color .15s;" style-hover="color:#2563eb;">Privacy</a>
-            <a href="/integrity" style="transition:color .15s;" style-hover="color:#2563eb;">Terms</a>
+            <a href="#waitlist" style="transition:color .15s;" style-hover="color:#2563eb;">Contact</a>
+            <a href="#trust" style="transition:color .15s;" style-hover="color:#2563eb;">Privacy</a>
+            <a href="#trust" style="transition:color .15s;" style-hover="color:#2563eb;">Terms</a>
           </div>
         </div>
       </div>
@@ -1270,8 +1120,8 @@
 
   const routeToScreen = {
     overview: "overview",
-    chat: "verified chat",
-    "truth-output": "clean output",
+    chat: "assistant",
+    "truth-output": "verification result",
     assistant: "assistant",
     claims: "new claim",
     evidence: "evidence pack",
@@ -1282,12 +1132,12 @@
 
   const labels = {
     overview: "Overview",
-    chat: "Verified Chat",
-    "truth-output": "Truth Output",
+    chat: "Assistant",
+    "truth-output": "Verification Result",
     assistant: "Assistant",
-    claims: "New Claim",
-    evidence: "Evidence Pack",
-    verifications: "Verification Result",
+    claims: "Claims",
+    evidence: "Evidence",
+    verifications: "Verifications",
     rulepacks: "Rule Packs",
     ledger: "Ledger",
     reports: "Reports",
@@ -1296,8 +1146,7 @@
   };
 
   function normalisedPath() {
-    const path = location.pathname.replace(/\/$/, "") || "/";
-    return path;
+    return location.pathname.replace(/\/$/, "") || "/";
   }
 
   function routeKey() {
@@ -1314,11 +1163,6 @@
 
     Array.from(document.querySelectorAll("section[id]")).forEach((section) => {
       section.style.display = allowed.has(section.id) ? "" : "none";
-    });
-
-    Array.from(document.body.children).forEach((child) => {
-      if (child.tagName === "SCRIPT") return;
-      child.style.display = "";
     });
 
     const footer = document.querySelector("footer");
@@ -1385,28 +1229,9 @@
           <span style="height:1px;flex:1;background:#dde5ef;"></span>
         </div>
         <div class="ta-frame" style="border:1px solid #dde5ef;border-radius:16px;overflow:hidden;box-shadow:0 1px 2px rgba(15,23,42,0.05),0 30px 60px -34px rgba(15,23,42,0.32);background:#fff;">
-          <div style="display:flex;align-items:center;gap:14px;padding:11px 16px;background:#f3f6fb;border-bottom:1px solid #e6ecf4;">
-            <div style="display:flex;gap:7px;"><span style="width:11px;height:11px;border-radius:50%;background:#e2554f;"></span><span style="width:11px;height:11px;border-radius:50%;background:#e8b13b;"></span><span style="width:11px;height:11px;border-radius:50%;background:#4caf63;"></span></div>
-            <div style="flex:1;max-width:380px;margin:0 auto;display:flex;align-items:center;gap:8px;background:#fff;border:1px solid #e0e7f0;border-radius:8px;padding:6px 12px;font-family:'IBM Plex Mono',monospace;font-size:12px;color:#64748b;">app.truthai.tech/${key}</div>
-            <div style="width:54px;"></div>
-          </div>
-          <div class="ta-shell" style="display:flex;min-height:600px;">
-            <nav style="width:230px;flex-shrink:0;background:#fbfdff;border-right:1px solid #e6ecf4;padding:14px 12px 16px;display:flex;flex-direction:column;min-height:100%;">
-              <div style="display:flex;align-items:center;gap:10px;padding:6px 10px 16px;"><span style="width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,#2563eb,#06b6d4);"></span><span style="font-weight:700;font-size:15px;color:#0f172a;">Truth-AI</span></div>
-              ${Object.entries(labels).map(([slug, label]) => `<a href="/app/${slug}" style="display:flex;align-items:center;gap:11px;padding:9px 11px;border-radius:9px;font-size:13.5px;text-decoration:none;${slug === key ? "font-weight:600;color:#2563eb;background:#eaf2ff;box-shadow:inset 2px 0 0 #2563eb;" : "font-weight:500;color:#475569;background:transparent;"}">${label}</a>`).join("")}
-            </nav>
-            <div style="flex:1;background:#f5f8fc;min-width:0;">
-              <div style="padding:16px 24px;background:#fff;border-bottom:1px solid #e6ecf4;">
-                <h3 style="margin:0;font-size:19px;font-weight:700;color:#0f172a;letter-spacing:-0.01em;">${labels[key]}</h3>
-                <p style="margin:3px 0 0;font-size:12.5px;color:#94a3b8;">Workspace area</p>
-              </div>
-              <div style="padding:24px;">
-                <div style="background:#fff;border:1px solid #e6ecf4;border-radius:13px;padding:24px;">
-                  <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:#94a3b8;">Coming next</div>
-                  <p style="margin:10px 0 0;font-size:14px;line-height:1.6;color:#475569;max-width:560px;">This workspace area now has its own route and page shell. The production controls for ${labels[key].toLowerCase()} will be connected as the backend milestones land.</p>
-                </div>
-              </div>
-            </div>
+          <div style="padding:24px;background:#fff;">
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:#94a3b8;">Coming next</div>
+            <p style="margin:10px 0 0;font-size:14px;line-height:1.6;color:#475569;max-width:560px;">This workspace area is reserved in the route map and will be connected as the backend milestones land.</p>
           </div>
         </div>`;
     }

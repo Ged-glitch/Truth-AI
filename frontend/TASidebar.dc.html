@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<script src="/frontend/support.js"></script>
+<script src="./support.js"></script>
 </head>
 <body>
 <x-dc>
@@ -38,7 +38,7 @@
   </div>
 </nav>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:230,&quot;height&quot;:520},&quot;active&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;overview&quot;,&quot;chat&quot;,&quot;truth-output&quot;,&quot;assistant&quot;,&quot;claims&quot;,&quot;evidence&quot;,&quot;verifications&quot;,&quot;rulepacks&quot;,&quot;ledger&quot;,&quot;reports&quot;,&quot;connections&quot;,&quot;settings&quot;],&quot;default&quot;:&quot;overview&quot;}}">
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:230,&quot;height&quot;:520},&quot;active&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;overview&quot;,&quot;assistant&quot;,&quot;claims&quot;,&quot;evidence&quot;,&quot;verifications&quot;,&quot;rulepacks&quot;,&quot;ledger&quot;,&quot;reports&quot;,&quot;connections&quot;,&quot;settings&quot;],&quot;default&quot;:&quot;overview&quot;}}">
 class Component extends DCLogic {
   renderVals() {
     const active = this.props.active || "overview";
@@ -48,8 +48,6 @@ class Component extends DCLogic {
     const icons = {
       overview: svg([p("M4 4h7v7H4z", "a"), p("M13 4h7v7h-7z", "b"), p("M13 13h7v7h-7z", "c"), p("M4 13h7v7H4z", "d")]),
       assistant: svg([p("M21 15a2 2 0 0 1-2 2H8l-4 4V5a2 2 0 0 1 2-2h13a2 2 0 0 1 2 2Z", "a"), p("M8 9h8M8 13h5", "b")]),
-      chat: svg([p("M21 15a2 2 0 0 1-2 2H9l-5 4V5a2 2 0 0 1 2-2h13a2 2 0 0 1 2 2Z", "a"), p("M8 8h8M8 12h6", "b")]),
-      "truth-output": svg([p("M12 3 4 6v6c0 5 3.5 8.5 8 10 4.5-1.5 8-5 8-10V6l-8-3Z", "a"), p("m8.5 12.5 2.2 2.2 4.8-5.2", "b"), p("M7 18h10", "c")]),
       connections: svg([p("M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1", "a"), p("M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1", "b")]),
       claims: svg([p("M14 3v4a1 1 0 0 0 1 1h4", "a"), p("M17 21H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7l5 5v11a2 2 0 0 1-2 2Z", "b"), p("M9 13h6M9 17h4", "c")]),
       evidence: svg([p("M4 7h6l2 2h8v9a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V7Z", "a")]),
@@ -61,8 +59,6 @@ class Component extends DCLogic {
     };
     const defs = [
       { key: "overview", label: "Overview", badge: null },
-      { key: "chat", label: "Verified Chat", badge: null },
-      { key: "truth-output", label: "Truth Output", badge: null },
       { key: "assistant", label: "Assistant", badge: null },
       { key: "claims", label: "Claims", badge: "24" },
       { key: "evidence", label: "Evidence", badge: null },

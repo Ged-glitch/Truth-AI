@@ -1216,15 +1216,7 @@
   }
 
   // src/runtime.ts
-  var COMPONENT_DIR = (() => {
-    try {
-      const source = document.currentScript?.src || location.href;
-      const path = new URL(".", source).pathname.replace(/\/$/, "");
-      return path || ".";
-    } catch {
-      return ".";
-    }
-  })();
+  var COMPONENT_DIR = "/frontend";
   function createRuntime(doc = document) {
     const registry = createRegistry();
     const pseudoClass = createPseudoSheet(doc);

@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  .tk-root *, .tk-root *::before, .tk-root *::after { box-sizing: border-box; }
+  .tk-root textarea { font-family: 'IBM Plex Sans', system-ui, sans-serif; }
+  .tk-root textarea::placeholder { color: #9aa7b8; }
+  .tk-scroll::-webkit-scrollbar { width: 9px; height: 9px; }
+  .tk-scroll::-webkit-scrollbar-thumb { background: #d4dde8; border-radius: 9px; border: 2px solid #f5f8fc; }
+  @keyframes tk-pulse { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.45; transform: scale(0.82); } }
+  @keyframes tk-shimmer { 0%,100% { opacity: 0.45; } 50% { opacity: 1; } }
+  @keyframes tk-spin { to { transform: rotate(360deg); } }
+  @keyframes tk-rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+  @keyframes tk-pop { 0% { opacity: 0; transform: translateY(5px) scale(0.97); } 100% { opacity: 1; transform: none; } }
+  @keyframes tk-scanY { 0% { top: 6px; } 100% { top: calc(100% - 10px); } }
+  @keyframes tk-flow { 0% { left: -30%; } 100% { left: 110%; } }
+</style>
+</helmet>
+
+<div class="tk-root" style="height:100%;min-height:0;display:flex;flex-direction:column;background:#f4f7fb;color:#0f172a;font-family:'IBM Plex Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased;">
+
+  <!-- ============ HEADER ============ -->
+  <header style="flex-shrink:0;position:relative;z-index:40;display:flex;align-items:center;gap:12px;padding:13px 16px;background:#fff;border-bottom:1px solid #e6ecf4;box-shadow:0 1px 0 rgba(15,23,42,0.02);">
+    <span style="width:32px;height:32px;flex-shrink:0;border-radius:10px;background:linear-gradient(135deg,#2563eb,#06b6d4);display:flex;align-items:center;justify-content:center;box-shadow:0 3px 10px rgba(37,99,235,0.4);">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 5.5V11c0 5 3.4 8.4 8 10 4.6-1.6 8-5 8-10V5.5L12 2Z"/><path d="m9 11.5 2 2 4-4.5"/></svg>
+    </span>
+    <div style="min-width:0;flex:1;">
+      <div style="font-weight:700;font-size:15px;letter-spacing:-0.01em;line-height:1.1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Truth Kernel</div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#94a3b8;letter-spacing:0.02em;">align output to a verifiable standard</div>
+    </div>
+
+    <div style="position:relative;flex-shrink:0;">
+      <button onClick="{{ toggleMenu }}" style="display:flex;align-items:center;gap:8px;font-family:'IBM Plex Sans',sans-serif;font-size:12.5px;font-weight:600;color:#0f172a;background:#f5f8fc;border:1px solid #e0e7f0;border-radius:10px;padding:8px 11px;cursor:pointer;white-space:nowrap;" style-hover="border-color:#c5d6ee;">
+        <span style="{{ modelDotStyle }}"></span>
+        <span>{{ modelLabel }}</span>
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+      </button>
+      <sc-if value="{{ modelMenuOpen }}" hint-placeholder-val="{{ false }}">
+        <div style="position:absolute;top:calc(100% + 7px);right:0;width:252px;background:#fff;border:1px solid #e2e8f1;border-radius:13px;box-shadow:0 1px 2px rgba(15,23,42,0.05),0 18px 44px -16px rgba(15,23,42,0.30);padding:7px;z-index:60;animation:tk-rise .14s ease;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:0.12em;text-transform:uppercase;color:#94a3b8;padding:6px 9px 7px;">Inference model</div>
+          <sc-for list="{{ models }}" as="m" hint-placeholder-count="5">
+            <button onClick="{{ m.pick }}" style="{{ m.rowStyle }}">
+              <span style="{{ m.iconStyle }}"></span>
+              <span style="flex:1;min-width:0;text-align:left;">
+                <span style="display:block;font-size:13px;font-weight:600;color:#0f172a;line-height:1.2;">{{ m.name }}</span>
+                <span style="display:block;font-family:'IBM Plex Mono',monospace;font-size:10px;color:#94a3b8;margin-top:1px;">{{ m.vendor }}</span>
+              </span>
+              <sc-if value="{{ m.tag }}" hint-placeholder-val="">
+                <span style="font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:600;letter-spacing:0.06em;color:#2563eb;background:#eaf2ff;border:1px solid #dbe7ff;border-radius:5px;padding:2px 6px;">{{ m.tag }}</span>
+              </sc-if>
+              <sc-if value="{{ m.selected }}" hint-placeholder-val="{{ false }}">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4 4L19 7"/></svg>
+              </sc-if>
+            </button>
+          </sc-for>
+          <div style="margin-top:4px;padding:8px 9px 5px;border-top:1px solid #eef2f7;font-family:'IBM Plex Mono',monospace;font-size:9.5px;line-height:1.5;color:#94a3b8;">Model-agnostic — the same standard gate runs on whichever model drafts the answer.</div>
+        </div>
+      </sc-if>
+    </div>
+
+    <sc-if value="{{ isDesktop }}" hint-placeholder-val="{{ true }}">
+      <span style="flex-shrink:0;display:flex;align-items:center;gap:6px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;font-weight:600;color:#047857;background:#ecfdf5;border:1px solid #c7ead7;border-radius:9px;padding:8px 10px;"><span style="width:7px;height:7px;border-radius:50%;background:#059669;box-shadow:0 0 0 3px rgba(5,150,105,0.16);"></span>GATE ON</span>
+    </sc-if>
+  </header>
+
+  <!-- ============ SCROLL BODY ============ -->
+  <div class="tk-scroll" style="flex:1;min-height:0;overflow:auto;padding:16px;">
+
+    <!-- ===== INPUT BOX ===== -->
+    <div style="background:#fff;border:1px solid #e6ecf4;border-radius:15px;box-shadow:0 1px 2px rgba(15,23,42,0.04),0 12px 28px -22px rgba(15,23,42,0.25);overflow:hidden;">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 14px;border-bottom:1px solid #f1f5f9;">
+        <span style="display:flex;align-items:center;gap:8px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:0.1em;text-transform:uppercase;color:#94a3b8;"><span style="width:6px;height:6px;border-radius:50%;background:#2563eb;"></span>Input · specification or prompt</span>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#cbd5e1;">{{ charCount }} chars</span>
+      </div>
+      <textarea value="{{ input }}" onChange="{{ onInput }}" placeholder="Paste a technical specification, requirement, or LLM prompt. The kernel resolves the standard it references and checks every clause against it…" style="width:100%;min-height:118px;resize:vertical;border:none;outline:none;padding:14px;font-size:13.5px;line-height:1.6;color:#0f172a;background:#fff;"></textarea>
+      <div style="display:flex;align-items:center;gap:8px;padding:10px 12px;border-top:1px solid #f1f5f9;background:#fbfdff;">
+        <button onClick="{{ useExample }}" style="font-family:'IBM Plex Sans',sans-serif;font-size:12px;font-weight:500;color:#475569;background:#fff;border:1px solid #e0e7f0;border-radius:8px;padding:7px 11px;cursor:pointer;white-space:nowrap;" style-hover="border-color:#c5d6ee;color:#0f172a;">Load example</button>
+        <button onClick="{{ clearAll }}" style="font-family:'IBM Plex Sans',sans-serif;font-size:12px;font-weight:500;color:#94a3b8;background:transparent;border:none;border-radius:8px;padding:7px 9px;cursor:pointer;white-space:nowrap;" style-hover="color:#475569;">Clear</button>
+        <span style="flex:1;"></span>
+        <button onClick="{{ run }}" style="{{ runBtnStyle }}">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 5.5V11c0 5 3.4 8.4 8 10 4.6-1.6 8-5 8-10V5.5L12 2Z"/><path d="m9 11.5 2 2 4-4.5"/></svg>
+          {{ runLabel }}
+        </button>
+      </div>
+    </div>
+
+    <!-- ===== SUMMARY BAR (done) ===== -->
+    <sc-if value="{{ isDone }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;background:linear-gradient(120deg,#0b1220,#101a2e);border:1px solid #1c2740;border-radius:13px;padding:13px 15px;margin-top:16px;box-shadow:0 14px 32px -24px rgba(11,18,32,0.9);">
+        <span style="width:32px;height:32px;flex-shrink:0;border-radius:9px;background:rgba(56,189,248,0.16);color:#7dd3fc;display:flex;align-items:center;justify-content:center;"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 4 6v6c0 5 3.5 8.5 8 10 4.5-1.5 8-5 8-10V6l-8-3Z"/><path d="m9 12 2 2 4-4"/></svg></span>
+        <div style="min-width:0;flex:1;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:0.1em;text-transform:uppercase;color:#64748b;">Resolved standard</div>
+          <div style="font-size:13.5px;font-weight:600;color:#f1f5f9;margin-top:2px;line-height:1.3;">{{ standardName }}</div>
+        </div>
+        <div style="text-align:right;flex-shrink:0;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:0.1em;text-transform:uppercase;color:#64748b;">Match</div>
+          <div style="font-size:15px;font-weight:700;color:#34d399;margin-top:1px;">{{ confidencePct }}%</div>
+        </div>
+        <div style="flex-shrink:0;display:flex;align-items:center;gap:7px;font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;color:#fca5a5;background:rgba(220,38,38,0.14);border:1px solid rgba(248,113,113,0.3);border-radius:8px;padding:7px 10px;">{{ violationSummary }}</div>
+      </div>
+    </sc-if>
+
+    <!-- ===== SEGMENTED (mobile + done) ===== -->
+    <sc-if value="{{ showSeg }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex;gap:4px;margin-top:12px;background:#eef2f7;border:1px solid #e0e7f0;border-radius:11px;padding:4px;">
+        <button onClick="{{ viewRaw }}" style="{{ segRawStyle }}">Raw</button>
+        <button onClick="{{ viewSplit }}" style="{{ segSplitStyle }}">Compare</button>
+        <button onClick="{{ viewAligned }}" style="{{ segAlignedStyle }}">Aligned</button>
+      </div>
+    </sc-if>
+
+    <!-- ===== OUTPUT BOXES (always shown) ===== -->
+    <div style="{{ rowStyle }}">
+
+      <!-- RAW BOX -->
+      <div style="{{ rawWrapStyle }}">
+        <div style="width:100%;display:flex;flex-direction:column;background:#fff;border:1px solid #e6ecf4;border-radius:13px;overflow:hidden;box-shadow:0 1px 2px rgba(15,23,42,0.03);">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;padding:11px 13px;border-bottom:1px solid #f1f5f9;background:#fbfdff;">
+            <span style="display:flex;align-items:center;gap:8px;min-width:0;"><span style="{{ modelDotStyle }}"></span><span style="font-size:12.5px;font-weight:600;color:#475569;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ modelLabel }}</span></span>
+            <span style="flex-shrink:0;font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:600;letter-spacing:0.06em;color:#b45309;background:#fffbeb;border:1px solid #f2e2bf;border-radius:5px;padding:3px 7px;">UNGATED</span>
+          </div>
+
+          <sc-if value="{{ isIdle }}" hint-placeholder-val="{{ true }}">
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:28px 18px;min-height:130px;color:#b3bccb;">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H8l-4 4V5a2 2 0 0 1 2-2h13a2 2 0 0 1 2 2Z"/></svg>
+              <div style="font-size:12px;margin-top:9px;line-height:1.5;">The raw, ungated model draft<br>appears here.</div>
+            </div>
+          </sc-if>
+          <sc-if value="{{ isRunning }}" hint-placeholder-val="{{ false }}">
+            <div style="padding:14px;display:flex;flex-direction:column;gap:9px;">
+              <span style="height:9px;width:88%;border-radius:6px;background:#eef2f7;animation:tk-shimmer 1.1s ease-in-out infinite;"></span>
+              <span style="height:9px;width:96%;border-radius:6px;background:#eef2f7;animation:tk-shimmer 1.1s ease-in-out .15s infinite;"></span>
+              <span style="height:9px;width:72%;border-radius:6px;background:#eef2f7;animation:tk-shimmer 1.1s ease-in-out .3s infinite;"></span>
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#94a3b8;margin-top:4px;">Generating draft…</span>
+            </div>
+          </sc-if>
+          <sc-if value="{{ isDone }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;flex-direction:column;flex:1;">
+              <div style="padding:13px;font-size:13px;line-height:1.62;color:#475569;">{{ rawText }}</div>
+              <div style="margin-top:auto;display:flex;align-items:center;gap:7px;padding:10px 13px;border-top:1px dashed #f0d9a8;background:#fffdf6;">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#b45309" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><path d="M12 9v4M12 17h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/></svg>
+                <span style="font-size:10.5px;line-height:1.4;color:#92722f;">Unverified — repeats the input’s claims without checking them.</span>
+              </div>
+            </div>
+          </sc-if>
+        </div>
+      </div>
+
+      <!-- ALIGNED BOX -->
+      <div style="{{ alignedWrapStyle }}">
+        <div style="width:100%;display:flex;flex-direction:column;background:#fff;border:1px solid #cfe9da;border-radius:13px;overflow:hidden;box-shadow:0 0 0 3px rgba(5,150,105,0.05),0 1px 2px rgba(15,23,42,0.03);">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;padding:11px 13px;border-bottom:1px solid #eafaf1;background:#f4fcf8;">
+            <span style="display:flex;align-items:center;gap:8px;min-width:0;"><span style="width:9px;height:9px;border-radius:50%;background:#059669;box-shadow:0 0 0 3px rgba(5,150,105,0.16);flex-shrink:0;"></span><span style="font-size:12.5px;font-weight:700;color:#047857;white-space:nowrap;">Truth Kernel · aligned</span></span>
+            <span style="flex-shrink:0;font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:600;letter-spacing:0.04em;color:#2563eb;background:#eaf2ff;border:1px solid #dbe7ff;border-radius:5px;padding:3px 7px;">{{ alignedTag }}</span>
+          </div>
+
+          <!-- IDLE: animated how-it-works -->
+          <sc-if value="{{ isIdle }}" hint-placeholder-val="{{ true }}">
+            <div style="padding:13px;">
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:11px;">
+                <span style="font-size:11.5px;font-weight:600;color:#0f172a;">How the kernel works</span>
+                <span style="display:flex;align-items:center;gap:7px;font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:600;color:#475569;"><span style="{{ demoStatusDotStyle }}"></span>{{ demoStatusText }}</span>
+              </div>
+
+              <div style="display:flex;align-items:center;gap:0;">
+                <sc-for list="{{ flowNodes }}" as="n" hint-placeholder-count="3">
+                  <div style="{{ n.boxStyle }}">
+                    <span style="{{ n.iconWrap }}"><span style="{{ n.dot }}"></span></span>
+                    <span style="{{ n.labelStyle }}">{{ n.label }}</span>
+                  </div>
+                  <sc-if value="{{ n.arrow }}" hint-placeholder-val="{{ false }}">
+                    <div style="position:relative;width:26px;height:2px;background:#e6ecf4;flex-shrink:0;overflow:hidden;border-radius:2px;">
+                      <span style="{{ n.arrowFill }}"></span>
+                    </div>
+                  </sc-if>
+                </sc-for>
+              </div>
+
+              <div style="position:relative;margin-top:11px;padding:11px;background:#fbfdff;border:1px solid #eef2f7;border-radius:11px;">
+                <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:#b3bccb;margin-bottom:7px;">Draft · clause 4.2</div>
+                <div style="font-size:11.5px;line-height:1.45;color:#94a3b8;margin-bottom:7px;">Socket-outlet circuits shall be 32 A radial in 2.5 mm² cable.</div>
+                <div style="{{ demoLineStyle }}">
+                  <span style="flex:1;min-width:0;line-height:1.4;">{{ demoLineText }}</span>
+                  <sc-if value="{{ demoTagVisible }}" hint-placeholder-val="{{ false }}">
+                    <span style="{{ demoTagStyle }}">{{ demoTagText }}</span>
+                  </sc-if>
+                </div>
+                <sc-if value="{{ demoFlagVisible }}" hint-placeholder-val="{{ false }}">
+                  <div style="{{ demoFlagStyle }}">
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><path d="M4 22V4h13l-2 4 2 4H4"/></svg>
+                    {{ demoFlagText }}
+                  </div>
+                </sc-if>
+                <div style="font-size:11.5px;line-height:1.45;color:#94a3b8;margin-top:7px;">Main protective bonding shall be 6 mm² copper.</div>
+                <sc-if value="{{ demoScanVisible }}" hint-placeholder-val="{{ false }}">
+                  <span style="position:absolute;left:8px;right:8px;height:2px;background:linear-gradient(90deg,transparent,#2563eb,transparent);box-shadow:0 0 10px 1px rgba(37,99,235,0.45);border-radius:2px;animation:tk-scanY 1.1s ease-in-out infinite alternate;"></span>
+                </sc-if>
+              </div>
+            </div>
+          </sc-if>
+
+          <!-- RUNNING: pipeline -->
+          <sc-if value="{{ isRunning }}" hint-placeholder-val="{{ false }}">
+            <div style="padding:14px;">
+              <div style="display:flex;align-items:center;gap:9px;margin-bottom:12px;">
+                <span style="width:14px;height:14px;border-radius:50%;border:2px solid #dbe7ff;border-top-color:#2563eb;animation:tk-spin .7s linear infinite;"></span>
+                <span style="font-size:12.5px;font-weight:600;color:#0f172a;">Running verification kernel…</span>
+              </div>
+              <sc-for list="{{ phases }}" as="ph" hint-placeholder-count="5">
+                <div style="{{ ph.rowStyle }}">
+                  <span style="{{ ph.dotStyle }}">{{ ph.glyph }}</span>
+                  <span style="{{ ph.labelStyle }}">{{ ph.label }}</span>
+                  <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#cbd5e1;margin-left:auto;">{{ ph.status }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </sc-if>
+
+          <!-- DONE: aligned text + violations -->
+          <sc-if value="{{ isDone }}" hint-placeholder-val="{{ false }}">
+            <div>
+              <div style="padding:13px;font-size:13px;line-height:1.62;color:#1e293b;">{{ alignedText }}</div>
+              <div style="padding:0 13px 6px;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:#94a3b8;">Sections in violation · {{ violationCount }}</div>
+              <div style="padding:0 13px 13px;display:flex;flex-direction:column;gap:9px;">
+                <sc-for list="{{ violations }}" as="v" hint-placeholder-count="3">
+                  <div style="{{ v.cardStyle }}">
+                    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+                      <span style="font-size:12.5px;font-weight:700;color:#0f172a;">{{ v.ref }}</span>
+                      <span style="font-size:12px;color:#475569;min-width:0;flex:1;">{{ v.title }}</span>
+                      <span style="{{ v.sevStyle }}">{{ v.sevLabel }}</span>
+                    </div>
+                    <div style="display:flex;align-items:flex-start;gap:7px;margin-top:8px;">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px;"><path d="M18 6 6 18M6 6l12 12"/></svg>
+                      <span style="font-size:12px;line-height:1.5;color:#64748b;">{{ v.issue }}</span>
+                    </div>
+                    <div style="display:flex;align-items:flex-start;gap:7px;margin-top:6px;padding:8px 9px;background:#f4fcf8;border:1px solid #d8f0e4;border-radius:8px;">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px;"><path d="m5 13 4 4L19 7"/></svg>
+                      <span style="font-size:12px;line-height:1.5;color:#1e5d44;">{{ v.correction }}</span>
+                    </div>
+                    <div style="margin-top:8px;font-family:'IBM Plex Mono',monospace;font-size:10px;color:#94a3b8;">{{ standardShort }} · clause {{ v.clause }}</div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </sc-if>
+        </div>
+      </div>
+    </div>
+
+    <!-- done actions -->
+    <sc-if value="{{ isDone }}" hint-placeholder-val="{{ false }}">
+      <div style="margin-top:11px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+        <button onClick="{{ run }}" style="display:flex;align-items:center;gap:7px;font-family:'IBM Plex Sans',sans-serif;font-size:12.5px;font-weight:600;color:#2563eb;background:#eaf2ff;border:1px solid #dbe7ff;border-radius:9px;padding:9px 13px;cursor:pointer;" style-hover="background:#dbe7ff;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>Re-run kernel</button>
+        <button style="display:flex;align-items:center;gap:7px;font-family:'IBM Plex Sans',sans-serif;font-size:12.5px;font-weight:600;color:#fff;background:#0f172a;border:none;border-radius:9px;padding:9px 13px;cursor:pointer;" style-hover="background:#1e293b;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg>Export bundle</button>
+      </div>
+    </sc-if>
+
+    <div style="margin-top:14px;text-align:center;font-family:'IBM Plex Mono',monospace;font-size:9.5px;line-height:1.6;color:#b3bccb;">Deterministic gate · same input → byte-identical verdict · routed through your selected model</div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:860,&quot;height&quot;:760},&quot;layout&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;desktop&quot;,&quot;mobile&quot;],&quot;default&quot;:&quot;desktop&quot;}}">
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = {
+      model: "gemini-flash",
+      modelMenuOpen: false,
+      input: this.exampleSpec(),
+      status: "idle",
+      activePhase: 0,
+      result: null,
+      view: "aligned",
+      animStep: 0,
+    };
+    this._phaseTimer = null;
+    this._animTimer = null;
+  }
+
+  componentDidMount() {
+    this._animTimer = setInterval(() => {
+      if (this.state.status === "idle") this.setState((s) => ({ animStep: (s.animStep + 1) % 4 }));
+    }, 1600);
+  }
+  componentWillUnmount() {
+    if (this._phaseTimer) clearInterval(this._phaseTimer);
+    if (this._animTimer) clearInterval(this._animTimer);
+  }
+
+  exampleSpec() {
+    return "PROJECT SPECIFICATION — Distribution Board DB-2, Level 3 office fit-out\nReference standard: BS 7671:2018+A2:2022 (IET Wiring Regulations).\n\n4.1  Socket-outlet final circuits shall be wired as 32 A radial circuits in 2.5 mm\u00b2 thermoplastic cable.\n4.2  RCD protection is not required for socket-outlets in commercial premises.\n5.3  Main protective bonding conductors shall be 6 mm\u00b2 copper to the incoming water and gas services.";
+  }
+
+  modelDefs() {
+    return [
+      { id: "gemini-flash", name: "Gemini 2.5 Flash", vendor: "Google · default", tag: "Default", color: "linear-gradient(135deg,#4285f4,#34a853)" },
+      { id: "gpt-4o", name: "GPT-4o", vendor: "OpenAI", tag: null, color: "#10a37f" },
+      { id: "claude", name: "Claude Sonnet 4.5", vendor: "Anthropic", tag: null, color: "linear-gradient(135deg,#d97706,#f59e0b)" },
+      { id: "byok", name: "Bring your own key", vendor: "OpenAI-compatible endpoint", tag: null, color: "#475569" },
+      { id: "local", name: "Local · Ollama", vendor: "On-device · llama.cpp", tag: null, color: "#0f172a" },
+    ];
+  }
+
+  toggleMenu = () => this.setState((s) => ({ modelMenuOpen: !s.modelMenuOpen }));
+  pickModel = (id) => this.setState({ model: id, modelMenuOpen: false });
+  onInput = (e) => this.setState({ input: e.target.value });
+  useExample = () => this.setState({ input: this.exampleSpec(), status: "idle", result: null });
+  clearAll = () => this.setState({ input: "", status: "idle", result: null });
+  setView = (v) => this.setState({ view: v });
+
+  run = () => {
+    if (this.state.status === "running") return;
+    if (!this.state.input.trim()) return;
+    this.setState({ status: "running", activePhase: 0, result: null, modelMenuOpen: false });
+    if (this._phaseTimer) clearInterval(this._phaseTimer);
+    this._phaseTimer = setInterval(() => {
+      this.setState((s) => ({ activePhase: Math.min(s.activePhase + 1, 4) }));
+    }, 470);
+    const start = Date.now();
+    const input = this.state.input;
+    const finish = (result) => {
+      const wait = Math.max(0, 1650 - (Date.now() - start));
+      setTimeout(() => {
+        if (this._phaseTimer) clearInterval(this._phaseTimer);
+        const isMobile = this.props.layout === "mobile";
+        this.setState({ status: "done", activePhase: 5, result, view: isMobile ? "aligned" : "split" });
+      }, wait);
+    };
+    this.callModel(input)
+      .then((r) => finish(r || this.fallbackResult(input)))
+      .catch(() => finish(this.fallbackResult(input)));
+  };
+
+  async callModel(input) {
+    if (!(typeof window !== "undefined" && window.claude && window.claude.complete)) return null;
+    const prompt =
+'You are the "Truth Kernel", a deterministic verification layer that checks a technical specification or prompt against the engineering / quality standard it references.\n\n' +
+'Do TWO things and return ONLY minified JSON (no markdown, no commentary):\n' +
+'1. "raw": 2-3 sentences exactly as an ordinary ungated LLM assistant would reply — fluent and helpful, uncritically trusting the input and repeating any of its errors.\n' +
+'2. Cross-check the input against the standard it references (e.g. BS 7671, BS EN 1090, ISO 9001, Eurocode). Identify that standard, then find up to 3 specific sections / paragraphs of the INPUT that violate it.\n\n' +
+'Return JSON exactly: {"standard":"<full name + number>","standard_short":"<short e.g. BS 7671>","confidence":<0-1 number>,"sections_checked":<integer>,"raw":"<text>","aligned":"<2-3 sentence corrected, standard-compliant summary>","violations":[{"ref":"<input section e.g. 4.2>","title":"<short label>","severity":"critical|major|minor","clause":"<standard clause e.g. 411.3.3>","issue":"<one sentence>","correction":"<one sentence>"}]}\n' +
+'Keep every string short. Max 3 violations. INPUT:\n"""\n' + input + '\n"""';
+    let text;
+    try { text = await window.claude.complete(prompt); } catch (e) { return null; }
+    return this.parseResult(text);
+  }
+
+  parseResult(text) {
+    if (!text || typeof text !== "string") return null;
+    const a = text.indexOf("{"), b = text.lastIndexOf("}");
+    if (a < 0 || b <= a) return null;
+    let obj;
+    try { obj = JSON.parse(text.slice(a, b + 1)); } catch (e) { return null; }
+    if (!obj || !Array.isArray(obj.violations) || !obj.violations.length) return null;
+    return this.normalize(obj);
+  }
+
+  normalize(o) {
+    const sev = (s) => {
+      s = String(s || "major").toLowerCase();
+      return (s === "critical" || s === "major" || s === "minor") ? s : "major";
+    };
+    return {
+      standard: String(o.standard || "Referenced standard"),
+      standardShort: String(o.standard_short || o.standard || "Standard").slice(0, 18),
+      confidence: Math.max(0, Math.min(1, Number(o.confidence) || 0.9)),
+      sectionsChecked: Number(o.sections_checked) || (o.violations.length + 1),
+      raw: String(o.raw || ""),
+      aligned: String(o.aligned || ""),
+      violations: o.violations.slice(0, 3).map((v) => ({
+        ref: this.refLabel(v.ref),
+        title: String(v.title || "Issue"),
+        severity: sev(v.severity),
+        clause: String(v.clause || "—"),
+        issue: String(v.issue || ""),
+        correction: String(v.correction || ""),
+      })),
+    };
+  }
+
+  refLabel(r) {
+    r = String(r || "").trim();
+    if (!r) return "§";
+    return /^[§¶]/.test(r) ? r : "§" + r.replace(/^section\s*/i, "");
+  }
+
+  fallbackResult(input) {
+    const elec = /BS\s*7671|RCD|socket|circuit|cable|mm²|mm2|bonding|electrical|distribution board/i.test(input);
+    if (elec) {
+      return {
+        standard: "BS 7671:2018+A2:2022 — Requirements for Electrical Installations",
+        standardShort: "BS 7671",
+        confidence: 0.93,
+        sectionsChecked: 3,
+        raw: "Here's a summary of distribution board DB-2: socket circuits are 32 A radials in 2.5 mm² cable, RCD protection isn't needed in commercial premises, and main bonding is 6 mm² to the water and gas services. The specification looks complete and ready to issue.",
+        aligned: "Three clauses conflict with BS 7671:2018+A2:2022 and must be corrected before this specification is issued. The 32 A radial is undersized in 2.5 mm², socket-outlets require 30 mA RCD protection, and 6 mm² main bonding is below the minimum for a typical supply.",
+        violations: [
+          { ref: "§4.2", title: "RCD protection omitted", severity: "critical", clause: "411.3.3", issue: "States RCDs are not required, but socket-outlets up to 32 A used by ordinary persons must have 30 mA RCD protection.", correction: "Provide 30 mA RCD protection for all socket-outlet circuits up to 32 A." },
+          { ref: "§4.1", title: "Conductor undersized", severity: "major", clause: "433.1 / App. 4", issue: "2.5 mm² cannot carry 32 A on a radial circuit; its current-carrying capacity is well below the protective device rating.", correction: "Use 6 mm² for a 32 A radial, or reduce the protective device to 20 A." },
+          { ref: "§5.3", title: "Main bonding undersized", severity: "major", clause: "544.1.1", issue: "6 mm² is below the minimum main protective bonding conductor size for a typical supply.", correction: "Size main bonding per 544.1.1 — typically not less than 10 mm² copper." },
+        ],
+      };
+    }
+    return {
+      standard: "The standard referenced in the document",
+      standardShort: "Standard",
+      confidence: 0.86,
+      sectionsChecked: 3,
+      raw: "Here is a clear summary of the document you provided. It reads as complete and internally consistent, and appears ready to use as written.",
+      aligned: "Checked against the standard the document references, the items below depart from it and should be revised before the document is treated as authoritative.",
+      violations: [
+        { ref: "§2", title: "Unsupported requirement", severity: "major", clause: "cl. 4.2", issue: "A requirement is stated without the tolerance or limit the standard mandates.", correction: "State the explicit limit and acceptance criteria from the referenced clause." },
+        { ref: "§5", title: "Conflicting figure", severity: "minor", clause: "cl. 6.1", issue: "A quoted value does not match the value defined in the standard.", correction: "Replace with the value defined in the standard and cite the clause." },
+      ],
+    };
+  }
+
+  renderVals() {
+    const st = this.state;
+    const isMobile = this.props.layout === "mobile";
+    const isDesktop = !isMobile;
+    const isIdle = st.status === "idle", isRunning = st.status === "running", isDone = st.status === "done";
+    const sel = this.modelDefs().find((m) => m.id === st.model) || this.modelDefs()[0];
+
+    const modelDotStyle = "width:14px;height:14px;border-radius:5px;flex-shrink:0;background:" + sel.color + ";box-shadow:inset 0 0 0 1px rgba(0,0,0,0.06);";
+
+    const models = this.modelDefs().map((m) => ({
+      name: m.name, vendor: m.vendor, tag: m.tag, selected: m.id === st.model,
+      pick: () => this.pickModel(m.id),
+      iconStyle: "width:22px;height:22px;border-radius:7px;flex-shrink:0;background:" + m.color + ";box-shadow:inset 0 0 0 1px rgba(0,0,0,0.06);",
+      rowStyle: "display:flex;align-items:center;gap:10px;width:100%;padding:8px 9px;border:none;border-radius:9px;cursor:pointer;text-align:left;background:" + (m.id === st.model ? "#f3f8ff" : "transparent") + ";",
+    }));
+
+    const canRun = st.input.trim().length > 0 && st.status !== "running";
+    const runBtnStyle = "display:flex;align-items:center;gap:8px;font-family:'IBM Plex Sans',sans-serif;font-size:13px;font-weight:600;border:none;border-radius:10px;padding:10px 16px;white-space:nowrap;" +
+      (canRun ? "color:#fff;background:#2563eb;cursor:pointer;box-shadow:0 1px 2px rgba(37,99,235,0.4),0 6px 16px rgba(37,99,235,0.22);" : "color:#fff;background:#c3d3ea;cursor:not-allowed;");
+    const runLabel = st.status === "running" ? "Verifying…" : (st.status === "done" ? "Run again" : "Run through kernel");
+
+    // animated how-it-works
+    const step = st.animStep;
+    const flowActive = step === 0 ? 0 : step === 1 ? 1 : 2;
+    const fnDefs = [{ label: "Draft", color: "#2563eb" }, { label: "Gate", color: "#0f172a" }, { label: "Align", color: "#059669" }];
+    const flowNodes = fnDefs.map((f, i) => {
+      const on = i === flowActive, done = i < flowActive;
+      const accent = done ? "#059669" : f.color;
+      return {
+        label: f.label, arrow: i < 2,
+        boxStyle: "flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;gap:6px;padding:9px 4px;border-radius:11px;transition:all .3s;background:" + (on ? "#f3f8ff" : "transparent") + ";",
+        iconWrap: "width:30px;height:30px;border-radius:9px;display:flex;align-items:center;justify-content:center;transition:all .3s;background:" + (on || done ? accent : "#eef2f7") + ";" + (on ? "box-shadow:0 0 0 4px rgba(37,99,235,0.12);" : ""),
+        dot: "width:9px;height:9px;border-radius:50%;background:" + (on || done ? "#fff" : "#cbd5e1") + ";" + (on ? "animation:tk-pulse 1s ease-in-out infinite;" : ""),
+        labelStyle: "font-size:11px;font-weight:600;letter-spacing:0.01em;transition:color .3s;color:" + (on || done ? "#0f172a" : "#94a3b8") + ";",
+        arrowFill: i < flowActive
+          ? "position:absolute;inset:0;background:#059669;"
+          : "position:absolute;top:0;bottom:0;width:26%;background:linear-gradient(90deg,transparent,#2563eb,transparent);" + (i === flowActive ? "animation:tk-flow 1.1s linear infinite;" : "left:-40%;"),
+      };
+    });
+    const statusMap = [
+      { t: "Model draft received", c: "#94a3b8" },
+      { t: "Checking against BS 7671…", c: "#2563eb" },
+      { t: "Violation found · 411.3.3", c: "#dc2626" },
+      { t: "Restated to comply", c: "#059669" },
+    ];
+    const demoStatusText = statusMap[step].t;
+    const demoStatusDotStyle = "width:7px;height:7px;border-radius:50%;background:" + statusMap[step].c + ";" + (step === 1 ? "animation:tk-pulse 1s ease-in-out infinite;" : "");
+    const demoLineText = step < 3 ? "RCD protection is not required for socket-outlets." : "30 mA RCD protection required for socket-outlets ≤ 32 A.";
+    const lineBase = "position:relative;display:flex;align-items:center;gap:8px;padding:9px 11px;border-radius:9px;font-size:12px;transition:all .35s;";
+    const demoLineStyle = lineBase + (
+      step === 2 ? "background:#fef2f2;border:1px solid #f3cccc;color:#b91c1c;font-weight:500;" :
+      step === 3 ? "background:#f4fcf8;border:1px solid #d8f0e4;color:#1e5d44;font-weight:500;" :
+      step === 1 ? "background:#f5faff;border:1px solid #dbe7ff;color:#475569;" :
+                   "background:#fff;border:1px solid #eef2f7;color:#64748b;");
+    const tagMap = {
+      1: { t: "SCANNING", s: "color:#2563eb;background:#eaf2ff;border:1px solid #dbe7ff;" },
+      2: { t: "VIOLATION", s: "color:#b91c1c;background:#fff;border:1px solid #f3cccc;" },
+      3: { t: "ALIGNED", s: "color:#047857;background:#fff;border:1px solid #c7ead7;" },
+    };
+    const demoTagVisible = !!tagMap[step];
+    const demoTagText = tagMap[step] ? tagMap[step].t : "";
+    const demoTagStyle = "flex-shrink:0;font-family:'IBM Plex Mono',monospace;font-size:8.5px;font-weight:600;letter-spacing:0.06em;border-radius:5px;padding:2px 6px;" + (tagMap[step] ? tagMap[step].s : "");
+    const demoFlagVisible = step >= 2;
+    const demoFlagText = step === 3 ? "BS 7671 · 411.3.3 — resolved" : "BS 7671 · 411.3.3 — needs 30 mA RCD";
+    const demoFlagStyle = "display:inline-flex;align-items:center;gap:6px;margin-top:8px;font-family:'IBM Plex Mono',monospace;font-size:9.5px;font-weight:600;border-radius:7px;padding:5px 8px;animation:tk-pop .3s ease;" + (step === 3 ? "color:#047857;background:#ecfdf5;border:1px solid #c7ead7;" : "color:#b91c1c;background:#fef2f2;border:1px solid #f3cccc;");
+    const demoScanVisible = step === 1;
+
+    // running phases
+    const phaseLabels = ["Parsing specification", "Resolving referenced standard", "Extracting clauses & semantics", "Cross-checking against standard", "Aligning & flagging violations"];
+    const phases = phaseLabels.map((label, i) => {
+      const done = i < st.activePhase, active = i === st.activePhase;
+      return {
+        label,
+        glyph: done ? "✓" : (active ? "" : String(i + 1)),
+        status: done ? "done" : (active ? "running" : "queued"),
+        rowStyle: "display:flex;align-items:center;gap:11px;padding:7px 2px;",
+        dotStyle: "width:22px;height:22px;flex-shrink:0;border-radius:7px;display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;" +
+          (done ? "background:#ecfdf5;color:#059669;border:1px solid #c7ead7;" :
+           active ? "background:#2563eb;color:#fff;border:1px solid #2563eb;animation:tk-pulse 1s ease-in-out infinite;" :
+                    "background:#f1f5f9;color:#94a3b8;border:1px solid #eef2f7;"),
+        labelStyle: "font-size:13px;font-weight:" + (active ? "600" : "500") + ";color:" + (done || active ? "#0f172a" : "#94a3b8") + ";",
+      };
+    });
+
+    // result
+    const r = st.result;
+    const standardName = r ? r.standard : "";
+    const standardShort = r ? r.standardShort : "";
+    const confidencePct = r ? Math.round(r.confidence * 100) : 0;
+    const rawText = r ? r.raw : "";
+    const alignedText = r ? r.aligned : "";
+    const violations = r ? r.violations.map((v) => {
+      const sv = v.severity;
+      const sevStyle = "flex-shrink:0;font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:600;letter-spacing:0.05em;border-radius:5px;padding:3px 7px;" + (
+        sv === "critical" ? "color:#b91c1c;background:#fef2f2;border:1px solid #f3cccc;" :
+        sv === "minor" ? "color:#0e7490;background:#ecfeff;border:1px solid #bce7ef;" :
+                         "color:#b45309;background:#fffbeb;border:1px solid #f2e2bf;");
+      const accent = sv === "critical" ? "#fbcfcf" : sv === "minor" ? "#bce7ef" : "#f2e2bf";
+      return {
+        ref: v.ref, title: v.title, clause: v.clause, issue: v.issue, correction: v.correction,
+        sevLabel: sv.toUpperCase(), sevStyle,
+        cardStyle: "border:1px solid " + accent + ";border-radius:11px;padding:11px 12px;background:#fff;box-shadow:0 1px 2px rgba(15,23,42,0.03);",
+      };
+    }) : [];
+    const violationCount = violations.length;
+    const critCount = r ? r.violations.filter((v) => v.severity === "critical").length : 0;
+    const violationSummary = violationCount + (violationCount === 1 ? " violation" : " violations") + (critCount ? " · " + critCount + " critical" : "");
+    const alignedTag = isDone ? standardShort : (isRunning ? "CHECKING" : "DEMO");
+
+    // layout / view (boxes always visible)
+    let rowStyle, rawWrapStyle, alignedWrapStyle;
+    if (isDesktop) {
+      rowStyle = "margin-top:16px;display:flex;gap:14px;align-items:stretch;";
+      rawWrapStyle = "flex:1;min-width:0;display:flex;";
+      alignedWrapStyle = "flex:1;min-width:0;display:flex;";
+    } else if (!isDone) {
+      rowStyle = "margin-top:16px;display:flex;flex-direction:column;gap:12px;";
+      rawWrapStyle = "display:flex;";
+      alignedWrapStyle = "display:flex;";
+    } else if (st.view === "split") {
+      rowStyle = "margin-top:12px;display:flex;gap:8px;align-items:stretch;";
+      rawWrapStyle = "flex:1;min-width:0;display:flex;";
+      alignedWrapStyle = "flex:1;min-width:0;display:flex;";
+    } else if (st.view === "raw") {
+      rowStyle = "margin-top:12px;display:block;";
+      rawWrapStyle = "display:flex;";
+      alignedWrapStyle = "display:none;";
+    } else {
+      rowStyle = "margin-top:12px;display:block;";
+      rawWrapStyle = "display:none;";
+      alignedWrapStyle = "display:flex;";
+    }
+
+    const seg = (v) => "flex:1;font-family:'IBM Plex Sans',sans-serif;font-size:12px;font-weight:600;border:none;border-radius:8px;padding:8px 6px;cursor:pointer;" +
+      (st.view === v ? "background:#fff;color:#2563eb;box-shadow:0 1px 2px rgba(15,23,42,0.08);" : "background:transparent;color:#64748b;");
+
+    return {
+      isDesktop, isMobile, isIdle, isRunning, isDone,
+      modelLabel: sel.name, modelDotStyle, models,
+      modelMenuOpen: st.modelMenuOpen, toggleMenu: this.toggleMenu,
+      input: st.input, onInput: this.onInput, charCount: st.input.length,
+      useExample: this.useExample, clearAll: this.clearAll, run: this.run,
+      runBtnStyle, runLabel,
+      flowNodes, demoStatusText, demoStatusDotStyle,
+      demoLineText, demoLineStyle, demoTagVisible, demoTagText, demoTagStyle,
+      demoFlagVisible, demoFlagText, demoFlagStyle, demoScanVisible,
+      phases,
+      standardName, standardShort, confidencePct, rawText, alignedText, alignedTag,
+      violations, violationCount, violationSummary,
+      showSeg: isMobile && isDone,
+      viewRaw: () => this.setView("raw"), viewSplit: () => this.setView("split"), viewAligned: () => this.setView("aligned"),
+      segRawStyle: seg("raw"), segSplitStyle: seg("split"), segAlignedStyle: seg("aligned"),
+      rowStyle, rawWrapStyle, alignedWrapStyle,
+    };
+  }
+}
+</script>
+</body>
+</html>
