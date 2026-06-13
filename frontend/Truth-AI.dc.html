@@ -1108,6 +1108,17 @@
 </x-dc>
 <script>
 (() => {
+  function redirectAppHash() {
+    if ((location.pathname.replace(/\/$/, "") || "/") === "/" && location.hash === "#app") {
+      location.replace("/app/overview");
+      return true;
+    }
+    return false;
+  }
+
+  if (redirectAppHash()) return;
+  window.addEventListener("hashchange", redirectAppHash);
+
   const pageRoutes = {
     "/": { title: "Truth-AI", sections: ["top"] },
     "/problem": { title: "Problem | Truth-AI", sections: ["problem"] },

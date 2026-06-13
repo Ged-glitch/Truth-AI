@@ -1,6 +1,9 @@
 (async () => {
   try {
-    const response = await fetch("/frontend/Truth-AI.dc.html", {
+    const source = location.pathname.startsWith("/app")
+      ? "/frontend/TruthKernel.dc.html"
+      : "/frontend/Truth-AI.dc.html";
+    const response = await fetch(source, {
       cache: "no-store"
     });
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
