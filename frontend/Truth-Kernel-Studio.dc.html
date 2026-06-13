@@ -17,6 +17,9 @@
   #tks-stack { display: grid; gap: 28px; margin-top: 58px; }
   .tks-panel { width: 100%; }
   .tks-panel-shell { border: 1px solid #d4deeb; border-radius: 18px; overflow: hidden; box-shadow: 0 1px 2px rgba(15,23,42,0.05), 0 40px 80px -36px rgba(15,23,42,0.4); background: #fff; }
+  @media (min-width: 1081px) {
+    .tks-mobile-panel { display: none !important; }
+  }
 </style>
 </helmet>
 
@@ -59,7 +62,7 @@
     <!-- ===== STAGE ===== -->
     <div id="tks-stack">
 
-      <section class="tks-panel">
+      <section class="tks-panel tks-mobile-panel">
         <div style="display:flex;align-items:center;gap:10px;margin-bottom:13px;">
           <span style="width:30px;height:30px;border-radius:8px;background:#fff;border:1px solid #dde5ef;display:flex;align-items:center;justify-content:center;color:#2563eb;box-shadow:0 1px 2px rgba(15,23,42,0.04);"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg></span>
           <div>
