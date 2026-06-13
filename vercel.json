@@ -4,8 +4,14 @@
   "redirects": [
     {
       "source": "/",
-      "destination": "/frontend/Truth-AI.dc.html",
+      "destination": "/app/overview",
       "permanent": false
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/app/:screen",
+      "destination": "/frontend/Truth-AI.dc.html"
     }
   ],
   "headers": [

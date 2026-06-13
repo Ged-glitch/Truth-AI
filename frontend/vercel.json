@@ -3,8 +3,16 @@
   "trailingSlash": false,
   "rewrites": [
     {
-      "source": "/",
+      "source": "/app/:screen",
       "destination": "/Truth-AI.dc.html"
+    },
+    {
+      "source": "/frontend/:path*",
+      "destination": "/:path*"
+    },
+    {
+      "source": "/",
+      "destination": "/app/overview"
     }
   ],
   "headers": [

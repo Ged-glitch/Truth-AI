@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Truth-AI</title>
-<script src="./support.js"></script>
+<script src="/frontend/support.js"></script>
 </head>
 <body>
 <x-dc>
@@ -57,7 +57,7 @@
         <a href="#app" style="transition:color .15s;" style-hover="color:#0f172a;">Product</a>
       </nav>
       <div style="display:flex;align-items:center;gap:12px;">
-        <a href="#app" style="font-size:14px;font-weight:500;color:#0f172a;padding:9px 14px;border:1px solid #d4dde8;border-radius:9px;background:#fff;transition:border-color .15s;white-space:nowrap;" style-hover="border-color:#2563eb;">View demo</a>
+        <a href="/app/overview" style="font-size:14px;font-weight:500;color:#0f172a;padding:9px 14px;border:1px solid #d4dde8;border-radius:9px;background:#fff;transition:border-color .15s;white-space:nowrap;" style-hover="border-color:#2563eb;">View demo</a>
         <a href="#waitlist" style="font-size:14px;font-weight:600;color:#fff;padding:10px 16px;border-radius:9px;background:#2563eb;box-shadow:0 1px 2px rgba(37,99,235,0.5),0 4px 14px rgba(37,99,235,0.22);transition:background .15s;" style-hover="background:#1d4ed8;">Join waitlist</a>
       </div>
     </div>
@@ -78,7 +78,7 @@
         <p style="margin:22px 0 0;font-size:18px;line-height:1.62;color:#475569;max-width:556px;text-wrap:pretty;">Check what an LLM tells you against a verifiable source of truth. Truth&#8209;AI grounds every claim in trusted online sources and references, then produces auditable decision bundles with cryptographic integrity.</p>
         <div style="display:flex;gap:13px;margin-top:32px;flex-wrap:wrap;">
           <a href="#waitlist" style="font-size:15px;font-weight:600;color:#fff;padding:13px 22px;border-radius:11px;background:#2563eb;box-shadow:0 1px 2px rgba(37,99,235,0.5),0 8px 22px rgba(37,99,235,0.24);transition:background .15s;" style-hover="background:#1d4ed8;">Join waitlist</a>
-          <a href="#app" style="font-size:15px;font-weight:600;color:#0f172a;padding:13px 22px;border-radius:11px;background:#fff;border:1px solid #d4dde8;transition:border-color .15s;display:inline-flex;align-items:center;gap:8px;" style-hover="border-color:#2563eb;">View demo
+          <a href="/app/overview" style="font-size:15px;font-weight:600;color:#0f172a;padding:13px 22px;border-radius:11px;background:#fff;border:1px solid #d4dde8;transition:border-color .15s;display:inline-flex;align-items:center;gap:8px;" style-hover="border-color:#2563eb;">View demo
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
           </a>
         </div>
@@ -1107,5 +1107,128 @@
 
 </div>
 </x-dc>
+<script>
+(() => {
+  const routeToScreen = {
+    overview: "overview",
+    assistant: "assistant",
+    claims: "new claim",
+    evidence: "evidence pack",
+    verifications: "verification result",
+    ledger: "ledger",
+    connections: "connections"
+  };
+
+  const labels = {
+    overview: "Overview",
+    assistant: "Assistant",
+    claims: "New Claim",
+    evidence: "Evidence Pack",
+    verifications: "Verification Result",
+    rulepacks: "Rule Packs",
+    ledger: "Ledger",
+    reports: "Reports",
+    connections: "Connections",
+    settings: "Settings"
+  };
+
+  function routeKey() {
+    const match = location.pathname.match(/\/app\/([a-z-]+)/i);
+    return match ? match[1].toLowerCase() : "";
+  }
+
+  function applyRoute() {
+    const key = routeKey();
+    const target = routeToScreen[key];
+    if (!labels[key]) return false;
+
+    const app = document.getElementById("app");
+    const screens = Array.from(document.querySelectorAll("[data-screen-label]"));
+    if (!app || screens.length === 0) return false;
+
+    document.title = labels[key] + " | Truth-AI";
+    app.style.borderTop = "none";
+
+    Array.from(document.body.children).forEach((child) => {
+      if (child.tagName === "SCRIPT") return;
+      if (child.contains(app)) return;
+      child.style.display = "none";
+    });
+
+    const intro = app.querySelector(":scope > div:first-child");
+    if (intro) {
+      const eyebrow = intro.querySelector("div");
+      const heading = intro.querySelector("h2");
+      const copy = intro.querySelector("p");
+      if (eyebrow) eyebrow.textContent = "Truth-AI console";
+      if (heading) heading.textContent = labels[key];
+      if (copy) copy.textContent = "Each workspace area opens as its own page while preserving the same verification-console interface.";
+      intro.style.padding = "42px 32px 26px";
+    }
+
+    const screenHost = screens[0]?.parentElement;
+    if (screenHost) {
+      screenHost.style.gap = "0";
+      screenHost.style.paddingBottom = "70px";
+    }
+
+    let placeholder = document.querySelector("[data-route-placeholder]");
+    if (!placeholder && screenHost) {
+      placeholder = document.createElement("div");
+      placeholder.setAttribute("data-route-placeholder", "");
+      screenHost.appendChild(placeholder);
+    }
+
+    screens.forEach((screen) => {
+      const label = (screen.getAttribute("data-screen-label") || "").toLowerCase();
+      screen.style.display = target && label.includes(target) ? "" : "none";
+    });
+
+    if (placeholder) {
+      placeholder.style.display = target ? "none" : "";
+      placeholder.innerHTML = `
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;">
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:#64748b;background:#fff;border:1px solid #dde5ef;border-radius:7px;padding:4px 10px;">${labels[key]}</span>
+          <span style="height:1px;flex:1;background:#dde5ef;"></span>
+        </div>
+        <div class="ta-frame" style="border:1px solid #dde5ef;border-radius:16px;overflow:hidden;box-shadow:0 1px 2px rgba(15,23,42,0.05),0 30px 60px -34px rgba(15,23,42,0.32);background:#fff;">
+          <div style="display:flex;align-items:center;gap:14px;padding:11px 16px;background:#f3f6fb;border-bottom:1px solid #e6ecf4;">
+            <div style="display:flex;gap:7px;"><span style="width:11px;height:11px;border-radius:50%;background:#e2554f;"></span><span style="width:11px;height:11px;border-radius:50%;background:#e8b13b;"></span><span style="width:11px;height:11px;border-radius:50%;background:#4caf63;"></span></div>
+            <div style="flex:1;max-width:380px;margin:0 auto;display:flex;align-items:center;gap:8px;background:#fff;border:1px solid #e0e7f0;border-radius:8px;padding:6px 12px;font-family:'IBM Plex Mono',monospace;font-size:12px;color:#64748b;">app.truthai.tech/${key}</div>
+            <div style="width:54px;"></div>
+          </div>
+          <div class="ta-shell" style="display:flex;min-height:600px;">
+            <nav style="width:230px;flex-shrink:0;background:#fbfdff;border-right:1px solid #e6ecf4;padding:14px 12px 16px;display:flex;flex-direction:column;min-height:100%;">
+              <div style="display:flex;align-items:center;gap:10px;padding:6px 10px 16px;"><span style="width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,#2563eb,#06b6d4);"></span><span style="font-weight:700;font-size:15px;color:#0f172a;">Truth-AI</span></div>
+              ${Object.entries(labels).map(([slug, label]) => `<a href="/app/${slug}" style="display:flex;align-items:center;gap:11px;padding:9px 11px;border-radius:9px;font-size:13.5px;text-decoration:none;${slug === key ? "font-weight:600;color:#2563eb;background:#eaf2ff;box-shadow:inset 2px 0 0 #2563eb;" : "font-weight:500;color:#475569;background:transparent;"}">${label}</a>`).join("")}
+            </nav>
+            <div style="flex:1;background:#f5f8fc;min-width:0;">
+              <div style="padding:16px 24px;background:#fff;border-bottom:1px solid #e6ecf4;">
+                <h3 style="margin:0;font-size:19px;font-weight:700;color:#0f172a;letter-spacing:-0.01em;">${labels[key]}</h3>
+                <p style="margin:3px 0 0;font-size:12.5px;color:#94a3b8;">Workspace area</p>
+              </div>
+              <div style="padding:24px;">
+                <div style="background:#fff;border:1px solid #e6ecf4;border-radius:13px;padding:24px;">
+                  <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:#94a3b8;">Coming next</div>
+                  <p style="margin:10px 0 0;font-size:14px;line-height:1.6;color:#475569;max-width:560px;">This workspace area now has its own route and page shell. The production controls for ${labels[key].toLowerCase()} will be connected as the backend milestones land.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>`;
+    }
+
+    return true;
+  }
+
+  let tries = 0;
+  const timer = setInterval(() => {
+    tries += 1;
+    applyRoute();
+    if (tries > 60) clearInterval(timer);
+  }, 50);
+  document.addEventListener("DOMContentLoaded", applyRoute);
+})();
+</script>
 </body>
 </html>

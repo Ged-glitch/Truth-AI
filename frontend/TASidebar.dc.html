@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<script src="./support.js"></script>
+<script src="/frontend/support.js"></script>
 </head>
 <body>
 <x-dc>
@@ -18,13 +18,13 @@
   <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:#b3bccb;padding:4px 11px 8px;">Workspace</div>
   <div style="display:flex;flex-direction:column;gap:2px;">
     <sc-for list="{{ items }}" as="item" hint-placeholder-count="8">
-      <div style="{{ item.rowStyle }}">
+      <a href="{{ item.href }}" style="{{ item.rowStyle }}">
         <span style="{{ item.iconStyle }}">{{ item.icon }}</span>
         <span style="flex:1;">{{ item.label }}</span>
         <sc-if value="{{ item.badge }}" hint-placeholder-val="">
           <span style="{{ item.badgeStyle }}">{{ item.badge }}</span>
         </sc-if>
-      </div>
+      </a>
     </sc-for>
   </div>
 
@@ -69,12 +69,13 @@ class Component extends DCLogic {
       { key: "connections", label: "Connections", badge: null },
       { key: "settings", label: "Settings", badge: null },
     ];
-    const base = "display:flex;align-items:center;gap:11px;padding:9px 11px;border-radius:9px;font-size:13.5px;cursor:pointer;transition:background .12s;";
+    const base = "display:flex;align-items:center;gap:11px;padding:9px 11px;border-radius:9px;font-size:13.5px;cursor:pointer;transition:background .12s;text-decoration:none;";
     const items = defs.map((d) => {
       const on = d.key === active;
       return {
         key: d.key,
         label: d.label,
+        href: "/app/" + d.key,
         icon: icons[d.key],
         badge: d.badge,
         rowStyle: base + (on
