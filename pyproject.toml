@@ -1,0 +1,49 @@
+[project]
+name = "truth-ai"
+version = "0.1.0"
+description = "Deterministic truth kernel and continuity ledger for LLM agents."
+authors = [
+    { name = "Ged Hogan", email = "181600685+Ged-glitch@users.noreply.github.com" }
+]
+license = "MIT"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "networkx==3.6.1",
+    "pydantic==2.13.4",
+    "typer==0.26.7",
+]
+
+[project.scripts]
+truth = "truthkernel.cli:app"
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+packages = ["truthkernel"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[build-system]
+requires = ["setuptools==80.9.0"]
+build-backend = "setuptools.build_meta"
+
+[dependency-groups]
+dev = [
+    "hypothesis==6.155.2",
+    "mypy==2.1.0",
+    "pre-commit==4.6.0",
+    "pytest==9.0.3",
+    "ruff==0.15.17",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]

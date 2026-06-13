@@ -1,0 +1,15 @@
+{
+  "Claim.schema.json": "7cd0bba341312b384a0709a77a182547b161caf2dfe0071d8d263366457250bd",
+  "DecisionBundle.schema.json": "aeb4929af99724ac413327427f6dd13bb517d8df68ddf1174e426e2a67ca402a",
+  "Entity.schema.json": "b1d909b53195df6d455e8834515a9452cbd95d3e0755225d91f6f48f6319e030",
+  "Evidence.schema.json": "515195269f49d5a0ea0b44d04d94774446efc2b03666045fab5a1750dee50fb6",
+  "Finding.schema.json": "f8ffc31661501bd3b80bee00fb2db2cb428b6c26f65d7cede3e49b19ca18f209",
+  "LedgerEntry.schema.json": "9e682866b75d16cc4b62ad19aca4f9c2399ebf06f7abe88cd11cf0f2deb49e50",
+  "Link.schema.json": "0d5f5b863e555c5b70961da98f877d74d3dcf0c34ca85a230d4d605c9285cd15",
+  "Pack.schema.json": "258419af1595615c9eb9a490ba58766cc4fe6dcb26eed533c3937947a08761d5",
+  "Provenance.schema.json": "6f2ee51d013238dc9c6afffaba794b452050eeed71ac930a923e05fe869a36d1",
+  "RepairContract.schema.json": "4ed2e617dd03895456bbab8d36d6eeef88c57a330e458ddb92c123e32852657c",
+  "RepairItem.schema.json": "8e998779894399fae5b6321cc5dbc6ec1c12e94d28182549c121154cbb99188d",
+  "RulePack.schema.json": "c20f8ddec8c0989f640da69695f31540ca5d0f02a4795aa07bcb473679a36fcb",
+  "VerifierResult.schema.json": "8a536cece079f4f22f23c97030d93a5849264ff89c218932c69ecfca56020ece"
+}
