@@ -1,0 +1,36 @@
+{
+  "critical_truth_classes": [
+    "TC-03",
+    "TC-07"
+  ],
+  "gate_ceilings": {
+    "TC-01": 0,
+    "TC-02": 0,
+    "TC-03": 0,
+    "TC-04": 0,
+    "TC-05": 0,
+    "TC-07": 0,
+    "TC-08": 0
+  },
+  "gate_relevant_claim_types": [
+    "factual",
+    "calculation",
+    "citation"
+  ],
+  "id": "strict-default-v0.1",
+  "name": "strict-default",
+  "policy_hash": "strict-default-policy-v0.1",
+  "qualified_source_kinds": [
+    "document_segment",
+    "tool_output",
+    "ledger_fact"
+  ],
+  "retrieval_permissions": {
+    "ledger": true,
+    "local_corpus": true,
+    "web": false
+  },
+  "taxonomy_hash": "truth-class-taxonomy-v0.1",
+  "verifier_weights": {},
+  "version": "0.1"
+}
