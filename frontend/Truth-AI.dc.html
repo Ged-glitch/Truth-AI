@@ -1,0 +1,1111 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Truth-AI</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; background: #f5f8fc; color: #0f172a; font-family: 'IBM Plex Sans', system-ui, sans-serif; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+  ::selection { background: rgba(37,99,235,0.16); }
+  a { color: inherit; text-decoration: none; }
+  @keyframes ta-pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.35; } }
+  @keyframes ta-scan { 0% { transform: translateY(-100%); } 100% { transform: translateY(900%); } }
+  @media (max-width: 900px) {
+    #ta-nav-links { display: none !important; }
+    #ta-hero-grid, #ta-trust-grid, #ta-dash-grid { grid-template-columns: 1fr !important; }
+    #ta-problem-grid, #ta-features-grid, #ta-workflow-grid, #ta-usecase-grid, #ta-footer-grid { grid-template-columns: repeat(2,1fr) !important; }
+    #ta-workflow-line { display: none !important; }
+    .ta-shell { min-width: 880px; }
+    .ta-frame { overflow-x: auto !important; }
+    h1 { font-size: 42px !important; }
+  }
+  @media (max-width: 560px) {
+    #ta-problem-grid, #ta-features-grid, #ta-workflow-grid, #ta-usecase-grid, #ta-footer-grid { grid-template-columns: 1fr !important; }
+    h1 { font-size: 32px !important; }
+    h2 { font-size: 28px !important; }
+  }
+</style>
+</helmet>
+
+<div style="min-height:100vh;background:#f5f8fc;overflow-x:hidden;">
+
+  <!-- ================= NAV ================= -->
+  <header style="position:sticky;top:0;z-index:50;background:rgba(245,248,252,0.82);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid #e4eaf2;">
+    <div style="max-width:1240px;margin:0 auto;padding:0 32px;height:68px;display:flex;align-items:center;justify-content:space-between;gap:24px;">
+      <a href="#top" style="display:flex;align-items:center;gap:11px;">
+        <span style="width:30px;height:30px;border-radius:9px;background:linear-gradient(135deg,#2563eb,#06b6d4);display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(37,99,235,0.35);">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 5.5V11c0 5 3.4 8.4 8 10 4.6-1.6 8-5 8-10V5.5L12 2Z"/><path d="m9 11.5 2 2 4-4.5"/></svg>
+        </span>
+        <span style="font-weight:700;font-size:17px;letter-spacing:-0.01em;color:#0f172a;">Truth&#8209;AI</span>
+      </a>
+      <nav id="ta-nav-links" style="display:flex;align-items:center;gap:28px;font-size:14px;color:#475569;font-weight:500;white-space:nowrap;">
+        <a href="#problem" style="transition:color .15s;" style-hover="color:#0f172a;">Problem</a>
+        <a href="#workflow" style="transition:color .15s;" style-hover="color:#0f172a;">Workflow</a>
+        <a href="#features" style="transition:color .15s;" style-hover="color:#0f172a;">Features</a>
+        <a href="#trust" style="transition:color .15s;" style-hover="color:#0f172a;">Integrity</a>
+        <a href="#usecases" style="transition:color .15s;" style-hover="color:#0f172a;">Use cases</a>
+        <a href="#app" style="transition:color .15s;" style-hover="color:#0f172a;">Product</a>
+      </nav>
+      <div style="display:flex;align-items:center;gap:12px;">
+        <a href="#app" style="font-size:14px;font-weight:500;color:#0f172a;padding:9px 14px;border:1px solid #d4dde8;border-radius:9px;background:#fff;transition:border-color .15s;white-space:nowrap;" style-hover="border-color:#2563eb;">View demo</a>
+        <a href="#waitlist" style="font-size:14px;font-weight:600;color:#fff;padding:10px 16px;border-radius:9px;background:#2563eb;box-shadow:0 1px 2px rgba(37,99,235,0.5),0 4px 14px rgba(37,99,235,0.22);transition:background .15s;" style-hover="background:#1d4ed8;">Join waitlist</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ================= HERO ================= -->
+  <section id="top" style="position:relative;overflow:hidden;border-bottom:1px solid #e4eaf2;">
+    <div aria-hidden="true" style="position:absolute;inset:0;background-image:linear-gradient(rgba(15,23,42,0.045) 1px,transparent 1px),linear-gradient(90deg,rgba(15,23,42,0.045) 1px,transparent 1px);background-size:46px 46px;-webkit-mask-image:radial-gradient(ellipse 75% 70% at 50% 8%,#000 35%,transparent 78%);mask-image:radial-gradient(ellipse 75% 70% at 50% 8%,#000 35%,transparent 78%);"></div>
+    <div aria-hidden="true" style="position:absolute;top:-180px;left:50%;transform:translateX(-50%);width:1100px;height:560px;background:radial-gradient(ellipse 50% 60% at 50% 50%,rgba(37,99,235,0.14),transparent 68%),radial-gradient(ellipse 60% 50% at 65% 45%,rgba(6,182,212,0.11),transparent 70%);filter:blur(6px);pointer-events:none;"></div>
+
+    <div id="ta-hero-grid" style="position:relative;max-width:1240px;margin:0 auto;padding:84px 32px 76px;display:grid;grid-template-columns:1.05fr 0.95fr;gap:56px;align-items:center;">
+      <div>
+        <div style="display:inline-flex;align-items:center;gap:9px;padding:6px 12px;border:1px solid #d6e0ee;background:#fff;border-radius:999px;font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:0.12em;color:#2563eb;text-transform:uppercase;box-shadow:0 1px 2px rgba(15,23,42,0.04);">
+          <span style="width:6px;height:6px;border-radius:50%;background:#06b6d4;box-shadow:0 0 0 3px rgba(6,182,212,0.18);"></span>
+          truthai.tech &nbsp;&middot;&nbsp; v0.1 preview
+        </div>
+        <h1 style="margin:22px 0 0;font-size:54px;line-height:1.04;letter-spacing:-0.025em;font-weight:700;color:#0b1220;text-wrap:balance;">Verifiable truth infrastructure for the AI era</h1>
+        <p style="margin:22px 0 0;font-size:18px;line-height:1.62;color:#475569;max-width:556px;text-wrap:pretty;">Check what an LLM tells you against a verifiable source of truth. Truth&#8209;AI grounds every claim in trusted online sources and references, then produces auditable decision bundles with cryptographic integrity.</p>
+        <div style="display:flex;gap:13px;margin-top:32px;flex-wrap:wrap;">
+          <a href="#waitlist" style="font-size:15px;font-weight:600;color:#fff;padding:13px 22px;border-radius:11px;background:#2563eb;box-shadow:0 1px 2px rgba(37,99,235,0.5),0 8px 22px rgba(37,99,235,0.24);transition:background .15s;" style-hover="background:#1d4ed8;">Join waitlist</a>
+          <a href="#app" style="font-size:15px;font-weight:600;color:#0f172a;padding:13px 22px;border-radius:11px;background:#fff;border:1px solid #d4dde8;transition:border-color .15s;display:inline-flex;align-items:center;gap:8px;" style-hover="border-color:#2563eb;">View demo
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        </div>
+        <div style="display:flex;align-items:center;gap:14px;margin-top:34px;flex-wrap:wrap;font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:#64748b;letter-spacing:0.01em;">
+          <span>Verified sources &amp; references</span><span style="color:#cbd5e1;">&bull;</span>
+          <span>Evidence hashing</span><span style="color:#cbd5e1;">&bull;</span>
+          <span>Rule packs</span><span style="color:#cbd5e1;">&bull;</span>
+          <span>Audit ledger</span>
+        </div>
+      </div>
+
+      <!-- Hero artifact: decision bundle card -->
+      <div style="position:relative;">
+        <div style="position:absolute;-z-index:1;inset:18px -10px -16px 20px;background:linear-gradient(135deg,rgba(37,99,235,0.10),rgba(6,182,212,0.08));border-radius:18px;filter:blur(2px);"></div>
+        <div style="position:relative;background:#fff;border:1px solid #e2e8f1;border-radius:16px;box-shadow:0 1px 2px rgba(15,23,42,0.05),0 20px 50px -18px rgba(15,23,42,0.22);overflow:hidden;">
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid #eef2f7;">
+            <div style="display:flex;align-items:center;gap:9px;">
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.1em;color:#64748b;text-transform:uppercase;">Decision bundle</span>
+            </div>
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#94a3b8;">kernel v0.1.0</span>
+          </div>
+          <div style="padding:20px 18px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;">
+              <div>
+                <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.08em;color:#64748b;text-transform:uppercase;">Verdict</div>
+                <div style="display:flex;align-items:center;gap:9px;margin-top:7px;">
+                  <span style="width:9px;height:9px;border-radius:50%;background:#059669;box-shadow:0 0 0 3px rgba(5,150,105,0.16);"></span>
+                  <span style="font-size:22px;font-weight:700;color:#047857;letter-spacing:-0.01em;">Accepted</span>
+                </div>
+              </div>
+              <div style="text-align:right;">
+                <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.08em;color:#64748b;text-transform:uppercase;">Confidence</div>
+                <div style="font-size:22px;font-weight:700;color:#0f172a;margin-top:7px;">0.94</div>
+              </div>
+            </div>
+            <div style="height:6px;border-radius:99px;background:#eef2f7;margin-top:16px;overflow:hidden;">
+              <div style="width:94%;height:100%;background:linear-gradient(90deg,#2563eb,#06b6d4);border-radius:99px;"></div>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:18px;">
+              <div style="text-align:center;padding:10px 4px;background:#f7faff;border:1px solid #eaf0f8;border-radius:9px;"><div style="font-size:16px;font-weight:700;color:#059669;">3</div><div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#94a3b8;margin-top:2px;">SUPPORT</div></div>
+              <div style="text-align:center;padding:10px 4px;background:#f7faff;border:1px solid #eaf0f8;border-radius:9px;"><div style="font-size:16px;font-weight:700;color:#dc2626;">1</div><div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#94a3b8;margin-top:2px;">CONTRA</div></div>
+              <div style="text-align:center;padding:10px 4px;background:#f7faff;border:1px solid #eaf0f8;border-radius:9px;"><div style="font-size:16px;font-weight:700;color:#d97706;">2</div><div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#94a3b8;margin-top:2px;">REVIEW</div></div>
+              <div style="text-align:center;padding:10px 4px;background:#f7faff;border:1px solid #eaf0f8;border-radius:9px;"><div style="font-size:16px;font-weight:700;color:#0f172a;">8</div><div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#94a3b8;margin-top:2px;">CLAIMS</div></div>
+            </div>
+            <div style="margin-top:16px;padding:12px 13px;background:#0f172a;border-radius:10px;">
+              <div style="display:flex;align-items:center;justify-content:space-between;">
+                <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.1em;color:#64748b;text-transform:uppercase;">SHA&#8209;256 canonical hash</span>
+                <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#34d399;">verified</span>
+              </div>
+              <div style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#7dd3fc;margin-top:8px;word-break:break-all;line-height:1.5;">95e23a47&#8230;5138395e</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= PROBLEM ================= -->
+  <section id="problem" style="background:#ffffff;border-bottom:1px solid #e4eaf2;">
+    <div style="max-width:1240px;margin:0 auto;padding:90px 32px;">
+      <div style="max-width:760px;">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:0.16em;text-transform:uppercase;color:#2563eb;">The problem</div>
+        <h2 style="margin:14px 0 0;font-size:38px;line-height:1.1;letter-spacing:-0.02em;font-weight:700;color:#0b1220;text-wrap:balance;">Generation is cheap. Verification is not.</h2>
+        <p style="margin:16px 0 0;font-size:17px;line-height:1.6;color:#475569;max-width:620px;">Language models produce fluent text faster than anyone can check it against a reliable source of truth. Without a deterministic gate between generation and persistence, unverified claims become institutional memory.</p>
+      </div>
+      <div id="ta-problem-grid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:48px;">
+        <div style="background:#f8fafd;border:1px solid #e6ecf4;border-radius:14px;padding:24px 22px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;">
+            <span style="width:38px;height:38px;border-radius:10px;background:#fff;border:1px solid #e6ecf4;display:flex;align-items:center;justify-content:center;color:#2563eb;"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M21 7v5h-5"/></svg></span>
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#cbd5e1;">01</span>
+          </div>
+          <h3 style="margin:18px 0 0;font-size:16px;font-weight:600;color:#0f172a;">AI content is increasing</h3>
+          <p style="margin:9px 0 0;font-size:13.5px;line-height:1.55;color:#64748b;">Synthetic text now outpaces the human capacity to review it, and most of it is never checked against a source.</p>
+        </div>
+        <div style="background:#f8fafd;border:1px solid #e6ecf4;border-radius:14px;padding:24px 22px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;">
+            <span style="width:38px;height:38px;border-radius:10px;background:#fff;border:1px solid #e6ecf4;display:flex;align-items:center;justify-content:center;color:#2563eb;"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/><path d="M11 8v3M11 14h.01"/></svg></span>
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#cbd5e1;">02</span>
+          </div>
+          <h3 style="margin:18px 0 0;font-size:16px;font-weight:600;color:#0f172a;">Claims are hard to verify</h3>
+          <p style="margin:9px 0 0;font-size:13.5px;line-height:1.55;color:#64748b;">There is rarely a structured path from an assertion to the evidence that supports or contradicts it.</p>
+        </div>
+        <div style="background:#f8fafd;border:1px solid #e6ecf4;border-radius:14px;padding:24px 22px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;">
+            <span style="width:38px;height:38px;border-radius:10px;background:#fff;border:1px solid #e6ecf4;display:flex;align-items:center;justify-content:center;color:#2563eb;"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h7l2 2h7v9a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V7Z"/><path d="M9 13h.01M14 13h.01"/></svg></span>
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#cbd5e1;">03</span>
+          </div>
+          <h3 style="margin:18px 0 0;font-size:16px;font-weight:600;color:#0f172a;">Evidence trails fragment</h3>
+          <p style="margin:9px 0 0;font-size:13.5px;line-height:1.55;color:#64748b;">Sources scatter across tools and tabs, unhashed and unsnapshotted, so findings cannot be reproduced.</p>
+        </div>
+        <div style="background:#f8fafd;border:1px solid #e6ecf4;border-radius:14px;padding:24px 22px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;">
+            <span style="width:38px;height:38px;border-radius:10px;background:#fff;border:1px solid #e6ecf4;display:flex;align-items:center;justify-content:center;color:#2563eb;"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 4 6v5c0 5 3.4 8.4 8 10 4.6-1.6 8-5 8-10V6l-8-3Z"/></svg></span>
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#cbd5e1;">04</span>
+          </div>
+          <h3 style="margin:18px 0 0;font-size:16px;font-weight:600;color:#0f172a;">Audit trails are required</h3>
+          <p style="margin:9px 0 0;font-size:13.5px;line-height:1.55;color:#64748b;">Compliance, legal and research teams need replayable decisions, not screenshots of a chat window.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= WORKFLOW ================= -->
+  <section id="workflow" style="background:#f5f8fc;border-bottom:1px solid #e4eaf2;">
+    <div style="max-width:1240px;margin:0 auto;padding:90px 32px;">
+      <div style="max-width:760px;">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:0.16em;text-transform:uppercase;color:#2563eb;">The pipeline</div>
+        <h2 style="margin:14px 0 0;font-size:38px;line-height:1.1;letter-spacing:-0.02em;font-weight:700;color:#0b1220;text-wrap:balance;">From raw claim to auditable decision</h2>
+        <p style="margin:16px 0 0;font-size:17px;line-height:1.6;color:#475569;max-width:620px;">Five deterministic stages. Every input is hashed; every output is replayable.</p>
+      </div>
+      <div id="ta-workflow-grid" style="position:relative;display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-top:52px;">
+        <div id="ta-workflow-line" aria-hidden="true" style="position:absolute;top:19px;left:8%;right:8%;height:2px;background:linear-gradient(90deg,#bfdbfe,#a5e8f2);z-index:0;"></div>
+        <div style="position:relative;z-index:1;text-align:center;">
+          <div style="width:40px;height:40px;margin:0 auto;border-radius:11px;background:#2563eb;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px;box-shadow:0 4px 12px rgba(37,99,235,0.3);">1</div>
+          <div style="margin-top:16px;background:#fff;border:1px solid #e6ecf4;border-radius:12px;padding:18px 14px;min-height:118px;">
+            <h3 style="margin:0;font-size:15px;font-weight:600;color:#0f172a;">Submit claim</h3>
+            <p style="margin:8px 0 0;font-size:12.5px;line-height:1.5;color:#64748b;">Atomic, decontextualised proposition with a claim type.</p>
+          </div>
+        </div>
+        <div style="position:relative;z-index:1;text-align:center;">
+          <div style="width:40px;height:40px;margin:0 auto;border-radius:11px;background:#2563eb;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px;box-shadow:0 4px 12px rgba(37,99,235,0.3);">2</div>
+          <div style="margin-top:16px;background:#fff;border:1px solid #e6ecf4;border-radius:12px;padding:18px 14px;min-height:118px;">
+            <h3 style="margin:0;font-size:15px;font-weight:600;color:#0f172a;">Ground in sources</h3>
+            <p style="margin:8px 0 0;font-size:12.5px;line-height:1.5;color:#64748b;">Trusted online sources, references and files are snapshotted, frozen and hashed.</p>
+          </div>
+        </div>
+        <div style="position:relative;z-index:1;text-align:center;">
+          <div style="width:40px;height:40px;margin:0 auto;border-radius:11px;background:#2563eb;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px;box-shadow:0 4px 12px rgba(37,99,235,0.3);">3</div>
+          <div style="margin-top:16px;background:#fff;border:1px solid #e6ecf4;border-radius:12px;padding:18px 14px;min-height:118px;">
+            <h3 style="margin:0;font-size:15px;font-weight:600;color:#0f172a;">Extract entities</h3>
+            <p style="margin:8px 0 0;font-size:12.5px;line-height:1.5;color:#64748b;">Subject&ndash;relation&ndash;object triples normalise the claim graph.</p>
+          </div>
+        </div>
+        <div style="position:relative;z-index:1;text-align:center;">
+          <div style="width:40px;height:40px;margin:0 auto;border-radius:11px;background:#2563eb;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px;box-shadow:0 4px 12px rgba(37,99,235,0.3);">4</div>
+          <div style="margin-top:16px;background:#fff;border:1px solid #e6ecf4;border-radius:12px;padding:18px 14px;min-height:118px;">
+            <h3 style="margin:0;font-size:15px;font-weight:600;color:#0f172a;">Run verification</h3>
+            <p style="margin:8px 0 0;font-size:12.5px;line-height:1.5;color:#64748b;">The kernel checks each claim against your sources, references and the ledger.</p>
+          </div>
+        </div>
+        <div style="position:relative;z-index:1;text-align:center;">
+          <div style="width:40px;height:40px;margin:0 auto;border-radius:11px;background:linear-gradient(135deg,#2563eb,#06b6d4);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px;box-shadow:0 4px 12px rgba(6,182,212,0.32);">5</div>
+          <div style="margin-top:16px;background:#fff;border:1px solid #d6e9f5;border-radius:12px;padding:18px 14px;min-height:118px;box-shadow:0 0 0 3px rgba(6,182,212,0.06);">
+            <h3 style="margin:0;font-size:15px;font-weight:600;color:#0f172a;">Decision bundle</h3>
+            <p style="margin:8px 0 0;font-size:12.5px;line-height:1.5;color:#64748b;">A signed, hashed record that replays the verdict exactly.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= DASHBOARD PREVIEW ================= -->
+  <section style="background:#ffffff;border-bottom:1px solid #e4eaf2;">
+    <div style="max-width:1240px;margin:0 auto;padding:90px 32px;">
+      <div style="text-align:center;max-width:720px;margin:0 auto;">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:0.16em;text-transform:uppercase;color:#2563eb;">Workspace</div>
+        <h2 style="margin:14px 0 0;font-size:38px;line-height:1.1;letter-spacing:-0.02em;font-weight:700;color:#0b1220;text-wrap:balance;">A verification console, not a chat log</h2>
+        <p style="margin:16px 0 0;font-size:17px;line-height:1.6;color:#475569;">Submit a claim, attach the sources that back it, and watch the kernel resolve a verdict against your source of truth &mdash; with full provenance.</p>
+      </div>
+
+      <!-- browser frame -->
+      <div style="margin-top:46px;border:1px solid #dde5ef;border-radius:16px;overflow:hidden;box-shadow:0 1px 2px rgba(15,23,42,0.05),0 30px 60px -28px rgba(15,23,42,0.28);background:#fff;">
+        <div style="display:flex;align-items:center;gap:14px;padding:11px 16px;background:#f3f6fb;border-bottom:1px solid #e6ecf4;">
+          <div style="display:flex;gap:7px;"><span style="width:11px;height:11px;border-radius:50%;background:#e2554f;"></span><span style="width:11px;height:11px;border-radius:50%;background:#e8b13b;"></span><span style="width:11px;height:11px;border-radius:50%;background:#4caf63;"></span></div>
+          <div style="flex:1;max-width:420px;margin:0 auto;display:flex;align-items:center;gap:8px;background:#fff;border:1px solid #e0e7f0;border-radius:8px;padding:6px 12px;font-family:'IBM Plex Mono',monospace;font-size:12px;color:#64748b;">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>
+            app.truthai.tech/verify
+          </div>
+          <div style="width:54px;"></div>
+        </div>
+
+        <div id="ta-dash-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:0;background:#fff;">
+          <!-- left: claim + evidence -->
+          <div style="padding:26px;border-right:1px solid #eef2f7;">
+            <div style="display:flex;align-items:center;justify-content:space-between;">
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:#94a3b8;">Claim input</span>
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#2563eb;background:#eef4ff;border:1px solid #dbe7ff;border-radius:6px;padding:2px 8px;">factual</span>
+            </div>
+            <div style="margin-top:12px;border:1px solid #e6ecf4;border-radius:11px;padding:15px;background:#fbfdff;">
+              <p style="margin:0;font-size:14.5px;line-height:1.55;color:#0f172a;font-weight:500;">&ldquo;The 2024 model release reduced inference latency by 38% versus the prior version.&rdquo;</p>
+            </div>
+            <div style="margin-top:22px;display:flex;align-items:center;justify-content:space-between;">
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:#94a3b8;">Evidence pack &middot; 3</span>
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#64748b;">EP&#8209;4471</span>
+            </div>
+            <div style="margin-top:12px;display:flex;flex-direction:column;gap:9px;">
+              <div style="display:flex;align-items:center;gap:11px;border:1px solid #e6ecf4;border-radius:10px;padding:11px 13px;">
+                <span style="width:30px;height:30px;border-radius:8px;background:#eef4ff;color:#2563eb;display:flex;align-items:center;justify-content:center;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3v4a1 1 0 0 0 1 1h4"/><path d="M17 21H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7l5 5v11a2 2 0 0 1-2 2Z"/></svg></span>
+                <div style="flex:1;min-width:0;"><div style="font-size:13px;font-weight:500;color:#0f172a;">benchmark_q3.pdf</div><div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#94a3b8;">a31f&#8230;c9 &middot; primary</div></div>
+                <span style="width:8px;height:8px;border-radius:50%;background:#059669;"></span>
+              </div>
+              <div style="display:flex;align-items:center;gap:11px;border:1px solid #e6ecf4;border-radius:10px;padding:11px 13px;">
+                <span style="width:30px;height:30px;border-radius:8px;background:#ecfeff;color:#0e7490;display:flex;align-items:center;justify-content:center;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></svg></span>
+                <div style="flex:1;min-width:0;"><div style="font-size:13px;font-weight:500;color:#0f172a;">engineering-blog.io/post</div><div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#94a3b8;">7b22&#8230;e1 &middot; secondary</div></div>
+                <span style="width:8px;height:8px;border-radius:50%;background:#d97706;"></span>
+              </div>
+              <div style="display:flex;align-items:center;gap:11px;border:1px solid #e6ecf4;border-radius:10px;padding:11px 13px;">
+                <span style="width:30px;height:30px;border-radius:8px;background:#eef4ff;color:#2563eb;display:flex;align-items:center;justify-content:center;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3v4a1 1 0 0 0 1 1h4"/><path d="M17 21H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7l5 5v11a2 2 0 0 1-2 2Z"/></svg></span>
+                <div style="flex:1;min-width:0;"><div style="font-size:13px;font-weight:500;color:#0f172a;">internal_telemetry.csv</div><div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#94a3b8;">f0c4&#8230;9d &middot; primary</div></div>
+                <span style="width:8px;height:8px;border-radius:50%;background:#059669;"></span>
+              </div>
+            </div>
+          </div>
+
+          <!-- right: verdict + findings + hash -->
+          <div style="padding:26px;background:#fbfdff;">
+            <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px;">
+              <div>
+                <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:#94a3b8;">Verification result</span>
+                <div style="display:flex;align-items:center;gap:9px;margin-top:9px;">
+                  <span style="width:10px;height:10px;border-radius:50%;background:#059669;box-shadow:0 0 0 4px rgba(5,150,105,0.14);"></span>
+                  <span style="font-size:24px;font-weight:700;color:#047857;letter-spacing:-0.01em;">Accepted</span>
+                </div>
+              </div>
+              <div style="position:relative;width:74px;height:74px;flex-shrink:0;">
+                <div style="position:absolute;inset:0;border-radius:50%;background:conic-gradient(#2563eb 0% 94%,#e6ecf4 94% 100%);"></div>
+                <div style="position:absolute;inset:8px;border-radius:50%;background:#fbfdff;display:flex;flex-direction:column;align-items:center;justify-content:center;"><span style="font-size:18px;font-weight:700;color:#0f172a;line-height:1;">94</span><span style="font-family:'IBM Plex Mono',monospace;font-size:8.5px;color:#94a3b8;margin-top:2px;">SCORE</span></div>
+              </div>
+            </div>
+
+            <div style="margin-top:18px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:#94a3b8;">Findings</div>
+            <div style="margin-top:10px;display:flex;flex-direction:column;gap:8px;">
+              <div style="display:flex;align-items:center;gap:10px;padding:9px 11px;background:#fff;border:1px solid #e6ecf4;border-radius:9px;"><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:600;color:#047857;background:#ecfdf5;border:1px solid #c7ead7;border-radius:5px;padding:2px 6px;">SUPPORT</span><span style="font-size:12.5px;color:#334155;flex:1;">Latency figure corroborated by telemetry</span></div>
+              <div style="display:flex;align-items:center;gap:10px;padding:9px 11px;background:#fff;border:1px solid #e6ecf4;border-radius:9px;"><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:600;color:#b45309;background:#fffbeb;border:1px solid #f2e2bf;border-radius:5px;padding:2px 6px;">TC&#8209;02</span><span style="font-size:12.5px;color:#334155;flex:1;">Secondary source predates the release window</span></div>
+              <div style="display:flex;align-items:center;gap:10px;padding:9px 11px;background:#fff;border:1px solid #e6ecf4;border-radius:9px;"><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:600;color:#0e7490;background:#ecfeff;border:1px solid #bce7ef;border-radius:5px;padding:2px 6px;">TC&#8209;06</span><span style="font-size:12.5px;color:#334155;flex:1;">One sub-claim routed to human review</span></div>
+            </div>
+
+            <div style="margin-top:16px;padding:13px;background:#0f172a;border-radius:11px;">
+              <div style="display:flex;align-items:center;justify-content:space-between;"><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.1em;color:#64748b;text-transform:uppercase;">Ledger entry</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#34d399;">appended</span></div>
+              <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#7dd3fc;margin-top:7px;word-break:break-all;">b7e1&#8230;a4 &larr; prev 95e2&#8230;5e</div>
+            </div>
+            <button style="margin-top:14px;width:100%;font-family:'IBM Plex Sans',sans-serif;font-size:13.5px;font-weight:600;color:#fff;background:#2563eb;border:none;border-radius:10px;padding:11px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 1px 2px rgba(37,99,235,0.4);" style-hover="background:#1d4ed8;">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg>
+              Export decision bundle
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= FEATURES ================= -->
+  <section id="features" style="background:#f5f8fc;border-bottom:1px solid #e4eaf2;">
+    <div style="max-width:1240px;margin:0 auto;padding:90px 32px;">
+      <div style="max-width:760px;">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:0.16em;text-transform:uppercase;color:#2563eb;">Core capabilities</div>
+        <h2 style="margin:14px 0 0;font-size:38px;line-height:1.1;letter-spacing:-0.02em;font-weight:700;color:#0b1220;text-wrap:balance;">Everything is typed, hashed and replayable</h2>
+        <p style="margin:16px 0 0;font-size:17px;line-height:1.6;color:#475569;max-width:620px;">A deterministic kernel surrounded by the workflow tooling teams actually need.</p>
+      </div>
+      <div id="ta-features-grid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:46px;">
+        <div style="background:#fff;border:1px solid #e6ecf4;border-radius:14px;padding:22px;transition:border-color .15s,box-shadow .15s;" style-hover="border-color:#c5d6ee;box-shadow:0 10px 26px -16px rgba(15,23,42,0.22);">
+          <span style="width:40px;height:40px;border-radius:11px;background:#eef4ff;color:#2563eb;display:flex;align-items:center;justify-content:center;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="2.5"/><circle cx="18" cy="6" r="2.5"/><circle cx="12" cy="18" r="2.5"/><path d="M8 7l3 9M16 7l-3 9"/></svg></span>
+          <h3 style="margin:16px 0 0;font-size:16px;font-weight:600;color:#0f172a;">Claim modelling</h3>
+          <p style="margin:8px 0 0;font-size:13px;line-height:1.55;color:#64748b;">Atomic subject&ndash;relation&ndash;object triples with typed claim kinds and criticality tags.</p>
+        </div>
+        <div style="background:#fff;border:1px solid #e6ecf4;border-radius:14px;padding:22px;transition:border-color .15s,box-shadow .15s;" style-hover="border-color:#c5d6ee;box-shadow:0 10px 26px -16px rgba(15,23,42,0.22);">
+          <span style="width:40px;height:40px;border-radius:11px;background:#eef4ff;color:#2563eb;display:flex;align-items:center;justify-content:center;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h6l2 2h8v9a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V7Z"/></svg></span>
+          <h3 style="margin:16px 0 0;font-size:16px;font-weight:600;color:#0f172a;">Source &amp; evidence packs</h3>
+          <p style="margin:8px 0 0;font-size:13px;line-height:1.55;color:#64748b;">Trusted online sources, references, files and tool outputs snapshotted and bundled per claim.</p>
+        </div>
+        <div style="background:#fff;border:1px solid #e6ecf4;border-radius:14px;padding:22px;transition:border-color .15s,box-shadow .15s;" style-hover="border-color:#c5d6ee;box-shadow:0 10px 26px -16px rgba(15,23,42,0.22);">
+          <span style="width:40px;height:40px;border-radius:11px;background:#ecfeff;color:#0e7490;display:flex;align-items:center;justify-content:center;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 6v6c0 5 3.5 8.5 8 10 4.5-1.5 8-5 8-10V6l-8-4Z"/><path d="m9 12 2 2 4-4"/></svg></span>
+          <h3 style="margin:16px 0 0;font-size:16px;font-weight:600;color:#0f172a;">Canonical hashing</h3>
+          <p style="margin:8px 0 0;font-size:13px;line-height:1.55;color:#64748b;">RFC&nbsp;8785 JSON and SHA&#8209;256 content addressing for byte-equal replay.</p>
+        </div>
+        <div style="background:#fff;border:1px solid #e6ecf4;border-radius:14px;padding:22px;transition:border-color .15s,box-shadow .15s;" style-hover="border-color:#c5d6ee;box-shadow:0 10px 26px -16px rgba(15,23,42,0.22);">
+          <span style="width:40px;height:40px;border-radius:11px;background:#eef4ff;color:#2563eb;display:flex;align-items:center;justify-content:center;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16M4 12h16M4 19h10"/><circle cx="18" cy="19" r="2.5"/></svg></span>
+          <h3 style="margin:16px 0 0;font-size:16px;font-weight:600;color:#0f172a;">Rule&#8209;based verification</h3>
+          <p style="margin:8px 0 0;font-size:13px;line-height:1.55;color:#64748b;">Versioned rule packs and pure predicates over a typed claim graph.</p>
+        </div>
+        <div style="background:#fff;border:1px solid #e6ecf4;border-radius:14px;padding:22px;transition:border-color .15s,box-shadow .15s;" style-hover="border-color:#c5d6ee;box-shadow:0 10px 26px -16px rgba(15,23,42,0.22);">
+          <span style="width:40px;height:40px;border-radius:11px;background:#ecfeff;color:#0e7490;display:flex;align-items:center;justify-content:center;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h11l3 3v13a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1Z"/><path d="M9 13l2 2 4-4"/></svg></span>
+          <h3 style="margin:16px 0 0;font-size:16px;font-weight:600;color:#0f172a;">Decision bundles</h3>
+          <p style="margin:8px 0 0;font-size:13px;line-height:1.55;color:#64748b;">Self-contained records of the graph, evidence, policy and verdict.</p>
+        </div>
+        <div style="background:#fff;border:1px solid #e6ecf4;border-radius:14px;padding:22px;transition:border-color .15s,box-shadow .15s;" style-hover="border-color:#c5d6ee;box-shadow:0 10px 26px -16px rgba(15,23,42,0.22);">
+          <span style="width:40px;height:40px;border-radius:11px;background:#eef4ff;color:#2563eb;display:flex;align-items:center;justify-content:center;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h9l5 5v13H6Z"/><path d="M9 8h3M9 12h6M9 16h6"/></svg></span>
+          <h3 style="margin:16px 0 0;font-size:16px;font-weight:600;color:#0f172a;">Audit ledger</h3>
+          <p style="margin:8px 0 0;font-size:13px;line-height:1.55;color:#64748b;">Append-only, bitemporal, Merkle-chained store of accepted claims.</p>
+        </div>
+        <div style="background:#fff;border:1px solid #e6ecf4;border-radius:14px;padding:22px;transition:border-color .15s,box-shadow .15s;" style-hover="border-color:#c5d6ee;box-shadow:0 10px 26px -16px rgba(15,23,42,0.22);">
+          <span style="width:40px;height:40px;border-radius:11px;background:#eef4ff;color:#2563eb;display:flex;align-items:center;justify-content:center;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.5"/><path d="M5 20a7 7 0 0 1 14 0"/><path d="m17 11 1.5 1.5L22 9"/></svg></span>
+          <h3 style="margin:16px 0 0;font-size:16px;font-weight:600;color:#0f172a;">Human review workflow</h3>
+          <p style="margin:8px 0 0;font-size:13px;line-height:1.55;color:#64748b;">Undecided claims route to reviewers with full context and provenance.</p>
+        </div>
+        <div style="background:#fff;border:1px solid #e6ecf4;border-radius:14px;padding:22px;transition:border-color .15s,box-shadow .15s;" style-hover="border-color:#c5d6ee;box-shadow:0 10px 26px -16px rgba(15,23,42,0.22);">
+          <span style="width:40px;height:40px;border-radius:11px;background:#ecfeff;color:#0e7490;display:flex;align-items:center;justify-content:center;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="6" rx="8" ry="3"/><path d="M4 6v6c0 1.7 3.6 3 8 3s8-1.3 8-3V6"/><path d="M4 12v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6"/></svg></span>
+          <h3 style="margin:16px 0 0;font-size:16px;font-weight:600;color:#0f172a;">Project storage</h3>
+          <p style="margin:8px 0 0;font-size:13px;line-height:1.55;color:#64748b;">Supabase-backed projects, claims, evidence and history per workspace.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= TECHNICAL INTEGRITY ================= -->
+  <section id="trust" style="background:#0b1220;border-bottom:1px solid #0b1220;position:relative;overflow:hidden;">
+    <div aria-hidden="true" style="position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.035) 1px,transparent 1px);background-size:46px 46px;-webkit-mask-image:radial-gradient(ellipse 80% 70% at 70% 30%,#000 30%,transparent 80%);mask-image:radial-gradient(ellipse 80% 70% at 70% 30%,#000 30%,transparent 80%);"></div>
+    <div id="ta-trust-grid" style="position:relative;max-width:1240px;margin:0 auto;padding:92px 32px;display:grid;grid-template-columns:0.95fr 1.05fr;gap:54px;align-items:center;">
+      <div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:0.16em;text-transform:uppercase;color:#38bdf8;">Determinism &amp; integrity</div>
+        <h2 style="margin:14px 0 0;font-size:36px;line-height:1.12;letter-spacing:-0.02em;font-weight:700;color:#f1f5f9;text-wrap:balance;">Measurement is deterministic. Generation is not.</h2>
+        <p style="margin:16px 0 0;font-size:16px;line-height:1.62;color:#94a3b8;max-width:480px;">The kernel makes no network calls, reads no clock and uses no randomness. Given the same inputs it returns byte-identical outputs &mdash; enforced by a 30-run replay check in CI.</p>
+        <div style="margin-top:28px;display:flex;flex-direction:column;gap:13px;">
+          <div style="display:flex;align-items:center;gap:13px;"><span style="width:26px;height:26px;border-radius:7px;background:rgba(56,189,248,0.14);color:#38bdf8;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4 4L19 7"/></svg></span><span style="font-size:14.5px;color:#cbd5e1;"><strong style="color:#f1f5f9;font-weight:600;">SHA&#8209;256 canonical hashes</strong> for every claim, evidence snapshot and bundle</span></div>
+          <div style="display:flex;align-items:center;gap:13px;"><span style="width:26px;height:26px;border-radius:7px;background:rgba(56,189,248,0.14);color:#38bdf8;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4 4L19 7"/></svg></span><span style="font-size:14.5px;color:#cbd5e1;"><strong style="color:#f1f5f9;font-weight:600;">Frozen JSON schemas</strong> &mdash; version-bumped, never silently changed</span></div>
+          <div style="display:flex;align-items:center;gap:13px;"><span style="width:26px;height:26px;border-radius:7px;background:rgba(56,189,248,0.14);color:#38bdf8;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4 4L19 7"/></svg></span><span style="font-size:14.5px;color:#cbd5e1;"><strong style="color:#f1f5f9;font-weight:600;">Reproducible outputs</strong> verified by byte-equal replay across runs</span></div>
+          <div style="display:flex;align-items:center;gap:13px;"><span style="width:26px;height:26px;border-radius:7px;background:rgba(56,189,248,0.14);color:#38bdf8;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4 4L19 7"/></svg></span><span style="font-size:14.5px;color:#cbd5e1;"><strong style="color:#f1f5f9;font-weight:600;">Testable rule packs</strong> with positive, negative and mutation coverage</span></div>
+          <div style="display:flex;align-items:center;gap:13px;"><span style="width:26px;height:26px;border-radius:7px;background:rgba(56,189,248,0.14);color:#38bdf8;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4 4L19 7"/></svg></span><span style="font-size:14.5px;color:#cbd5e1;"><strong style="color:#f1f5f9;font-weight:600;">Exportable audit trail</strong> as a Git-friendly, hash-chained event log</span></div>
+        </div>
+      </div>
+
+      <!-- code exhibit -->
+      <div style="background:#0a0f1a;border:1px solid #1e293b;border-radius:16px;overflow:hidden;box-shadow:0 30px 70px -30px rgba(0,0,0,0.7);">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid #18222f;background:#0c1220;">
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#64748b;">decision_bundle.json</span>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#475569;">canonical &middot; RFC 8785</span>
+        </div>
+        <pre style="margin:0;padding:20px;font-family:'IBM Plex Mono',monospace;font-size:12.5px;line-height:1.7;color:#cbd5e1;overflow-x:auto;"><span style="color:#475569;">{</span>
+  <span style="color:#7dd3fc;">"kernel_version"</span>: <span style="color:#86efac;">"0.1.0"</span>,
+  <span style="color:#7dd3fc;">"policy_hash"</span>: <span style="color:#86efac;">"a31f9c…b204"</span>,
+  <span style="color:#7dd3fc;">"taxonomy_hash"</span>: <span style="color:#86efac;">"5e02…c9f1"</span>,
+  <span style="color:#7dd3fc;">"verdict"</span>: <span style="color:#fbbf24;">"accepted"</span>,
+  <span style="color:#7dd3fc;">"confidence"</span>: <span style="color:#86efac;">"0.94"</span>,
+  <span style="color:#7dd3fc;">"findings"</span>: <span style="color:#475569;">[</span>
+    <span style="color:#475569;">{</span> <span style="color:#7dd3fc;">"class"</span>:<span style="color:#86efac;">"TC-02"</span>, <span style="color:#7dd3fc;">"severity"</span>:<span style="color:#fbbf24;">"major"</span> <span style="color:#475569;">}</span>
+  <span style="color:#475569;">],</span>
+  <span style="color:#7dd3fc;">"ledger_root"</span>: <span style="color:#86efac;">"95e23a47…395e"</span>,
+  <span style="color:#7dd3fc;">"replay"</span>: <span style="color:#fbbf24;">"byte-equal × 30"</span>
+<span style="color:#475569;">}</span>
+<span style="color:#475569;">#</span> <span style="color:#34d399;">sha256(canonical) = b7e1d0…a4c2  ✓ verified</span></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= USE CASES ================= -->
+  <section id="usecases" style="background:#ffffff;border-bottom:1px solid #e4eaf2;">
+    <div style="max-width:1240px;margin:0 auto;padding:90px 32px;">
+      <div style="max-width:760px;">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:0.16em;text-transform:uppercase;color:#2563eb;">Who it&#8217;s for</div>
+        <h2 style="margin:14px 0 0;font-size:38px;line-height:1.1;letter-spacing:-0.02em;font-weight:700;color:#0b1220;text-wrap:balance;">Built for people who are accountable for being right</h2>
+      </div>
+      <div id="ta-usecase-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:44px;">
+        <div style="background:#f8fafd;border:1px solid #e6ecf4;border-radius:14px;padding:24px;">
+          <span style="width:38px;height:38px;border-radius:10px;background:#fff;border:1px solid #e6ecf4;color:#2563eb;display:flex;align-items:center;justify-content:center;"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h13v14H6a2 2 0 0 1-2-2V5Z"/><path d="M17 8h3v9a2 2 0 0 1-2 2M8 9h5M8 13h5"/></svg></span>
+          <h3 style="margin:16px 0 6px;font-size:16px;font-weight:600;color:#0f172a;">Journalism &amp; fact-checking</h3>
+          <p style="margin:0;font-size:13.5px;line-height:1.55;color:#64748b;">Trace every published claim to a hashed source and defend it later.</p>
+        </div>
+        <div style="background:#f8fafd;border:1px solid #e6ecf4;border-radius:14px;padding:24px;">
+          <span style="width:38px;height:38px;border-radius:10px;background:#fff;border:1px solid #e6ecf4;color:#2563eb;display:flex;align-items:center;justify-content:center;"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 4 6v6c0 5 3.5 8.5 8 10 4.5-1.5 8-5 8-10V6l-8-3Z"/><circle cx="12" cy="11" r="2.5"/></svg></span>
+          <h3 style="margin:16px 0 6px;font-size:16px;font-weight:600;color:#0f172a;">AI safety research</h3>
+          <p style="margin:0;font-size:13.5px;line-height:1.55;color:#64748b;">Measure hallucination profiles and gate memory writes deterministically.</p>
+        </div>
+        <div style="background:#f8fafd;border:1px solid #e6ecf4;border-radius:14px;padding:24px;">
+          <span style="width:38px;height:38px;border-radius:10px;background:#fff;border:1px solid #e6ecf4;color:#2563eb;display:flex;align-items:center;justify-content:center;"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M5 7h14M7 7l-3 7a4 4 0 0 0 6 0L7 7Zm10 0-3 7a4 4 0 0 0 6 0l-3-7Z"/></svg></span>
+          <h3 style="margin:16px 0 6px;font-size:16px;font-weight:600;color:#0f172a;">Legal &amp; compliance</h3>
+          <p style="margin:0;font-size:13.5px;line-height:1.55;color:#64748b;">Produce replayable, tamper-evident decision records for review.</p>
+        </div>
+        <div style="background:#f8fafd;border:1px solid #e6ecf4;border-radius:14px;padding:24px;">
+          <span style="width:38px;height:38px;border-radius:10px;background:#fff;border:1px solid #e6ecf4;color:#2563eb;display:flex;align-items:center;justify-content:center;"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21V8l9-5 9 5v13"/><path d="M9 21v-6h6v6M3 8h18"/></svg></span>
+          <h3 style="margin:16px 0 6px;font-size:16px;font-weight:600;color:#0f172a;">Enterprise knowledge</h3>
+          <p style="margin:0;font-size:13.5px;line-height:1.55;color:#64748b;">Validate internal knowledge bases before they become a source of truth.</p>
+        </div>
+        <div style="background:#f8fafd;border:1px solid #e6ecf4;border-radius:14px;padding:24px;">
+          <span style="width:38px;height:38px;border-radius:10px;background:#fff;border:1px solid #e6ecf4;color:#2563eb;display:flex;align-items:center;justify-content:center;"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10 12 5 2 10l10 5 10-5Z"/><path d="M6 12v5c0 1 2.7 2.5 6 2.5s6-1.5 6-2.5v-5"/></svg></span>
+          <h3 style="margin:16px 0 6px;font-size:16px;font-weight:600;color:#0f172a;">Academic research</h3>
+          <p style="margin:0;font-size:13.5px;line-height:1.55;color:#64748b;">Attach citations to claims and keep a reproducible evidence chain.</p>
+        </div>
+        <div style="background:#f8fafd;border:1px solid #e6ecf4;border-radius:14px;padding:24px;">
+          <span style="width:38px;height:38px;border-radius:10px;background:#fff;border:1px solid #e6ecf4;color:#2563eb;display:flex;align-items:center;justify-content:center;"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg></span>
+          <h3 style="margin:16px 0 6px;font-size:16px;font-weight:600;color:#0f172a;">Public-interest investigations</h3>
+          <p style="margin:0;font-size:13.5px;line-height:1.55;color:#64748b;">Assemble auditable findings that withstand adversarial scrutiny.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= WAITLIST CTA ================= -->
+  <section id="waitlist" style="background:#f5f8fc;border-bottom:1px solid #e4eaf2;">
+    <div style="max-width:1240px;margin:0 auto;padding:80px 32px;">
+      <div style="position:relative;overflow:hidden;border-radius:20px;background:linear-gradient(135deg,#0b1220,#101a2e);border:1px solid #1c2740;padding:52px 44px;text-align:center;">
+        <div aria-hidden="true" style="position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.04) 1px,transparent 1px);background-size:40px 40px;-webkit-mask-image:radial-gradient(ellipse 70% 100% at 50% 0%,#000,transparent 75%);mask-image:radial-gradient(ellipse 70% 100% at 50% 0%,#000,transparent 75%);"></div>
+        <div style="position:relative;">
+          <h2 style="margin:0;font-size:34px;line-height:1.12;letter-spacing:-0.02em;font-weight:700;color:#f1f5f9;text-wrap:balance;">Bring verifiable truth to your workflow</h2>
+          <p style="margin:14px auto 0;font-size:16px;line-height:1.6;color:#94a3b8;max-width:520px;">Join the waitlist for early access to the Truth&#8209;AI verification console and kernel.</p>
+          <form onsubmit="return false" style="margin:28px auto 0;display:flex;gap:10px;max-width:460px;">
+            <input type="email" placeholder="you@organisation.com" style="flex:1;background:rgba(255,255,255,0.06);border:1px solid #243349;border-radius:11px;padding:13px 15px;font-family:'IBM Plex Sans',sans-serif;font-size:14px;color:#f1f5f9;outline:none;" />
+            <button type="submit" style="font-family:'IBM Plex Sans',sans-serif;font-size:14px;font-weight:600;color:#fff;background:#2563eb;border:none;border-radius:11px;padding:13px 22px;cursor:pointer;white-space:nowrap;box-shadow:0 1px 2px rgba(37,99,235,0.5),0 8px 22px rgba(37,99,235,0.28);transition:background .15s;" style-hover="background:#1d4ed8;">Join waitlist</button>
+          </form>
+          <p style="margin:14px 0 0;font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#64748b;">No spam &middot; v0.1 preview &middot; truthai.tech</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= PRODUCT UI ================= -->
+  <section id="app" style="background:#eef2f8;border-top:1px solid #e4eaf2;border-bottom:1px solid #e4eaf2;">
+    <div style="max-width:1240px;margin:0 auto;padding:84px 32px 40px;text-align:center;">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:0.16em;text-transform:uppercase;color:#2563eb;">The product</div>
+      <h2 style="margin:14px 0 0;font-size:38px;line-height:1.1;letter-spacing:-0.02em;font-weight:700;color:#0b1220;text-wrap:balance;">The verification console</h2>
+      <p style="margin:16px auto 0;font-size:17px;line-height:1.6;color:#475569;max-width:600px;">Seven core screens of the Truth&#8209;AI workspace &mdash; from a verified assistant and claim intake through to an auditable ledger and connected model accounts.</p>
+    </div>
+
+    <div style="max-width:1180px;margin:0 auto;padding:0 32px 90px;display:flex;flex-direction:column;gap:60px;">
+
+      <!-- ===== SCREEN 01: OVERVIEW ===== -->
+      <div data-screen-label="App · Overview">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;">
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:#64748b;background:#fff;border:1px solid #dde5ef;border-radius:7px;padding:4px 10px;">01 &middot; Overview</span>
+          <span style="height:1px;flex:1;background:#dde5ef;"></span>
+        </div>
+        <div class="ta-frame" style="border:1px solid #dde5ef;border-radius:16px;overflow:hidden;box-shadow:0 1px 2px rgba(15,23,42,0.05),0 30px 60px -34px rgba(15,23,42,0.32);background:#fff;">
+          <div style="display:flex;align-items:center;gap:14px;padding:11px 16px;background:#f3f6fb;border-bottom:1px solid #e6ecf4;">
+            <div style="display:flex;gap:7px;"><span style="width:11px;height:11px;border-radius:50%;background:#e2554f;"></span><span style="width:11px;height:11px;border-radius:50%;background:#e8b13b;"></span><span style="width:11px;height:11px;border-radius:50%;background:#4caf63;"></span></div>
+            <div style="flex:1;max-width:380px;margin:0 auto;display:flex;align-items:center;gap:8px;background:#fff;border:1px solid #e0e7f0;border-radius:8px;padding:6px 12px;font-family:'IBM Plex Mono',monospace;font-size:12px;color:#64748b;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>app.truthai.tech/overview</div>
+            <div style="width:54px;"></div>
+          </div>
+          <div class="ta-shell" style="display:flex;min-height:600px;">
+            <dc-import name="TASidebar" active="overview" hint-size="230px,100%"></dc-import>
+            <div style="flex:1;background:#f5f8fc;min-width:0;">
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 24px;background:#fff;border-bottom:1px solid #e6ecf4;">
+                <div>
+                  <h3 style="margin:0;font-size:19px;font-weight:700;color:#0f172a;letter-spacing:-0.01em;">Overview</h3>
+                  <p style="margin:3px 0 0;font-size:12.5px;color:#94a3b8;">Workspace &middot; Public-interest desk</p>
+                </div>
+                <div style="display:flex;align-items:center;gap:10px;">
+                  <div style="display:flex;align-items:center;gap:8px;background:#f5f8fc;border:1px solid #e6ecf4;border-radius:9px;padding:8px 12px;width:190px;color:#94a3b8;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg><span style="font-size:13px;">Search&#8230;</span></div>
+                  <button style="display:flex;align-items:center;gap:7px;font-family:'IBM Plex Sans',sans-serif;font-size:13px;font-weight:600;color:#fff;background:#2563eb;border:none;border-radius:9px;padding:9px 14px;cursor:pointer;white-space:nowrap;box-shadow:0 1px 2px rgba(37,99,235,0.4);"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>New claim</button>
+                </div>
+              </div>
+              <div style="padding:22px 24px;">
+                <!-- stats -->
+                <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;">
+                  <div style="background:#fff;border:1px solid #e6ecf4;border-radius:13px;padding:16px;">
+                    <div style="display:flex;align-items:center;justify-content:space-between;"><span style="font-size:12.5px;color:#64748b;">Claims verified</span><span style="width:28px;height:28px;border-radius:8px;background:#ecfdf5;color:#059669;display:flex;align-items:center;justify-content:center;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4 4L19 7"/></svg></span></div>
+                    <div style="font-size:27px;font-weight:700;color:#0f172a;margin-top:8px;letter-spacing:-0.01em;">1,284</div>
+                    <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#059669;margin-top:2px;">&#9650; 6.2% this week</div>
+                  </div>
+                  <div style="background:#fff;border:1px solid #e6ecf4;border-radius:13px;padding:16px;">
+                    <div style="display:flex;align-items:center;justify-content:space-between;"><span style="font-size:12.5px;color:#64748b;">Pending review</span><span style="width:28px;height:28px;border-radius:8px;background:#fffbeb;color:#d97706;display:flex;align-items:center;justify-content:center;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 2"/></svg></span></div>
+                    <div style="font-size:27px;font-weight:700;color:#0f172a;margin-top:8px;letter-spacing:-0.01em;">17</div>
+                    <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#94a3b8;margin-top:2px;">3 critical</div>
+                  </div>
+                  <div style="background:#fff;border:1px solid #e6ecf4;border-radius:13px;padding:16px;">
+                    <div style="display:flex;align-items:center;justify-content:space-between;"><span style="font-size:12.5px;color:#64748b;">Acceptance rate</span><span style="width:28px;height:28px;border-radius:8px;background:#eef4ff;color:#2563eb;display:flex;align-items:center;justify-content:center;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 18 10 12l4 4 6-7"/></svg></span></div>
+                    <div style="font-size:27px;font-weight:700;color:#0f172a;margin-top:8px;letter-spacing:-0.01em;">82.4%</div>
+                    <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#94a3b8;margin-top:2px;">strict-default pack</div>
+                  </div>
+                  <div style="background:#fff;border:1px solid #e6ecf4;border-radius:13px;padding:16px;">
+                    <div style="display:flex;align-items:center;justify-content:space-between;"><span style="font-size:12.5px;color:#64748b;">Ledger entries</span><span style="width:28px;height:28px;border-radius:8px;background:#ecfeff;color:#0e7490;display:flex;align-items:center;justify-content:center;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="6" rx="8" ry="3"/><path d="M4 6v12c0 1.7 3.6 3 8 3s8-1.3 8-3V6"/></svg></span></div>
+                    <div style="font-size:27px;font-weight:700;color:#0f172a;margin-top:8px;letter-spacing:-0.01em;">9,452</div>
+                    <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#94a3b8;margin-top:2px;">head b7e1&#8230;a4</div>
+                  </div>
+                </div>
+                <!-- two col -->
+                <div style="display:grid;grid-template-columns:1.55fr 1fr;gap:14px;margin-top:14px;">
+                  <div style="background:#fff;border:1px solid #e6ecf4;border-radius:13px;overflow:hidden;">
+                    <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid #eef2f7;"><span style="font-size:14px;font-weight:600;color:#0f172a;">Recent claims</span><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#2563eb;cursor:pointer;">View all</span></div>
+                    <div>
+                      <div style="display:grid;grid-template-columns:1fr 92px 86px;gap:10px;padding:9px 16px;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:#94a3b8;border-bottom:1px solid #f1f5f9;"><span>Claim</span><span>Verdict</span><span style="text-align:right;">Conf.</span></div>
+                      <div style="display:grid;grid-template-columns:1fr 92px 86px;gap:10px;padding:12px 16px;align-items:center;border-bottom:1px solid #f5f8fc;"><div style="min-width:0;"><div style="font-size:13px;color:#0f172a;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Latency reduced 38% in 2024 release</div><div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#94a3b8;">CLM&#8209;4471 &middot; factual</div></div><span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;font-weight:600;color:#047857;background:#ecfdf5;border:1px solid #c7ead7;border-radius:6px;padding:3px 8px;text-align:center;">Accepted</span><span style="font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:#0f172a;text-align:right;">0.94</span></div>
+                      <div style="display:grid;grid-template-columns:1fr 92px 86px;gap:10px;padding:12px 16px;align-items:center;border-bottom:1px solid #f5f8fc;"><div style="min-width:0;"><div style="font-size:13px;color:#0f172a;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Vendor SOC&#8209;2 renewed Q1 2026</div><div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#94a3b8;">CLM&#8209;4470 &middot; citation</div></div><span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;font-weight:600;color:#b45309;background:#fffbeb;border:1px solid #f2e2bf;border-radius:6px;padding:3px 8px;text-align:center;">Review</span><span style="font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:#0f172a;text-align:right;">0.61</span></div>
+                      <div style="display:grid;grid-template-columns:1fr 92px 86px;gap:10px;padding:12px 16px;align-items:center;border-bottom:1px solid #f5f8fc;"><div style="min-width:0;"><div style="font-size:13px;color:#0f172a;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Dataset contains 4.2M records</div><div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#94a3b8;">CLM&#8209;4469 &middot; calculation</div></div><span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;font-weight:600;color:#b91c1c;background:#fef2f2;border:1px solid #f3cccc;border-radius:6px;padding:3px 8px;text-align:center;">Rejected</span><span style="font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:#0f172a;text-align:right;">0.22</span></div>
+                      <div style="display:grid;grid-template-columns:1fr 92px 86px;gap:10px;padding:12px 16px;align-items:center;"><div style="min-width:0;"><div style="font-size:13px;color:#0f172a;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Policy updated for EU markets</div><div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#94a3b8;">CLM&#8209;4468 &middot; factual</div></div><span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;font-weight:600;color:#047857;background:#ecfdf5;border:1px solid #c7ead7;border-radius:6px;padding:3px 8px;text-align:center;">Accepted</span><span style="font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:#0f172a;text-align:right;">0.88</span></div>
+                    </div>
+                  </div>
+                  <div style="background:#fff;border:1px solid #e6ecf4;border-radius:13px;padding:16px;">
+                    <span style="font-size:14px;font-weight:600;color:#0f172a;">Verdict distribution</span>
+                    <div style="margin-top:16px;display:flex;flex-direction:column;gap:14px;">
+                      <div><div style="display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:6px;"><span style="color:#475569;">Accepted</span><span style="font-family:'IBM Plex Mono',monospace;color:#0f172a;">82%</span></div><div style="height:7px;border-radius:99px;background:#eef2f7;overflow:hidden;"><div style="width:82%;height:100%;background:#059669;border-radius:99px;"></div></div></div>
+                      <div><div style="display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:6px;"><span style="color:#475569;">Needs review</span><span style="font-family:'IBM Plex Mono',monospace;color:#0f172a;">11%</span></div><div style="height:7px;border-radius:99px;background:#eef2f7;overflow:hidden;"><div style="width:11%;height:100%;background:#d97706;border-radius:99px;"></div></div></div>
+                      <div><div style="display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:6px;"><span style="color:#475569;">Rejected</span><span style="font-family:'IBM Plex Mono',monospace;color:#0f172a;">7%</span></div><div style="height:7px;border-radius:99px;background:#eef2f7;overflow:hidden;"><div style="width:7%;height:100%;background:#dc2626;border-radius:99px;"></div></div></div>
+                    </div>
+                    <div style="margin-top:18px;padding-top:16px;border-top:1px solid #eef2f7;">
+                      <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:#94a3b8;">Top finding class</div>
+                      <div style="display:flex;align-items:center;justify-content:space-between;margin-top:8px;"><span style="font-size:13px;color:#0f172a;font-weight:500;">TC&#8209;02 Stale evidence</span><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#64748b;">38</span></div>
+                      <div style="display:flex;align-items:center;justify-content:space-between;margin-top:8px;"><span style="font-size:13px;color:#0f172a;font-weight:500;">TC&#8209;01 Unsupported</span><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#64748b;">21</span></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== SCREEN 02: ASSISTANT (VERIFIED CHAT) ===== -->
+      <div data-screen-label="App · Assistant">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;">
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:#64748b;background:#fff;border:1px solid #dde5ef;border-radius:7px;padding:4px 10px;">02 &middot; Assistant</span>
+          <span style="height:1px;flex:1;background:#dde5ef;"></span>
+          <span style="font-size:12px;color:#94a3b8;">Every response is verified before it is shown</span>
+        </div>
+        <div class="ta-frame" style="border:1px solid #dde5ef;border-radius:16px;overflow:hidden;box-shadow:0 1px 2px rgba(15,23,42,0.05),0 30px 60px -34px rgba(15,23,42,0.32);background:#fff;">
+          <div style="display:flex;align-items:center;gap:14px;padding:11px 16px;background:#f3f6fb;border-bottom:1px solid #e6ecf4;">
+            <div style="display:flex;gap:7px;"><span style="width:11px;height:11px;border-radius:50%;background:#e2554f;"></span><span style="width:11px;height:11px;border-radius:50%;background:#e8b13b;"></span><span style="width:11px;height:11px;border-radius:50%;background:#4caf63;"></span></div>
+            <div style="flex:1;max-width:380px;margin:0 auto;display:flex;align-items:center;gap:8px;background:#fff;border:1px solid #e0e7f0;border-radius:8px;padding:6px 12px;font-family:'IBM Plex Mono',monospace;font-size:12px;color:#64748b;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>app.truthai.tech/assistant</div>
+            <div style="width:54px;"></div>
+          </div>
+          <div class="ta-shell" style="display:flex;min-height:620px;">
+            <dc-import name="TASidebar" active="assistant" hint-size="230px,100%"></dc-import>
+            <div style="flex:1;display:flex;min-width:0;">
+              <!-- chat column -->
+              <div style="flex:1;display:flex;flex-direction:column;min-width:0;background:#f5f8fc;">
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 22px;background:#fff;border-bottom:1px solid #e6ecf4;">
+                  <div>
+                    <h3 style="margin:0;font-size:17px;font-weight:700;color:#0f172a;letter-spacing:-0.01em;">Verified assistant</h3>
+                    <p style="margin:2px 0 0;font-size:12px;color:#94a3b8;">Session SES&#8209;2291 &middot; strict-default pack</p>
+                  </div>
+                  <div style="display:flex;align-items:center;gap:9px;">
+                    <span style="display:flex;align-items:center;gap:7px;font-size:12px;font-weight:500;color:#0f172a;background:#f5f8fc;border:1px solid #e0e7f0;border-radius:9px;padding:7px 11px;"><span style="width:14px;height:14px;border-radius:4px;background:linear-gradient(135deg,#d97706,#f59e0b);"></span>claude-sonnet-4.5<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></span>
+                    <span style="display:flex;align-items:center;gap:6px;font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;color:#047857;background:#ecfdf5;border:1px solid #c7ead7;border-radius:9px;padding:7px 10px;"><span style="width:7px;height:7px;border-radius:50%;background:#059669;"></span>GATE ON</span>
+                  </div>
+                </div>
+                <!-- thread -->
+                <div style="flex:1;padding:22px;display:flex;flex-direction:column;gap:18px;overflow:hidden;">
+                  <!-- user -->
+                  <div style="align-self:flex-end;max-width:74%;background:#2563eb;color:#fff;border-radius:14px 14px 4px 14px;padding:11px 15px;font-size:13.5px;line-height:1.55;box-shadow:0 1px 2px rgba(37,99,235,0.3);">Summarise our Q3 inference benchmarks and the SOC&#8209;2 status for the vendor.</div>
+                  <!-- inline verification api call -->
+                  <div style="align-self:flex-start;max-width:84%;display:flex;gap:11px;">
+                    <span style="width:30px;height:30px;flex-shrink:0;border-radius:9px;background:#fff;border:1px solid #e6ecf4;display:flex;align-items:center;justify-content:center;color:#2563eb;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="m8 9 3 3-3 3M14 15h3"/></svg></span>
+                    <div style="min-width:0;flex:1;background:#0f172a;border:1px solid #1e293b;border-radius:12px;overflow:hidden;">
+                      <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 12px;border-bottom:1px solid #18222f;background:#0c1220;">
+                        <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#cbd5e1;"><span style="color:#38bdf8;">POST</span> api.truthai.tech/v1/verify</span>
+                        <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#34d399;white-space:nowrap;">200 &middot; 412ms</span>
+                      </div>
+                      <div style="padding:11px 13px;font-family:'IBM Plex Mono',monospace;font-size:11.5px;line-height:1.75;color:#94a3b8;">
+                        <div><span style="color:#7dd3fc;">extract_claims</span><span style="color:#475569;">()</span> <span style="color:#475569;">&rarr;</span> <span style="color:#e2e8f0;">2 claims</span></div>
+                        <div><span style="color:#7dd3fc;">retrieve_sources</span><span style="color:#475569;">()</span> <span style="color:#475569;">&rarr;</span> <span style="color:#e2e8f0;">3 matched</span></div>
+                        <div style="display:flex;gap:6px;flex-wrap:wrap;margin:6px 0 7px 14px;">
+                          <span style="font-size:10px;color:#cbd5e1;background:rgba(56,189,248,0.1);border:1px solid rgba(56,189,248,0.25);border-radius:6px;padding:2px 7px;">benchmark_q3.pdf</span>
+                          <span style="font-size:10px;color:#cbd5e1;background:rgba(56,189,248,0.1);border:1px solid rgba(56,189,248,0.25);border-radius:6px;padding:2px 7px;">eng-blog.io</span>
+                          <span style="font-size:10px;color:#cbd5e1;background:rgba(56,189,248,0.1);border:1px solid rgba(56,189,248,0.25);border-radius:6px;padding:2px 7px;">telemetry.csv</span>
+                        </div>
+                        <div><span style="color:#7dd3fc;">ground</span><span style="color:#475569;">()</span> <span style="color:#475569;">&rarr;</span> <span style="color:#34d399;">3 support</span> <span style="color:#475569;">&middot;</span> <span style="color:#fbbf24;">1 stale</span></div>
+                        <div><span style="color:#7dd3fc;">gate</span><span style="color:#475569;">()</span> <span style="color:#475569;">&rarr;</span> <span style="color:#34d399;">accept &middot; 0.91</span></div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- assistant accepted -->
+                  <div style="align-self:flex-start;max-width:82%;display:flex;gap:11px;">
+                    <span style="width:30px;height:30px;flex-shrink:0;border-radius:9px;background:linear-gradient(135deg,#2563eb,#06b6d4);display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(37,99,235,0.3);"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 5.5V11c0 5 3.4 8.4 8 10 4.6-1.6 8-5 8-10V5.5L12 2Z"/><path d="m9 11.5 2 2 4-4.5"/></svg></span>
+                    <div style="min-width:0;">
+                      <div style="background:#fff;border:1px solid #e6ecf4;border-radius:14px 14px 14px 4px;padding:13px 15px;font-size:13.5px;line-height:1.62;color:#1e293b;">The 2024 release <span style="background:#ecfdf5;border-bottom:2px solid #6ee7b7;border-radius:3px;padding:0 2px;">reduced inference latency by 38%</span> versus the prior version, confirmed by internal telemetry. The vendor&rsquo;s <span style="background:#fffbeb;border-bottom:2px solid #fcd34d;border-radius:3px;padding:0 2px;">SOC&#8209;2 renewal for Q1 2026</span> is reported but the supporting certificate predates the renewal window.</div>
+                      <div style="display:flex;align-items:center;gap:10px;margin-top:8px;flex-wrap:wrap;">
+                        <span style="display:flex;align-items:center;gap:6px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;font-weight:600;color:#047857;background:#ecfdf5;border:1px solid #c7ead7;border-radius:7px;padding:3px 9px;"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4 4L19 7"/></svg>ACCEPTED &middot; 0.91</span>
+                        <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#94a3b8;">2 claims &middot; 1 review &middot; hash a31f&#8230;b204</span>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- user 2 -->
+                  <div style="align-self:flex-end;max-width:74%;background:#2563eb;color:#fff;border-radius:14px 14px 4px 14px;padding:11px 15px;font-size:13.5px;line-height:1.55;box-shadow:0 1px 2px rgba(37,99,235,0.3);">And confirm the dataset has 5 million records.</div>
+                  <!-- assistant blocked / repair -->
+                  <div style="align-self:flex-start;max-width:82%;display:flex;gap:11px;">
+                    <span style="width:30px;height:30px;flex-shrink:0;border-radius:9px;background:linear-gradient(135deg,#2563eb,#06b6d4);display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(37,99,235,0.3);"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 5.5V11c0 5 3.4 8.4 8 10 4.6-1.6 8-5 8-10V5.5L12 2Z"/><path d="m9 11.5 2 2 4-4.5"/></svg></span>
+                    <div style="min-width:0;">
+                      <div style="background:#fff;border:1px solid #f3cccc;border-radius:14px 14px 14px 4px;padding:13px 15px;">
+                        <div style="display:flex;align-items:center;gap:8px;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></svg><span style="font-size:13px;font-weight:600;color:#b91c1c;">Response withheld &mdash; repair contract issued</span></div>
+                        <p style="margin:9px 0 0;font-size:12.5px;line-height:1.55;color:#64748b;">The draft asserted &ldquo;5,000,000 records&rdquo; but the evidence pack records <span style="font-family:'IBM Plex Mono',monospace;color:#0f172a;">4,200,000</span>. <span style="font-family:'IBM Plex Mono',monospace;color:#b45309;">TC&#8209;01</span> requires the model to restate with the source figure or retract.</p>
+                      </div>
+                      <div style="display:flex;align-items:center;gap:10px;margin-top:8px;">
+                        <span style="display:flex;align-items:center;gap:6px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;font-weight:600;color:#b91c1c;background:#fef2f2;border:1px solid #f3cccc;border-radius:7px;padding:3px 9px;">REJECTED &middot; 0.22</span>
+                        <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#2563eb;cursor:pointer;">Regenerate with contract &rarr;</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- composer -->
+                <div style="padding:14px 22px 18px;background:#fff;border-top:1px solid #e6ecf4;">
+                  <div style="display:flex;align-items:flex-end;gap:10px;background:#f5f8fc;border:1px solid #e0e7f0;border-radius:13px;padding:10px 12px;">
+                    <span style="font-size:13.5px;color:#94a3b8;flex:1;padding:4px 2px;">Ask anything &mdash; responses are verified before they&rsquo;re shown&#8230;</span>
+                    <button style="width:34px;height:34px;border-radius:9px;border:none;background:#2563eb;color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;box-shadow:0 1px 2px rgba(37,99,235,0.4);"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+                  </div>
+                  <div style="display:flex;align-items:center;gap:14px;margin-top:9px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#94a3b8;"><span>&#8984;&#9166; to send</span><span>&middot;</span><span>Verifier: MiniCheck + HHEM</span><span>&middot;</span><span>Retrieval: ledger &rarr; sources &rarr; web</span></div>
+                </div>
+              </div>
+              <!-- verification panel -->
+              <div style="width:312px;flex-shrink:0;border-left:1px solid #e6ecf4;background:#fff;padding:18px;overflow:hidden;">
+                <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:#94a3b8;">Response verification</div>
+                <div style="margin-top:12px;border:1px solid #e6ecf4;border-radius:12px;padding:14px;">
+                  <div style="display:flex;align-items:center;justify-content:space-between;"><span style="display:flex;align-items:center;gap:8px;"><span style="width:9px;height:9px;border-radius:50%;background:#059669;box-shadow:0 0 0 3px rgba(5,150,105,0.15);"></span><span style="font-size:15px;font-weight:700;color:#047857;">Accepted</span></span><span style="font-size:15px;font-weight:700;color:#0f172a;">0.91</span></div>
+                  <div style="height:6px;border-radius:99px;background:#eef2f7;margin-top:11px;overflow:hidden;"><div style="width:91%;height:100%;background:linear-gradient(90deg,#2563eb,#06b6d4);border-radius:99px;"></div></div>
+                </div>
+                <div style="margin-top:16px;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:#94a3b8;">Extracted claims</div>
+                <div style="margin-top:10px;display:flex;flex-direction:column;gap:8px;">
+                  <div style="display:flex;align-items:flex-start;gap:9px;padding:10px;border:1px solid #e6ecf4;border-radius:10px;"><span style="width:7px;height:7px;border-radius:50%;background:#059669;margin-top:5px;flex-shrink:0;"></span><div><div style="font-size:12.5px;color:#1e293b;line-height:1.4;">Latency reduced 38%</div><div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#94a3b8;margin-top:2px;">factual &middot; supported</div></div></div>
+                  <div style="display:flex;align-items:flex-start;gap:9px;padding:10px;border:1px solid #e6ecf4;border-radius:10px;"><span style="width:7px;height:7px;border-radius:50%;background:#d97706;margin-top:5px;flex-shrink:0;"></span><div><div style="font-size:12.5px;color:#1e293b;line-height:1.4;">SOC&#8209;2 renewed Q1 2026</div><div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#94a3b8;margin-top:2px;">citation &middot; TC&#8209;02 review</div></div></div>
+                </div>
+                <div style="margin-top:16px;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:#94a3b8;">Evidence used</div>
+                <div style="margin-top:10px;display:flex;flex-direction:column;gap:7px;">
+                  <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:#475569;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="1.8"><path d="M14 3v4a1 1 0 0 0 1 1h4"/><path d="M17 21H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7l5 5v11a2 2 0 0 1-2 2Z"/></svg>benchmark_q3.pdf</div>
+                  <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:#475569;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="1.8"><path d="M14 3v4a1 1 0 0 0 1 1h4"/><path d="M17 21H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7l5 5v11a2 2 0 0 1-2 2Z"/></svg>internal_telemetry.csv</div>
+                </div>
+                <div style="margin-top:16px;padding:12px;background:#0f172a;border-radius:11px;">
+                  <div style="display:flex;align-items:center;justify-content:space-between;"><span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:0.1em;color:#64748b;text-transform:uppercase;">Ledger</span><span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#34d399;">appended</span></div>
+                  <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#7dd3fc;margin-top:6px;word-break:break-all;">a31f&#8230;b204</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== SCREEN 03: NEW CLAIM ===== -->
+      <div data-screen-label="App · New Claim">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;">
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:#64748b;background:#fff;border:1px solid #dde5ef;border-radius:7px;padding:4px 10px;">03 &middot; New Claim</span>
+          <span style="height:1px;flex:1;background:#dde5ef;"></span>
+        </div>
+        <div class="ta-frame" style="border:1px solid #dde5ef;border-radius:16px;overflow:hidden;box-shadow:0 1px 2px rgba(15,23,42,0.05),0 30px 60px -34px rgba(15,23,42,0.32);background:#fff;">
+          <div style="display:flex;align-items:center;gap:14px;padding:11px 16px;background:#f3f6fb;border-bottom:1px solid #e6ecf4;">
+            <div style="display:flex;gap:7px;"><span style="width:11px;height:11px;border-radius:50%;background:#e2554f;"></span><span style="width:11px;height:11px;border-radius:50%;background:#e8b13b;"></span><span style="width:11px;height:11px;border-radius:50%;background:#4caf63;"></span></div>
+            <div style="flex:1;max-width:380px;margin:0 auto;display:flex;align-items:center;gap:8px;background:#fff;border:1px solid #e0e7f0;border-radius:8px;padding:6px 12px;font-family:'IBM Plex Mono',monospace;font-size:12px;color:#64748b;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>app.truthai.tech/claims/new</div>
+            <div style="width:54px;"></div>
+          </div>
+          <div class="ta-shell" style="display:flex;min-height:600px;">
+            <dc-import name="TASidebar" active="claims" hint-size="230px,100%"></dc-import>
+            <div style="flex:1;background:#f5f8fc;min-width:0;">
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 24px;background:#fff;border-bottom:1px solid #e6ecf4;">
+                <div><h3 style="margin:0;font-size:19px;font-weight:700;color:#0f172a;letter-spacing:-0.01em;">New claim</h3><p style="margin:3px 0 0;font-size:12.5px;color:#94a3b8;">Define an atomic, checkable proposition</p></div>
+                <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#94a3b8;">Draft &middot; CLM&#8209;4472</span>
+              </div>
+              <div style="display:grid;grid-template-columns:1.6fr 1fr;gap:0;">
+                <!-- form -->
+                <div style="padding:24px;border-right:1px solid #eef2f7;display:flex;flex-direction:column;gap:18px;">
+                  <div>
+                    <label style="font-size:12.5px;font-weight:600;color:#334155;">Claim title</label>
+                    <div style="margin-top:7px;background:#fff;border:1px solid #d8e0ec;border-radius:10px;padding:11px 13px;font-size:13.5px;color:#0f172a;">2024 release reduced inference latency</div>
+                  </div>
+                  <div>
+                    <label style="font-size:12.5px;font-weight:600;color:#334155;">Claim text</label>
+                    <div style="margin-top:7px;background:#fff;border:1px solid #2563eb;box-shadow:0 0 0 3px rgba(37,99,235,0.1);border-radius:10px;padding:11px 13px;font-size:13.5px;color:#0f172a;line-height:1.55;min-height:74px;">The 2024 model release reduced inference latency by 38% versus the prior version.</div>
+                    <div style="display:flex;justify-content:space-between;margin-top:6px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#94a3b8;"><span>Decontextualised &middot; SROM ready</span><span>72 / 500</span></div>
+                  </div>
+                  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+                    <div>
+                      <label style="font-size:12.5px;font-weight:600;color:#334155;">Claim type</label>
+                      <div style="margin-top:7px;display:flex;align-items:center;justify-content:space-between;background:#fff;border:1px solid #d8e0ec;border-radius:10px;padding:11px 13px;"><span style="font-size:13.5px;color:#0f172a;">Factual</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></div>
+                      <div style="display:flex;gap:5px;margin-top:7px;flex-wrap:wrap;"><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#94a3b8;">prediction</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#94a3b8;">opinion</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#94a3b8;">citation</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#94a3b8;">calculation</span></div>
+                    </div>
+                    <div>
+                      <label style="font-size:12.5px;font-weight:600;color:#334155;">Source URL</label>
+                      <div style="margin-top:7px;background:#fff;border:1px solid #d8e0ec;border-radius:10px;padding:11px 13px;font-family:'IBM Plex Mono',monospace;font-size:12px;color:#2563eb;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">https://eng-blog.io/q3-bench</div>
+                    </div>
+                  </div>
+                  <div>
+                    <div style="display:flex;align-items:center;justify-content:space-between;"><label style="font-size:12.5px;font-weight:600;color:#334155;">Confidence before verification</label><span style="font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:600;color:#2563eb;">0.70</span></div>
+                    <div style="margin-top:12px;position:relative;height:6px;border-radius:99px;background:#e6ecf4;"><div style="position:absolute;left:0;top:0;height:100%;width:70%;border-radius:99px;background:linear-gradient(90deg,#2563eb,#06b6d4);"></div><div style="position:absolute;left:70%;top:50%;transform:translate(-50%,-50%);width:16px;height:16px;border-radius:50%;background:#fff;border:2px solid #2563eb;box-shadow:0 1px 3px rgba(15,23,42,0.2);"></div></div>
+                    <div style="display:flex;justify-content:space-between;margin-top:7px;font-family:'IBM Plex Mono',monospace;font-size:10px;color:#94a3b8;"><span>0.0 uncertain</span><span>1.0 certain</span></div>
+                  </div>
+                  <div>
+                    <label style="font-size:12.5px;font-weight:600;color:#334155;">Tags</label>
+                    <div style="margin-top:7px;display:flex;align-items:center;gap:7px;flex-wrap:wrap;">
+                      <span style="display:flex;align-items:center;gap:6px;font-size:12px;color:#2563eb;background:#eef4ff;border:1px solid #dbe7ff;border-radius:7px;padding:5px 9px;">benchmarks<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M6 6l12 12M18 6 6 18"/></svg></span>
+                      <span style="display:flex;align-items:center;gap:6px;font-size:12px;color:#2563eb;background:#eef4ff;border:1px solid #dbe7ff;border-radius:7px;padding:5px 9px;">performance<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M6 6l12 12M18 6 6 18"/></svg></span>
+                      <span style="font-size:12px;color:#94a3b8;background:#fff;border:1px dashed #cbd5e1;border-radius:7px;padding:5px 9px;">+ add tag</span>
+                    </div>
+                  </div>
+                  <div style="display:flex;align-items:center;gap:10px;padding-top:6px;">
+                    <button style="display:flex;align-items:center;gap:8px;font-family:'IBM Plex Sans',sans-serif;font-size:13.5px;font-weight:600;color:#fff;background:#2563eb;border:none;border-radius:10px;padding:12px 18px;cursor:pointer;box-shadow:0 1px 2px rgba(37,99,235,0.45);"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 4 6v6c0 5 3.5 8.5 8 10 4.5-1.5 8-5 8-10V6l-8-3Z"/><path d="m9 12 2 2 4-4"/></svg>Submit for verification</button>
+                    <button style="font-family:'IBM Plex Sans',sans-serif;font-size:13.5px;font-weight:600;color:#475569;background:#fff;border:1px solid #d8e0ec;border-radius:10px;padding:12px 18px;cursor:pointer;">Save draft</button>
+                  </div>
+                </div>
+                <!-- side guidance -->
+                <div style="padding:24px;background:#fbfdff;">
+                  <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:#94a3b8;">Next steps</div>
+                  <div style="margin-top:14px;display:flex;flex-direction:column;gap:14px;">
+                    <div style="display:flex;gap:11px;"><span style="width:24px;height:24px;border-radius:7px;background:#eef4ff;color:#2563eb;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">1</span><div><div style="font-size:13px;font-weight:600;color:#0f172a;">Attach evidence</div><p style="margin:3px 0 0;font-size:12px;line-height:1.5;color:#64748b;">Files and URLs are snapshotted and hashed into a pack.</p></div></div>
+                    <div style="display:flex;gap:11px;"><span style="width:24px;height:24px;border-radius:7px;background:#eef4ff;color:#2563eb;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">2</span><div><div style="font-size:13px;font-weight:600;color:#0f172a;">Kernel verification</div><p style="margin:3px 0 0;font-size:12px;line-height:1.5;color:#64748b;">Rule packs evaluate the claim against evidence and ledger.</p></div></div>
+                    <div style="display:flex;gap:11px;"><span style="width:24px;height:24px;border-radius:7px;background:#eef4ff;color:#2563eb;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">3</span><div><div style="font-size:13px;font-weight:600;color:#0f172a;">Decision bundle</div><p style="margin:3px 0 0;font-size:12px;line-height:1.5;color:#64748b;">A hashed, replayable verdict is appended to the ledger.</p></div></div>
+                  </div>
+                  <div style="margin-top:20px;padding:13px;border:1px solid #e6ecf4;border-radius:11px;background:#fff;">
+                    <div style="display:flex;align-items:center;gap:8px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 16v-4M12 8h.01"/></svg><span style="font-size:12.5px;font-weight:600;color:#0f172a;">Atomic claims verify best</span></div>
+                    <p style="margin:8px 0 0;font-size:12px;line-height:1.5;color:#64748b;">Split compound statements so each proposition can be checked independently.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== SCREEN 04: EVIDENCE PACK ===== -->
+      <div data-screen-label="App · Evidence Pack">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;">
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:#64748b;background:#fff;border:1px solid #dde5ef;border-radius:7px;padding:4px 10px;">04 &middot; Evidence Pack</span>
+          <span style="height:1px;flex:1;background:#dde5ef;"></span>
+        </div>
+        <div class="ta-frame" style="border:1px solid #dde5ef;border-radius:16px;overflow:hidden;box-shadow:0 1px 2px rgba(15,23,42,0.05),0 30px 60px -34px rgba(15,23,42,0.32);background:#fff;">
+          <div style="display:flex;align-items:center;gap:14px;padding:11px 16px;background:#f3f6fb;border-bottom:1px solid #e6ecf4;">
+            <div style="display:flex;gap:7px;"><span style="width:11px;height:11px;border-radius:50%;background:#e2554f;"></span><span style="width:11px;height:11px;border-radius:50%;background:#e8b13b;"></span><span style="width:11px;height:11px;border-radius:50%;background:#4caf63;"></span></div>
+            <div style="flex:1;max-width:380px;margin:0 auto;display:flex;align-items:center;gap:8px;background:#fff;border:1px solid #e0e7f0;border-radius:8px;padding:6px 12px;font-family:'IBM Plex Mono',monospace;font-size:12px;color:#64748b;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>app.truthai.tech/evidence/EP-4471</div>
+            <div style="width:54px;"></div>
+          </div>
+          <div class="ta-shell" style="display:flex;min-height:600px;">
+            <dc-import name="TASidebar" active="evidence" hint-size="230px,100%"></dc-import>
+            <div style="flex:1;background:#f5f8fc;min-width:0;">
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 24px;background:#fff;border-bottom:1px solid #e6ecf4;">
+                <div><h3 style="margin:0;font-size:19px;font-weight:700;color:#0f172a;letter-spacing:-0.01em;">Evidence pack</h3><p style="margin:3px 0 0;font-size:12.5px;color:#94a3b8;">EP&#8209;4471 &middot; bound to CLM&#8209;4471 &middot; 4 items</p></div>
+                <button style="display:flex;align-items:center;gap:7px;font-family:'IBM Plex Sans',sans-serif;font-size:13px;font-weight:600;color:#fff;background:#2563eb;border:none;border-radius:9px;padding:9px 14px;cursor:pointer;white-space:nowrap;box-shadow:0 1px 2px rgba(37,99,235,0.4);"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Add evidence</button>
+              </div>
+              <div style="padding:22px 24px;">
+                <!-- pack summary bar -->
+                <div style="display:flex;align-items:center;gap:18px;flex-wrap:wrap;background:#fff;border:1px solid #e6ecf4;border-radius:12px;padding:14px 18px;margin-bottom:16px;">
+                  <div><div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:#94a3b8;">Pack hash</div><div style="font-family:'IBM Plex Mono',monospace;font-size:13px;color:#0f172a;margin-top:3px;">d41f&#8230;9c02</div></div>
+                  <span style="width:1px;height:30px;background:#eef2f7;"></span>
+                  <div><div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:#94a3b8;">Frozen</div><div style="font-size:13px;color:#0f172a;margin-top:3px;">2026&#8209;06&#8209;12 14:22 UTC</div></div>
+                  <span style="width:1px;height:30px;background:#eef2f7;"></span>
+                  <div><div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:#94a3b8;">Integrity</div><div style="display:flex;align-items:center;gap:6px;margin-top:3px;"><span style="width:7px;height:7px;border-radius:50%;background:#059669;"></span><span style="font-size:13px;color:#047857;font-weight:600;">All hashes match</span></div></div>
+                  <div style="margin-left:auto;font-family:'IBM Plex Mono',monospace;font-size:11px;color:#2563eb;cursor:pointer;">Verify integrity &#8635;</div>
+                </div>
+                <!-- evidence cards grid -->
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+                  <!-- file -->
+                  <div style="background:#fff;border:1px solid #e6ecf4;border-radius:13px;padding:16px;">
+                    <div style="display:flex;align-items:flex-start;gap:12px;">
+                      <span style="width:38px;height:38px;border-radius:10px;background:#eef4ff;color:#2563eb;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3v4a1 1 0 0 0 1 1h4"/><path d="M17 21H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7l5 5v11a2 2 0 0 1-2 2Z"/></svg></span>
+                      <div style="flex:1;min-width:0;"><div style="font-size:14px;font-weight:600;color:#0f172a;">benchmark_q3.pdf</div><div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#94a3b8;margin-top:2px;">PDF &middot; 2.4 MB &middot; primary source</div></div>
+                      <span style="display:flex;align-items:center;gap:5px;font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:600;color:#047857;background:#ecfdf5;border:1px solid #c7ead7;border-radius:6px;padding:3px 8px;"><span style="width:6px;height:6px;border-radius:50%;background:#059669;"></span>HIGH</span>
+                    </div>
+                    <div style="margin-top:13px;padding-top:13px;border-top:1px solid #f1f5f9;display:flex;flex-direction:column;gap:7px;">
+                      <div style="display:flex;justify-content:space-between;font-size:12px;"><span style="color:#94a3b8;">SHA&#8209;256</span><span style="font-family:'IBM Plex Mono',monospace;color:#0f172a;">a31f9c&#8230;b204</span></div>
+                      <div style="display:flex;justify-content:space-between;font-size:12px;"><span style="color:#94a3b8;">Source type</span><span style="color:#0f172a;">Primary &middot; vendor report</span></div>
+                      <div style="display:flex;justify-content:space-between;font-size:12px;"><span style="color:#94a3b8;">Snapshot</span><span style="color:#0f172a;">Frozen &middot; 12 Jun</span></div>
+                    </div>
+                  </div>
+                  <!-- url -->
+                  <div style="background:#fff;border:1px solid #e6ecf4;border-radius:13px;padding:16px;">
+                    <div style="display:flex;align-items:flex-start;gap:12px;">
+                      <span style="width:38px;height:38px;border-radius:10px;background:#ecfeff;color:#0e7490;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></svg></span>
+                      <div style="flex:1;min-width:0;"><div style="font-size:14px;font-weight:600;color:#0f172a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">eng-blog.io/q3-bench</div><div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#94a3b8;margin-top:2px;">URL &middot; secondary source</div></div>
+                      <span style="display:flex;align-items:center;gap:5px;font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:600;color:#b45309;background:#fffbeb;border:1px solid #f2e2bf;border-radius:6px;padding:3px 8px;"><span style="width:6px;height:6px;border-radius:50%;background:#d97706;"></span>MED</span>
+                    </div>
+                    <div style="margin-top:13px;padding-top:13px;border-top:1px solid #f1f5f9;display:flex;flex-direction:column;gap:7px;">
+                      <div style="display:flex;justify-content:space-between;font-size:12px;"><span style="color:#94a3b8;">SHA&#8209;256</span><span style="font-family:'IBM Plex Mono',monospace;color:#0f172a;">7b22e1&#8230;9d44</span></div>
+                      <div style="display:flex;justify-content:space-between;font-size:12px;"><span style="color:#94a3b8;">Retrieved</span><span style="color:#0f172a;">2026&#8209;06&#8209;11 09:02</span></div>
+                      <div style="display:flex;justify-content:space-between;font-size:12px;"><span style="color:#94a3b8;">Flag</span><span style="color:#b45309;">Predates window</span></div>
+                    </div>
+                  </div>
+                  <!-- data -->
+                  <div style="background:#fff;border:1px solid #e6ecf4;border-radius:13px;padding:16px;">
+                    <div style="display:flex;align-items:flex-start;gap:12px;">
+                      <span style="width:38px;height:38px;border-radius:10px;background:#eef4ff;color:#2563eb;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5"/><path d="M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></svg></span>
+                      <div style="flex:1;min-width:0;"><div style="font-size:14px;font-weight:600;color:#0f172a;">internal_telemetry.csv</div><div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#94a3b8;margin-top:2px;">CSV &middot; 880 KB &middot; primary source</div></div>
+                      <span style="display:flex;align-items:center;gap:5px;font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:600;color:#047857;background:#ecfdf5;border:1px solid #c7ead7;border-radius:6px;padding:3px 8px;"><span style="width:6px;height:6px;border-radius:50%;background:#059669;"></span>HIGH</span>
+                    </div>
+                    <div style="margin-top:13px;padding-top:13px;border-top:1px solid #f1f5f9;display:flex;flex-direction:column;gap:7px;">
+                      <div style="display:flex;justify-content:space-between;font-size:12px;"><span style="color:#94a3b8;">SHA&#8209;256</span><span style="font-family:'IBM Plex Mono',monospace;color:#0f172a;">f0c49d&#8230;1e77</span></div>
+                      <div style="display:flex;justify-content:space-between;font-size:12px;"><span style="color:#94a3b8;">Rows</span><span style="color:#0f172a;">4,200,000</span></div>
+                      <div style="display:flex;justify-content:space-between;font-size:12px;"><span style="color:#94a3b8;">Source type</span><span style="color:#0f172a;">Primary &middot; internal</span></div>
+                    </div>
+                  </div>
+                  <!-- add tile -->
+                  <div style="border:1px dashed #cbd5e1;border-radius:13px;padding:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;color:#94a3b8;min-height:140px;">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 20h16"/></svg>
+                    <div style="font-size:13px;font-weight:500;color:#475569;margin-top:9px;">Drop a file or paste a URL</div>
+                    <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;margin-top:4px;">snapshotted &amp; hashed on add</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== SCREEN 05: VERIFICATION RESULT ===== -->
+      <div data-screen-label="App · Verification Result">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;">
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:#64748b;background:#fff;border:1px solid #dde5ef;border-radius:7px;padding:4px 10px;">05 &middot; Verification Result</span>
+          <span style="height:1px;flex:1;background:#dde5ef;"></span>
+        </div>
+        <div class="ta-frame" style="border:1px solid #dde5ef;border-radius:16px;overflow:hidden;box-shadow:0 1px 2px rgba(15,23,42,0.05),0 30px 60px -34px rgba(15,23,42,0.32);background:#fff;">
+          <div style="display:flex;align-items:center;gap:14px;padding:11px 16px;background:#f3f6fb;border-bottom:1px solid #e6ecf4;">
+            <div style="display:flex;gap:7px;"><span style="width:11px;height:11px;border-radius:50%;background:#e2554f;"></span><span style="width:11px;height:11px;border-radius:50%;background:#e8b13b;"></span><span style="width:11px;height:11px;border-radius:50%;background:#4caf63;"></span></div>
+            <div style="flex:1;max-width:380px;margin:0 auto;display:flex;align-items:center;gap:8px;background:#fff;border:1px solid #e0e7f0;border-radius:8px;padding:6px 12px;font-family:'IBM Plex Mono',monospace;font-size:12px;color:#64748b;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>app.truthai.tech/verifications/V-2291</div>
+            <div style="width:54px;"></div>
+          </div>
+          <div class="ta-shell" style="display:flex;min-height:600px;">
+            <dc-import name="TASidebar" active="verifications" hint-size="230px,100%"></dc-import>
+            <div style="flex:1;background:#f5f8fc;min-width:0;">
+              <!-- verdict banner -->
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px 24px;background:linear-gradient(90deg,#ecfdf5,#f5fbf8);border-bottom:1px solid #d6ecdf;">
+                <div style="display:flex;align-items:center;gap:14px;">
+                  <span style="width:46px;height:46px;border-radius:13px;background:#059669;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(5,150,105,0.3);"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4 4L19 7"/></svg></span>
+                  <div>
+                    <div style="display:flex;align-items:center;gap:10px;"><h3 style="margin:0;font-size:21px;font-weight:700;color:#065f46;letter-spacing:-0.01em;">Accepted</h3><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#047857;background:#d1fae5;border-radius:6px;padding:2px 8px;">no critical findings</span></div>
+                    <p style="margin:3px 0 0;font-size:12.5px;color:#15803d;">CLM&#8209;4471 &middot; verified against strict-default v0.1 &middot; kernel v0.1.0</p>
+                  </div>
+                </div>
+                <button style="display:flex;align-items:center;gap:8px;font-family:'IBM Plex Sans',sans-serif;font-size:13.5px;font-weight:600;color:#fff;background:#0f172a;border:none;border-radius:10px;padding:11px 16px;cursor:pointer;white-space:nowrap;box-shadow:0 2px 8px rgba(15,23,42,0.2);"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg>Export decision bundle</button>
+              </div>
+              <div style="display:grid;grid-template-columns:1.7fr 1fr;gap:0;">
+                <!-- left: claim + findings + evidence -->
+                <div style="padding:22px 24px;border-right:1px solid #eef2f7;">
+                  <div style="background:#fff;border:1px solid #e6ecf4;border-radius:12px;padding:15px;">
+                    <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:#94a3b8;">Claim under review</div>
+                    <p style="margin:8px 0 0;font-size:14px;line-height:1.55;color:#0f172a;font-weight:500;">&ldquo;The 2024 model release reduced inference latency by 38% versus the prior version.&rdquo;</p>
+                  </div>
+
+                  <div style="margin-top:18px;font-size:14px;font-weight:600;color:#0f172a;">Findings <span style="font-family:'IBM Plex Mono',monospace;font-weight:500;color:#94a3b8;font-size:12px;">3</span></div>
+                  <div style="margin-top:10px;display:flex;flex-direction:column;gap:8px;">
+                    <div style="display:flex;align-items:flex-start;gap:11px;background:#fff;border:1px solid #e6ecf4;border-radius:10px;padding:12px 13px;"><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:600;color:#047857;background:#ecfdf5;border:1px solid #c7ead7;border-radius:6px;padding:3px 7px;flex-shrink:0;">SUPPORT</span><div><div style="font-size:13px;color:#0f172a;font-weight:500;">Latency figure corroborated by telemetry</div><div style="font-size:12px;color:#64748b;margin-top:2px;">internal_telemetry.csv entails the 38% reduction.</div></div></div>
+                    <div style="display:flex;align-items:flex-start;gap:11px;background:#fff;border:1px solid #f2e2bf;border-radius:10px;padding:12px 13px;"><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:600;color:#b45309;background:#fffbeb;border:1px solid #f2e2bf;border-radius:6px;padding:3px 7px;flex-shrink:0;">TC&#8209;02</span><div><div style="font-size:13px;color:#0f172a;font-weight:500;">Stale evidence &middot; major</div><div style="font-size:12px;color:#64748b;margin-top:2px;">Secondary source predates the claim&rsquo;s validity window.</div></div></div>
+                    <div style="display:flex;align-items:flex-start;gap:11px;background:#fff;border:1px solid #bce7ef;border-radius:10px;padding:12px 13px;"><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:600;color:#0e7490;background:#ecfeff;border:1px solid #bce7ef;border-radius:6px;padding:3px 7px;flex-shrink:0;">TC&#8209;06</span><div><div style="font-size:13px;color:#0f172a;font-weight:500;">Semantic support undecided &middot; review</div><div style="font-size:12px;color:#64748b;margin-top:2px;">One sub-claim routed to the Verifier Bank and human review.</div></div></div>
+                  </div>
+
+                  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:18px;">
+                    <div style="background:#fff;border:1px solid #e6ecf4;border-radius:11px;padding:13px;"><div style="display:flex;align-items:center;gap:7px;"><span style="width:7px;height:7px;border-radius:50%;background:#059669;"></span><span style="font-size:12px;font-weight:600;color:#0f172a;">Supporting</span></div><div style="font-size:22px;font-weight:700;color:#0f172a;margin-top:7px;">3</div><div style="font-size:11px;color:#94a3b8;">snapshots entail</div></div>
+                    <div style="background:#fff;border:1px solid #e6ecf4;border-radius:11px;padding:13px;"><div style="display:flex;align-items:center;gap:7px;"><span style="width:7px;height:7px;border-radius:50%;background:#dc2626;"></span><span style="font-size:12px;font-weight:600;color:#0f172a;">Contradicting</span></div><div style="font-size:22px;font-weight:700;color:#0f172a;margin-top:7px;">1</div><div style="font-size:11px;color:#94a3b8;">date conflict</div></div>
+                    <div style="background:#fff;border:1px solid #e6ecf4;border-radius:11px;padding:13px;"><div style="display:flex;align-items:center;gap:7px;"><span style="width:7px;height:7px;border-radius:50%;background:#94a3b8;"></span><span style="font-size:12px;font-weight:600;color:#0f172a;">Missing</span></div><div style="font-size:22px;font-weight:700;color:#0f172a;margin-top:7px;">1</div><div style="font-size:11px;color:#94a3b8;">prior-version data</div></div>
+                  </div>
+                </div>
+                <!-- right: score + meta -->
+                <div style="padding:22px 24px;background:#fbfdff;">
+                  <div style="display:flex;flex-direction:column;align-items:center;background:#fff;border:1px solid #e6ecf4;border-radius:13px;padding:20px;">
+                    <div style="position:relative;width:108px;height:108px;">
+                      <div style="position:absolute;inset:0;border-radius:50%;background:conic-gradient(#2563eb 0% 94%,#e6ecf4 94% 100%);"></div>
+                      <div style="position:absolute;inset:11px;border-radius:50%;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;"><span style="font-size:30px;font-weight:700;color:#0f172a;line-height:1;">0.94</span><span style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:#94a3b8;margin-top:3px;letter-spacing:0.1em;">CONFIDENCE</span></div>
+                    </div>
+                    <div style="font-size:12px;color:#64748b;margin-top:12px;text-align:center;">Ensemble verdict &middot; weighted, calibrated</div>
+                  </div>
+
+                  <div style="margin-top:16px;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:#94a3b8;">Entity links</div>
+                  <div style="margin-top:9px;display:flex;flex-wrap:wrap;gap:6px;">
+                    <span style="font-size:11.5px;color:#2563eb;background:#eef4ff;border:1px solid #dbe7ff;border-radius:6px;padding:3px 8px;">2024 release</span>
+                    <span style="font-size:11.5px;color:#2563eb;background:#eef4ff;border:1px solid #dbe7ff;border-radius:6px;padding:3px 8px;">inference latency</span>
+                    <span style="font-size:11.5px;color:#2563eb;background:#eef4ff;border:1px solid #dbe7ff;border-radius:6px;padding:3px 8px;">&minus;38%</span>
+                    <span style="font-size:11.5px;color:#2563eb;background:#eef4ff;border:1px solid #dbe7ff;border-radius:6px;padding:3px 8px;">prior version</span>
+                  </div>
+
+                  <div style="margin-top:16px;display:flex;flex-direction:column;gap:9px;">
+                    <div style="display:flex;justify-content:space-between;font-size:12.5px;"><span style="color:#94a3b8;">Rule pack</span><span style="font-family:'IBM Plex Mono',monospace;color:#0f172a;">strict-default v0.1</span></div>
+                    <div style="display:flex;justify-content:space-between;font-size:12.5px;"><span style="color:#94a3b8;">Policy hash</span><span style="font-family:'IBM Plex Mono',monospace;color:#0f172a;">5e02&#8230;c9f1</span></div>
+                    <div style="display:flex;justify-content:space-between;font-size:12.5px;"><span style="color:#94a3b8;">Replay</span><span style="font-family:'IBM Plex Mono',monospace;color:#047857;">byte-equal &times;30</span></div>
+                  </div>
+
+                  <div style="margin-top:16px;padding:13px;background:#0f172a;border-radius:11px;">
+                    <div style="display:flex;align-items:center;justify-content:space-between;"><span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:0.1em;color:#64748b;text-transform:uppercase;">Canonical hash</span><span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#34d399;">verified</span></div>
+                    <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#7dd3fc;margin-top:7px;word-break:break-all;line-height:1.5;">b7e1d0&#8230;a4c2</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== SCREEN 06: LEDGER ===== -->
+      <div data-screen-label="App · Ledger">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;">
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:#64748b;background:#fff;border:1px solid #dde5ef;border-radius:7px;padding:4px 10px;">06 &middot; Ledger</span>
+          <span style="height:1px;flex:1;background:#dde5ef;"></span>
+        </div>
+        <div class="ta-frame" style="border:1px solid #dde5ef;border-radius:16px;overflow:hidden;box-shadow:0 1px 2px rgba(15,23,42,0.05),0 30px 60px -34px rgba(15,23,42,0.32);background:#fff;">
+          <div style="display:flex;align-items:center;gap:14px;padding:11px 16px;background:#f3f6fb;border-bottom:1px solid #e6ecf4;">
+            <div style="display:flex;gap:7px;"><span style="width:11px;height:11px;border-radius:50%;background:#e2554f;"></span><span style="width:11px;height:11px;border-radius:50%;background:#e8b13b;"></span><span style="width:11px;height:11px;border-radius:50%;background:#4caf63;"></span></div>
+            <div style="flex:1;max-width:380px;margin:0 auto;display:flex;align-items:center;gap:8px;background:#fff;border:1px solid #e0e7f0;border-radius:8px;padding:6px 12px;font-family:'IBM Plex Mono',monospace;font-size:12px;color:#64748b;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>app.truthai.tech/ledger</div>
+            <div style="width:54px;"></div>
+          </div>
+          <div class="ta-shell" style="display:flex;min-height:600px;">
+            <dc-import name="TASidebar" active="ledger" hint-size="230px,100%"></dc-import>
+            <div style="flex:1;background:#f5f8fc;min-width:0;">
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 24px;background:#fff;border-bottom:1px solid #e6ecf4;">
+                <div><h3 style="margin:0;font-size:19px;font-weight:700;color:#0f172a;letter-spacing:-0.01em;">Audit ledger</h3><p style="margin:3px 0 0;font-size:12.5px;color:#94a3b8;">Append-only &middot; bitemporal &middot; Merkle-chained</p></div>
+                <button style="display:flex;align-items:center;gap:7px;font-family:'IBM Plex Sans',sans-serif;font-size:13px;font-weight:600;color:#0f172a;background:#fff;border:1px solid #d8e0ec;border-radius:9px;padding:9px 14px;cursor:pointer;white-space:nowrap;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg>Export audit trail</button>
+              </div>
+              <div style="padding:22px 24px;">
+                <!-- chain summary -->
+                <div style="display:flex;align-items:center;gap:18px;flex-wrap:wrap;background:#0f172a;border-radius:12px;padding:15px 18px;margin-bottom:16px;">
+                  <div><div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:0.1em;text-transform:uppercase;color:#64748b;">Head</div><div style="font-family:'IBM Plex Mono',monospace;font-size:13px;color:#7dd3fc;margin-top:3px;">b7e1d0&#8230;a4c2</div></div>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#334155" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                  <div><div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:0.1em;text-transform:uppercase;color:#64748b;">Entries</div><div style="font-family:'IBM Plex Mono',monospace;font-size:13px;color:#f1f5f9;margin-top:3px;">9,452</div></div>
+                  <span style="width:1px;height:30px;background:#1e293b;"></span>
+                  <div><div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:0.1em;text-transform:uppercase;color:#64748b;">Genesis</div><div style="font-family:'IBM Plex Mono',monospace;font-size:13px;color:#f1f5f9;margin-top:3px;">2026&#8209;03&#8209;01</div></div>
+                  <div style="margin-left:auto;display:flex;align-items:center;gap:7px;font-family:'IBM Plex Mono',monospace;font-size:11.5px;font-weight:600;color:#34d399;background:rgba(52,211,153,0.1);border:1px solid rgba(52,211,153,0.25);border-radius:8px;padding:6px 11px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4 4L19 7"/></svg>Chain verified &middot; replays to head</div>
+                </div>
+                <!-- table -->
+                <div style="background:#fff;border:1px solid #e6ecf4;border-radius:12px;overflow:hidden;">
+                  <div style="display:grid;grid-template-columns:150px 100px 100px 1fr 96px 110px;gap:12px;padding:11px 16px;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:#94a3b8;background:#f8fafd;border-bottom:1px solid #eef2f7;"><span>Timestamp (UTC)</span><span>Claim</span><span>Evidence</span><span>Entry hash</span><span>Result</span><span>Reviewer</span></div>
+                  <div style="display:grid;grid-template-columns:150px 100px 100px 1fr 96px 110px;gap:12px;padding:13px 16px;align-items:center;border-bottom:1px solid #f5f8fc;font-size:12.5px;"><span style="font-family:'IBM Plex Mono',monospace;color:#475569;">06&#8209;12 14:24</span><span style="font-family:'IBM Plex Mono',monospace;color:#0f172a;">CLM&#8209;4471</span><span style="font-family:'IBM Plex Mono',monospace;color:#64748b;">EP&#8209;4471</span><span style="font-family:'IBM Plex Mono',monospace;color:#0f172a;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">b7e1d0&#8230;a4c2</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:600;color:#047857;background:#ecfdf5;border:1px solid #c7ead7;border-radius:6px;padding:3px 7px;text-align:center;">Accept</span><span style="color:#475569;">auto</span></div>
+                  <div style="display:grid;grid-template-columns:150px 100px 100px 1fr 96px 110px;gap:12px;padding:13px 16px;align-items:center;border-bottom:1px solid #f5f8fc;font-size:12.5px;"><span style="font-family:'IBM Plex Mono',monospace;color:#475569;">06&#8209;12 13:58</span><span style="font-family:'IBM Plex Mono',monospace;color:#0f172a;">CLM&#8209;4470</span><span style="font-family:'IBM Plex Mono',monospace;color:#64748b;">EP&#8209;4470</span><span style="font-family:'IBM Plex Mono',monospace;color:#0f172a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">5f0ac2&#8230;77e1</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:600;color:#b45309;background:#fffbeb;border:1px solid #f2e2bf;border-radius:6px;padding:3px 7px;text-align:center;">Review</span><span style="color:#475569;">D. Hayes</span></div>
+                  <div style="display:grid;grid-template-columns:150px 100px 100px 1fr 96px 110px;gap:12px;padding:13px 16px;align-items:center;border-bottom:1px solid #f5f8fc;font-size:12.5px;"><span style="font-family:'IBM Plex Mono',monospace;color:#475569;">06&#8209;12 13:31</span><span style="font-family:'IBM Plex Mono',monospace;color:#0f172a;">CLM&#8209;4469</span><span style="font-family:'IBM Plex Mono',monospace;color:#64748b;">EP&#8209;4469</span><span style="font-family:'IBM Plex Mono',monospace;color:#0f172a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">9c3d41&#8230;0b22</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:600;color:#b91c1c;background:#fef2f2;border:1px solid #f3cccc;border-radius:6px;padding:3px 7px;text-align:center;">Reject</span><span style="color:#475569;">auto</span></div>
+                  <div style="display:grid;grid-template-columns:150px 100px 100px 1fr 96px 110px;gap:12px;padding:13px 16px;align-items:center;border-bottom:1px solid #f5f8fc;font-size:12.5px;"><span style="font-family:'IBM Plex Mono',monospace;color:#475569;">06&#8209;12 11:09</span><span style="font-family:'IBM Plex Mono',monospace;color:#0f172a;">CLM&#8209;4468</span><span style="font-family:'IBM Plex Mono',monospace;color:#64748b;">EP&#8209;4468</span><span style="font-family:'IBM Plex Mono',monospace;color:#0f172a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">2a77b9&#8230;c410</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:600;color:#047857;background:#ecfdf5;border:1px solid #c7ead7;border-radius:6px;padding:3px 7px;text-align:center;">Accept</span><span style="color:#475569;">M. Okoro</span></div>
+                  <div style="display:grid;grid-template-columns:150px 100px 100px 1fr 96px 110px;gap:12px;padding:13px 16px;align-items:center;font-size:12.5px;"><span style="font-family:'IBM Plex Mono',monospace;color:#475569;">06&#8209;11 18:47</span><span style="font-family:'IBM Plex Mono',monospace;color:#0f172a;">CLM&#8209;4467</span><span style="font-family:'IBM Plex Mono',monospace;color:#64748b;">EP&#8209;4467</span><span style="font-family:'IBM Plex Mono',monospace;color:#0f172a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">e108fa&#8230;31d0</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:600;color:#047857;background:#ecfdf5;border:1px solid #c7ead7;border-radius:6px;padding:3px 7px;text-align:center;">Accept</span><span style="color:#475569;">auto</span></div>
+                </div>
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-top:13px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:#94a3b8;"><span>Showing 5 of 9,452 entries</span><span>Each entry embeds the previous head &middot; supersession never deletes</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== SCREEN 07: CONNECTIONS ===== -->
+      <div data-screen-label="App · Connections">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;">
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:#64748b;background:#fff;border:1px solid #dde5ef;border-radius:7px;padding:4px 10px;">07 &middot; Connections</span>
+          <span style="height:1px;flex:1;background:#dde5ef;"></span>
+          <span style="font-size:12px;color:#94a3b8;">Provider-agnostic &middot; keys stored per workspace</span>
+        </div>
+        <div class="ta-frame" style="border:1px solid #dde5ef;border-radius:16px;overflow:hidden;box-shadow:0 1px 2px rgba(15,23,42,0.05),0 30px 60px -34px rgba(15,23,42,0.32);background:#fff;">
+          <div style="display:flex;align-items:center;gap:14px;padding:11px 16px;background:#f3f6fb;border-bottom:1px solid #e6ecf4;">
+            <div style="display:flex;gap:7px;"><span style="width:11px;height:11px;border-radius:50%;background:#e2554f;"></span><span style="width:11px;height:11px;border-radius:50%;background:#e8b13b;"></span><span style="width:11px;height:11px;border-radius:50%;background:#4caf63;"></span></div>
+            <div style="flex:1;max-width:380px;margin:0 auto;display:flex;align-items:center;gap:8px;background:#fff;border:1px solid #e0e7f0;border-radius:8px;padding:6px 12px;font-family:'IBM Plex Mono',monospace;font-size:12px;color:#64748b;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>app.truthai.tech/settings/connections</div>
+            <div style="width:54px;"></div>
+          </div>
+          <div class="ta-shell" style="display:flex;min-height:600px;">
+            <dc-import name="TASidebar" active="connections" hint-size="230px,100%"></dc-import>
+            <div style="flex:1;background:#f5f8fc;min-width:0;">
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 24px;background:#fff;border-bottom:1px solid #e6ecf4;">
+                <div><h3 style="margin:0;font-size:19px;font-weight:700;color:#0f172a;letter-spacing:-0.01em;">Connections</h3><p style="margin:3px 0 0;font-size:12.5px;color:#94a3b8;">Model providers and storage for this workspace</p></div>
+                <button style="display:flex;align-items:center;gap:7px;font-family:'IBM Plex Sans',sans-serif;font-size:13px;font-weight:600;color:#fff;background:#2563eb;border:none;border-radius:9px;padding:9px 14px;cursor:pointer;white-space:nowrap;box-shadow:0 1px 2px rgba(37,99,235,0.4);"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Add connection</button>
+              </div>
+              <div style="padding:22px 24px;">
+                <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:#94a3b8;">Model providers</div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:12px;">
+                  <!-- Anthropic -->
+                  <div style="background:#fff;border:1px solid #e6ecf4;border-radius:13px;padding:16px;">
+                    <div style="display:flex;align-items:center;gap:12px;">
+                      <span style="width:40px;height:40px;border-radius:11px;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px;flex-shrink:0;">A</span>
+                      <div style="flex:1;min-width:0;"><div style="font-size:14.5px;font-weight:600;color:#0f172a;">Anthropic</div><div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#94a3b8;">claude-sonnet-4.5 &middot; T2/T3</div></div>
+                      <span style="display:flex;align-items:center;gap:6px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;font-weight:600;color:#047857;background:#ecfdf5;border:1px solid #c7ead7;border-radius:7px;padding:4px 9px;"><span style="width:6px;height:6px;border-radius:50%;background:#059669;"></span>CONNECTED</span>
+                    </div>
+                    <div style="margin-top:13px;display:flex;align-items:center;justify-content:space-between;background:#f8fafd;border:1px solid #eef2f7;border-radius:9px;padding:9px 12px;"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#475569;">sk-ant-&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;4f9c</span><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#2563eb;cursor:pointer;">Rotate</span></div>
+                  </div>
+                  <!-- OpenAI -->
+                  <div style="background:#fff;border:1px solid #e6ecf4;border-radius:13px;padding:16px;">
+                    <div style="display:flex;align-items:center;gap:12px;">
+                      <span style="width:40px;height:40px;border-radius:11px;background:#0f9d77;color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v10M7 12h10"/></svg></span>
+                      <div style="flex:1;min-width:0;"><div style="font-size:14.5px;font-weight:600;color:#0f172a;">OpenAI</div><div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#94a3b8;">gpt-class &middot; T2/T3</div></div>
+                      <span style="display:flex;align-items:center;gap:6px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;font-weight:600;color:#047857;background:#ecfdf5;border:1px solid #c7ead7;border-radius:7px;padding:4px 9px;"><span style="width:6px;height:6px;border-radius:50%;background:#059669;"></span>CONNECTED</span>
+                    </div>
+                    <div style="margin-top:13px;display:flex;align-items:center;justify-content:space-between;background:#f8fafd;border:1px solid #eef2f7;border-radius:9px;padding:9px 12px;"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#475569;">sk-&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;a012</span><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#2563eb;cursor:pointer;">Rotate</span></div>
+                  </div>
+                  <!-- Gemini -->
+                  <div style="background:#fff;border:1px solid #e6ecf4;border-radius:13px;padding:16px;">
+                    <div style="display:flex;align-items:center;gap:12px;">
+                      <span style="width:40px;height:40px;border-radius:11px;background:linear-gradient(135deg,#2563eb,#7c3aed);color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c.4 5.4 4.6 9.6 10 10-5.4.4-9.6 4.6-10 10-.4-5.4-4.6-9.6-10-10C7.4 11.6 11.6 7.4 12 2Z"/></svg></span>
+                      <div style="flex:1;min-width:0;"><div style="font-size:14.5px;font-weight:600;color:#0f172a;">Google Gemini</div><div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#94a3b8;">gemini-class &middot; T2</div></div>
+                      <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;font-weight:600;color:#64748b;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:7px;padding:4px 9px;">NOT LINKED</span>
+                    </div>
+                    <div style="margin-top:13px;"><button style="width:100%;font-family:'IBM Plex Sans',sans-serif;font-size:12.5px;font-weight:600;color:#2563eb;background:#eef4ff;border:1px solid #dbe7ff;border-radius:9px;padding:9px;cursor:pointer;">Add API key</button></div>
+                  </div>
+                  <!-- Ollama -->
+                  <div style="background:#fff;border:1px solid #e6ecf4;border-radius:13px;padding:16px;">
+                    <div style="display:flex;align-items:center;gap:12px;">
+                      <span style="width:40px;height:40px;border-radius:11px;background:#0f172a;color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M9 9h.01M15 9h.01M9 15h6"/></svg></span>
+                      <div style="flex:1;min-width:0;"><div style="font-size:14.5px;font-weight:600;color:#0f172a;">Ollama &middot; local</div><div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#94a3b8;">minicheck, hhem &middot; T1</div></div>
+                      <span style="display:flex;align-items:center;gap:6px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;font-weight:600;color:#047857;background:#ecfdf5;border:1px solid #c7ead7;border-radius:7px;padding:4px 9px;"><span style="width:6px;height:6px;border-radius:50%;background:#059669;"></span>RUNNING</span>
+                    </div>
+                    <div style="margin-top:13px;display:flex;align-items:center;justify-content:space-between;background:#f8fafd;border:1px solid #eef2f7;border-radius:9px;padding:9px 12px;"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#475569;">http://localhost:11434</span><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#059669;">healthy</span></div>
+                  </div>
+                </div>
+
+                <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:#94a3b8;margin-top:24px;">Storage &amp; data</div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:12px;">
+                  <!-- Supabase -->
+                  <div style="background:#fff;border:1px solid #e6ecf4;border-radius:13px;padding:16px;">
+                    <div style="display:flex;align-items:center;gap:12px;">
+                      <span style="width:40px;height:40px;border-radius:11px;background:#0f9d77;color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor"><path d="M13 2 4 13h7l-1 9 9-11h-7l1-9Z"/></svg></span>
+                      <div style="flex:1;min-width:0;"><div style="font-size:14.5px;font-weight:600;color:#0f172a;">Supabase</div><div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#94a3b8;">truthai-prod &middot; eu-west-2</div></div>
+                      <span style="display:flex;align-items:center;gap:6px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;font-weight:600;color:#047857;background:#ecfdf5;border:1px solid #c7ead7;border-radius:7px;padding:4px 9px;"><span style="width:6px;height:6px;border-radius:50%;background:#059669;"></span>CONNECTED</span>
+                    </div>
+                    <div style="margin-top:13px;display:flex;gap:7px;flex-wrap:wrap;"><span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#475569;background:#f8fafd;border:1px solid #eef2f7;border-radius:6px;padding:3px 8px;">auth</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#475569;background:#f8fafd;border:1px solid #eef2f7;border-radius:6px;padding:3px 8px;">claims</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#475569;background:#f8fafd;border:1px solid #eef2f7;border-radius:6px;padding:3px 8px;">evidence</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#475569;background:#f8fafd;border:1px solid #eef2f7;border-radius:6px;padding:3px 8px;">ledger</span></div>
+                  </div>
+                  <!-- Tier routing info -->
+                  <div style="background:linear-gradient(135deg,#eef4ff,#f5fbff);border:1px solid #dbe7ff;border-radius:13px;padding:16px;">
+                    <div style="display:flex;align-items:center;gap:8px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h10"/></svg><span style="font-size:13.5px;font-weight:600;color:#0f172a;">Tier routing</span></div>
+                    <p style="margin:8px 0 0;font-size:12px;line-height:1.5;color:#475569;">The kernel never calls a model. Connected providers serve extraction, grounding and repair &mdash; routed lowest-tier first, escalating only on measured kernel outcomes.</p>
+                    <div style="margin-top:11px;display:flex;gap:6px;"><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#475569;background:#fff;border:1px solid #dbe7ff;border-radius:6px;padding:3px 8px;">T1 local</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#475569;background:#fff;border:1px solid #dbe7ff;border-radius:6px;padding:3px 8px;">T2 mid</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#475569;background:#fff;border:1px solid #dbe7ff;border-radius:6px;padding:3px 8px;">T3 frontier</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MORE-SCREENS -->
+    </div>
+  </section>
+
+  <!-- ================= FOOTER ================= -->
+  <footer style="background:#ffffff;">
+    <div style="max-width:1240px;margin:0 auto;padding:60px 32px 40px;">
+      <div id="ta-footer-grid" style="display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:32px;">
+        <div>
+          <a href="#top" style="display:flex;align-items:center;gap:11px;">
+            <span style="width:30px;height:30px;border-radius:9px;background:linear-gradient(135deg,#2563eb,#06b6d4);display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(37,99,235,0.35);"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 5.5V11c0 5 3.4 8.4 8 10 4.6-1.6 8-5 8-10V5.5L12 2Z"/><path d="m9 11.5 2 2 4-4.5"/></svg></span>
+            <span style="font-weight:700;font-size:17px;letter-spacing:-0.01em;color:#0f172a;">Truth&#8209;AI</span>
+          </a>
+          <p style="margin:16px 0 0;font-size:14px;line-height:1.55;color:#64748b;max-width:280px;">Truth verification for the AI era. Structured, auditable, evidence-based verification workflows.</p>
+          <p style="margin:16px 0 0;font-family:'IBM Plex Mono',monospace;font-size:12px;color:#94a3b8;">truthai.tech</p>
+        </div>
+        <div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:#94a3b8;">Product</div>
+          <div style="margin-top:14px;display:flex;flex-direction:column;gap:10px;font-size:14px;color:#475569;">
+            <a href="#features" style="transition:color .15s;" style-hover="color:#2563eb;">Features</a>
+            <a href="#workflow" style="transition:color .15s;" style-hover="color:#2563eb;">Workflow</a>
+            <a href="#app" style="transition:color .15s;" style-hover="color:#2563eb;">Console</a>
+            <a href="#waitlist" style="transition:color .15s;" style-hover="color:#2563eb;">Waitlist</a>
+          </div>
+        </div>
+        <div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:#94a3b8;">Resources</div>
+          <div style="margin-top:14px;display:flex;flex-direction:column;gap:10px;font-size:14px;color:#475569;">
+            <a href="#trust" style="transition:color .15s;" style-hover="color:#2563eb;">Docs</a>
+            <a href="#trust" style="transition:color .15s;" style-hover="color:#2563eb;">GitHub</a>
+            <a href="#trust" style="transition:color .15s;" style-hover="color:#2563eb;">Spec v0.1</a>
+            <a href="#trust" style="transition:color .15s;" style-hover="color:#2563eb;">Changelog</a>
+          </div>
+        </div>
+        <div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:#94a3b8;">Company</div>
+          <div style="margin-top:14px;display:flex;flex-direction:column;gap:10px;font-size:14px;color:#475569;">
+            <a href="#waitlist" style="transition:color .15s;" style-hover="color:#2563eb;">Contact</a>
+            <a href="#trust" style="transition:color .15s;" style-hover="color:#2563eb;">Privacy</a>
+            <a href="#trust" style="transition:color .15s;" style-hover="color:#2563eb;">Terms</a>
+          </div>
+        </div>
+      </div>
+      <div style="margin-top:44px;padding-top:24px;border-top:1px solid #e6ecf4;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;">
+        <span style="font-size:13px;color:#94a3b8;">&copy; 2026 Truth&#8209;AI. All rights reserved.</span>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#cbd5e1;">deterministic &middot; replayable &middot; auditable</span>
+      </div>
+    </div>
+  </footer>
+
+</div>
+</x-dc>
+</body>
+</html>

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<nav style="width:230px;flex-shrink:0;background:#fbfdff;border-right:1px solid #e6ecf4;padding:14px 12px 16px;display:flex;flex-direction:column;min-height:100%;">
+  <div style="display:flex;align-items:center;gap:10px;padding:6px 10px 16px;">
+    <span style="width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,#2563eb,#06b6d4);display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(37,99,235,0.3);">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 5.5V11c0 5 3.4 8.4 8 10 4.6-1.6 8-5 8-10V5.5L12 2Z"/><path d="m9 11.5 2 2 4-4.5"/></svg>
+    </span>
+    <span style="font-weight:700;font-size:15px;letter-spacing:-0.01em;color:#0f172a;">Truth&#8209;AI</span>
+  </div>
+
+  <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:#b3bccb;padding:4px 11px 8px;">Workspace</div>
+  <div style="display:flex;flex-direction:column;gap:2px;">
+    <sc-for list="{{ items }}" as="item" hint-placeholder-count="8">
+      <div style="{{ item.rowStyle }}">
+        <span style="{{ item.iconStyle }}">{{ item.icon }}</span>
+        <span style="flex:1;">{{ item.label }}</span>
+        <sc-if value="{{ item.badge }}" hint-placeholder-val="">
+          <span style="{{ item.badgeStyle }}">{{ item.badge }}</span>
+        </sc-if>
+      </div>
+    </sc-for>
+  </div>
+
+  <div style="margin-top:auto;padding-top:14px;border-top:1px solid #eef2f7;display:flex;align-items:center;gap:10px;">
+    <span style="width:32px;height:32px;border-radius:9px;background:linear-gradient(135deg,#1e293b,#334155);color:#e2e8f0;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;">DH</span>
+    <div style="flex:1;min-width:0;">
+      <div style="font-size:13px;font-weight:600;color:#0f172a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">D. Hayes</div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#94a3b8;">Compliance</div>
+    </div>
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+  </div>
+</nav>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:230,&quot;height&quot;:520},&quot;active&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;overview&quot;,&quot;assistant&quot;,&quot;claims&quot;,&quot;evidence&quot;,&quot;verifications&quot;,&quot;rulepacks&quot;,&quot;ledger&quot;,&quot;reports&quot;,&quot;connections&quot;,&quot;settings&quot;],&quot;default&quot;:&quot;overview&quot;}}">
+class Component extends DCLogic {
+  renderVals() {
+    const active = this.props.active || "overview";
+    const h = React.createElement;
+    const svg = (children) => h("svg", { width: 17, height: 17, viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: 1.7, strokeLinecap: "round", strokeLinejoin: "round" }, children);
+    const p = (d, key) => h("path", { d, key });
+    const icons = {
+      overview: svg([p("M4 4h7v7H4z", "a"), p("M13 4h7v7h-7z", "b"), p("M13 13h7v7h-7z", "c"), p("M4 13h7v7H4z", "d")]),
+      assistant: svg([p("M21 15a2 2 0 0 1-2 2H8l-4 4V5a2 2 0 0 1 2-2h13a2 2 0 0 1 2 2Z", "a"), p("M8 9h8M8 13h5", "b")]),
+      connections: svg([p("M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1", "a"), p("M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1", "b")]),
+      claims: svg([p("M14 3v4a1 1 0 0 0 1 1h4", "a"), p("M17 21H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7l5 5v11a2 2 0 0 1-2 2Z", "b"), p("M9 13h6M9 17h4", "c")]),
+      evidence: svg([p("M4 7h6l2 2h8v9a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V7Z", "a")]),
+      verifications: svg([p("M12 3 4 6v6c0 5 3.5 8.5 8 10 4.5-1.5 8-5 8-10V6l-8-3Z", "a"), p("m9 12 2 2 4-4", "b")]),
+      rulepacks: svg([p("M4 6h16M4 12h16M4 18h10", "a"), h("circle", { cx: 18, cy: 18, r: 2.5, key: "b" })]),
+      ledger: svg([h("ellipse", { cx: 12, cy: 6, rx: 8, ry: 3, key: "a" }), p("M4 6v6c0 1.7 3.6 3 8 3s8-1.3 8-3V6", "b"), p("M4 12v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6", "c")]),
+      reports: svg([p("M4 20V10M10 20V4M16 20v-7M22 20H2", "a")]),
+      settings: svg([h("circle", { cx: 12, cy: 12, r: 3, key: "a" }), p("M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3H10a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9V10a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z", "b")]),
+    };
+    const defs = [
+      { key: "overview", label: "Overview", badge: null },
+      { key: "assistant", label: "Assistant", badge: null },
+      { key: "claims", label: "Claims", badge: "24" },
+      { key: "evidence", label: "Evidence", badge: null },
+      { key: "verifications", label: "Verifications", badge: "3" },
+      { key: "rulepacks", label: "Rule Packs", badge: null },
+      { key: "ledger", label: "Ledger", badge: null },
+      { key: "reports", label: "Reports", badge: null },
+      { key: "connections", label: "Connections", badge: null },
+      { key: "settings", label: "Settings", badge: null },
+    ];
+    const base = "display:flex;align-items:center;gap:11px;padding:9px 11px;border-radius:9px;font-size:13.5px;cursor:pointer;transition:background .12s;";
+    const items = defs.map((d) => {
+      const on = d.key === active;
+      return {
+        key: d.key,
+        label: d.label,
+        icon: icons[d.key],
+        badge: d.badge,
+        rowStyle: base + (on
+          ? "font-weight:600;color:#2563eb;background:#eaf2ff;box-shadow:inset 2px 0 0 #2563eb;"
+          : "font-weight:500;color:#475569;background:transparent;"),
+        iconStyle: "display:flex;align-items:center;justify-content:center;color:" + (on ? "#2563eb" : "#94a3b8") + ";",
+        badgeStyle: "font-family:'IBM Plex Mono',monospace;font-size:10.5px;font-weight:600;padding:1px 7px;border-radius:99px;" + (on ? "background:#dbe7ff;color:#2563eb;" : "background:#eef2f7;color:#94a3b8;"),
+      };
+    });
+    return { items };
+  }
+}
+</script>
+</body>
+</html>
