@@ -9,10 +9,6 @@
     {
       "source": "/frontend/:path*",
       "destination": "/:path*"
-    },
-    {
-      "source": "/",
-      "destination": "/app/overview"
     }
   ],
   "headers": [

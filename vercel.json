@@ -1,13 +1,6 @@
 {
   "cleanUrls": true,
   "trailingSlash": false,
-  "redirects": [
-    {
-      "source": "/",
-      "destination": "/app/overview",
-      "permanent": false
-    }
-  ],
   "headers": [
     {
       "source": "/(.*)",
