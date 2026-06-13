@@ -25,14 +25,45 @@
     #ta-hero-grid, #ta-trust-grid, #ta-dash-grid { grid-template-columns: 1fr !important; }
     #ta-problem-grid, #ta-features-grid, #ta-workflow-grid, #ta-usecase-grid, #ta-footer-grid { grid-template-columns: repeat(2,1fr) !important; }
     #ta-workflow-line { display: none !important; }
-    .ta-shell { min-width: 880px; }
-    .ta-frame { overflow-x: auto !important; }
+    .ta-shell { min-width: 0 !important; }
+    .ta-frame { overflow: hidden !important; }
     h1 { font-size: 42px !important; }
+  }
+  @media (max-width: 760px) {
+    header > div { height: auto !important; min-height: 64px !important; padding: 12px 18px !important; }
+    header > div > div:last-child { gap: 8px !important; }
+    header > div > div:last-child a:first-child { display: none !important; }
+    #app > div:first-child { padding: 34px 18px 20px !important; }
+    #app > div:nth-child(2) { padding: 0 12px 44px !important; }
+    .ta-frame { border-radius: 12px !important; box-shadow: 0 1px 2px rgba(15,23,42,0.05) !important; }
+    .ta-shell { width: 100% !important; min-height: 0 !important; flex-direction: column !important; }
+    .ta-shell nav { width: 100% !important; min-height: 0 !important; height: auto !important; border-right: 0 !important; border-bottom: 1px solid #e6ecf4 !important; padding: 10px !important; flex-direction: row !important; gap: 8px !important; overflow-x: auto !important; overscroll-behavior-x: contain; }
+    .ta-shell nav > div:first-child,
+    .ta-shell nav > div:nth-child(2),
+    .ta-shell nav > div:last-child { display: none !important; }
+    .ta-shell nav > div:nth-child(3) { display: flex !important; flex-direction: row !important; gap: 6px !important; min-width: max-content !important; }
+    .ta-shell nav a { flex: 0 0 auto !important; width: auto !important; min-width: 0 !important; white-space: nowrap !important; padding: 8px 10px !important; box-shadow: none !important; }
+    .ta-shell > div { width: 100% !important; min-width: 0 !important; }
+    .ta-shell > div > div:first-child { padding: 14px 16px !important; flex-direction: column !important; align-items: flex-start !important; }
+    .ta-shell > div > div:first-child > div:last-child { width: 100% !important; flex-wrap: wrap !important; }
+    .ta-shell [style*="grid-template-columns:repeat(4"] { grid-template-columns: repeat(2,1fr) !important; }
+    .ta-shell [style*="grid-template-columns:1.55fr 1fr"],
+    .ta-shell [style*="grid-template-columns:1fr 1fr"],
+    .ta-shell [style*="grid-template-columns:1.2fr 0.8fr"],
+    .ta-shell [style*="grid-template-columns:1fr 290px"],
+    .ta-shell [style*="grid-template-columns:1fr 300px"] { grid-template-columns: 1fr !important; }
+    .ta-shell [style*="grid-template-columns:150px 100px 100px 1fr 96px 110px"] { min-width: 760px !important; }
+    .ta-shell [style*="overflow:hidden"] { max-width: 100% !important; }
+    .ta-shell button,
+    .ta-shell input { max-width: 100% !important; }
   }
   @media (max-width: 560px) {
     #ta-problem-grid, #ta-features-grid, #ta-workflow-grid, #ta-usecase-grid, #ta-footer-grid { grid-template-columns: 1fr !important; }
     h1 { font-size: 32px !important; }
     h2 { font-size: 28px !important; }
+    #app > div:first-child h2 { font-size: 26px !important; }
+    #app > div:first-child p { font-size: 14px !important; }
+    .ta-shell [style*="grid-template-columns:repeat(4"] { grid-template-columns: 1fr !important; }
   }
 </style>
 </helmet>
