@@ -13,7 +13,7 @@ test:
 	uv run pytest -q
 
 replay:
-	@echo "replay: stubbed until M2"
+	uv run truth replay fixtures/golden --runs 30 --byte-equal
 
 freeze-check:
 	uv run python tools/schema_freeze_check.py

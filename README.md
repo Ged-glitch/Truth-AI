@@ -2,8 +2,8 @@
 
 Truth-AI is a deterministic truth kernel and continuity ledger for LLM agents.
 
-This repository is currently at **M0 scaffold**. Application logic starts in later
-milestones after the project contract, gate, and CI surface are in place.
+This repository is at **M2 graph/replay**: validated packs can be turned into
+deterministic typed graph dumps, and committed graph fixtures replay byte-equal.
 
 ## Setup
 
@@ -24,8 +24,9 @@ uv run ruff check .
 uv run ruff format --check .
 uv run mypy --strict src/
 uv run pytest -q
+uv run truth replay fixtures/golden --runs 30 --byte-equal
 uv run python tools/schema_freeze_check.py
 ```
 
-The replay target is intentionally stubbed until M2, as defined in
-`CODEX_HARNESS.md`.
+Replay runs committed golden graph fixtures 30 times and byte-compares their
+canonical hashes, as required from M2 onward.
