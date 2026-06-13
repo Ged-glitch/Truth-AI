@@ -1,7 +1,7 @@
 (async () => {
   try {
     const source = location.pathname.startsWith("/app")
-      ? "/frontend/TruthKernel.dc.html"
+      ? "/frontend/Truth-Kernel-Studio.dc.html"
       : "/frontend/Truth-AI.dc.html";
     const response = await fetch(source, {
       cache: "no-store"
