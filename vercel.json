@@ -8,12 +8,6 @@
       "permanent": false
     }
   ],
-  "rewrites": [
-    {
-      "source": "/app/:screen",
-      "destination": "/frontend/Truth-AI.dc.html"
-    }
-  ],
   "headers": [
     {
       "source": "/(.*)",
