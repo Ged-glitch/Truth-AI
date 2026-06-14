@@ -1,6 +1,7 @@
 (async () => {
   try {
-    const source = location.pathname === "/" || location.pathname.startsWith("/app")
+    const pathname = location.pathname.replace(/\/$/, "") || "/";
+    const source = pathname === "/"
       ? "/frontend/Truth-Kernel-Studio.dc.html"
       : "/frontend/Truth-AI.dc.html";
     const response = await fetch(source, {
