@@ -53,6 +53,18 @@ Author a deterministic fixture bundle:
 uv run truth fixtures make fixtures/golden/m1/minimal-supported.pack.json rulepacks/strict-default/rulepack.json ./tmp/minimal.bundle.json
 ```
 
+Run the HTTP sidecar:
+
+```bash
+uv run truth serve http .truth-ledger rulepacks/strict-default/rulepack.json --host 127.0.0.1 --port 8000
+```
+
+Run the line-delimited MCP session server:
+
+```bash
+uv run truth serve mcp .truth-ledger rulepacks/strict-default/rulepack.json
+```
+
 ## Frontend Preview
 
 The copied UI is a static DreamCanvas export. Serve it over HTTP so component

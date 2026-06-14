@@ -17,6 +17,7 @@ from truthkernel.ledger import LedgerStore
 from truthkernel.predicates.evaluate import evaluate_predicates
 from truthkernel.replay import replay_golden
 from truthkernel.schemas import Decision, Pack, RulePack
+from truthkernel.server import ServerConfig, run_http_sidecar, run_mcp_session
 
 PACK_ARGUMENT = typer.Argument(..., exists=True, file_okay=True, dir_okay=False)
 RULEPACK_ARGUMENT = typer.Argument(..., exists=True, file_okay=True, dir_okay=False)
@@ -35,8 +36,10 @@ app = typer.Typer(
 )
 ledger_app = typer.Typer(help="Inspect the continuity ledger.")
 fixtures_app = typer.Typer(help="Author deterministic fixtures.")
+serve_app = typer.Typer(help="Run the HTTP sidecar or MCP server.")
 app.add_typer(ledger_app, name="ledger")
 app.add_typer(fixtures_app, name="fixtures")
+app.add_typer(serve_app, name="serve")
 
 
 @app.callback()
@@ -215,6 +218,40 @@ def fixtures_make(
         typer.echo(canonical_text({"output_path": str(output_file), "bundle": bundle}))
     else:
         typer.echo(str(output_file))
+
+
+@serve_app.command("http")
+def serve_http(
+    ledger_path: Path = LEDGER_ARGUMENT,
+    rulepack_path: Path = RULEPACK_ARGUMENT,
+    host: str = typer.Option("127.0.0.1", "--host"),
+    port: int = typer.Option(8000, "--port", min=0),
+    bearer_token: str | None = typer.Option(None, "--bearer-token"),
+) -> None:
+    """Run the HTTP sidecar."""
+    run_http_sidecar(
+        ServerConfig(
+            ledger_path=ledger_path,
+            rulepack_path=rulepack_path,
+            host=host,
+            port=port,
+            bearer_token=bearer_token,
+        )
+    )
+
+
+@serve_app.command("mcp")
+def serve_mcp(
+    ledger_path: Path = LEDGER_ARGUMENT,
+    rulepack_path: Path = RULEPACK_ARGUMENT,
+) -> None:
+    """Run the line-delimited MCP session server."""
+    run_mcp_session(
+        ServerConfig(
+            ledger_path=ledger_path,
+            rulepack_path=rulepack_path,
+        )
+    )
 
 
 def _load_pack(path: Path) -> Pack:
