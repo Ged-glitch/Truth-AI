@@ -1,0 +1,1 @@
+{"adapter_id":"grounding-mini-check","abstention_rate":"0.07","balanced_accuracy":"0.91","benchmark_names":["llm-aggrefact","ragtruth","averitec","halubench"],"frozen_thresholds":{"accept":"0.80","review":"0.55"}}

@@ -65,6 +65,9 @@ Run the line-delimited MCP session server:
 uv run truth serve mcp .truth-ledger rulepacks/strict-default/rulepack.json
 ```
 
+Advisory adapter contracts live under `src/adapters/`, with committed frozen
+artefacts stored under `adapters/`.
+
 ## Frontend Preview
 
 The copied UI is a static DreamCanvas export. Serve it over HTTP so component
