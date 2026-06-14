@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from datetime import UTC, datetime
-from decimal import Decimal
+from decimal import Decimal, InvalidOperation
 from enum import StrEnum
 
 from truthkernel.schemas import Claim
@@ -101,6 +101,17 @@ def compare_units(
     return Comparison.DIFFERENT
 
 
+def _coerce_decimal(value: object) -> Decimal | None:
+    if isinstance(value, Decimal):
+        return value
+    if isinstance(value, str):
+        try:
+            return Decimal(value)
+        except InvalidOperation:
+            return None
+    return None
+
+
 def claims_conflict(left: Claim, right: Claim) -> bool:
     """Return whether two claims conflict on canonical SROM."""
     if left.subject != right.subject or left.relation != right.relation:
@@ -110,16 +121,18 @@ def claims_conflict(left: Claim, right: Claim) -> bool:
     right_value = right.modifiers.get("value")
     left_unit = left.modifiers.get("unit")
     right_unit = right.modifiers.get("unit")
-    if isinstance(left_value, Decimal) and isinstance(right_value, Decimal):
+    left_decimal = _coerce_decimal(left_value)
+    right_decimal = _coerce_decimal(right_value)
+    if left_decimal is not None and right_decimal is not None:
         if isinstance(left_unit, str) and isinstance(right_unit, str):
             unit_comparison = compare_units(
-                unit_value(left_value, left_unit),
-                unit_value(right_value, right_unit),
+                unit_value(left_decimal, left_unit),
+                unit_value(right_decimal, right_unit),
             )
             return unit_comparison in {
                 Comparison.DIFFERENT,
                 Comparison.DIMENSION_MISMATCH,
             }
-        return not decimal_equal(left_value, right_value)
+        return not decimal_equal(left_decimal, right_decimal)
 
     return left.object != right.object
