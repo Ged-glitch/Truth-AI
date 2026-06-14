@@ -68,6 +68,20 @@ uv run truth serve mcp .truth-ledger rulepacks/strict-default/rulepack.json
 Advisory adapter contracts live under `src/adapters/`, with committed frozen
 artefacts stored under `adapters/`.
 
+Run the integration demos:
+
+```bash
+uv run truth demo openclaw --json
+uv run truth demo hermes --json
+uv run truth demo dcir --json
+```
+
+Generate the M10 evaluation report:
+
+```bash
+uv run truth report --output-dir reports/m10 --json
+```
+
 ## Frontend Preview
 
 The copied UI is a static DreamCanvas export. Serve it over HTTP so component

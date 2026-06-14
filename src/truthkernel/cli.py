@@ -16,6 +16,7 @@ from truthkernel.graph import build_graph
 from truthkernel.ledger import LedgerStore
 from truthkernel.predicates.evaluate import evaluate_predicates
 from truthkernel.replay import replay_golden
+from truthkernel.reporting import DemoSummary, build_m10_report, demo_payload, write_report
 from truthkernel.schemas import Decision, Pack, RulePack
 from truthkernel.server import ServerConfig, run_http_sidecar, run_mcp_session
 
@@ -27,6 +28,7 @@ GOLDEN_DIR_ARGUMENT = typer.Argument(..., exists=True, file_okay=False, dir_okay
 JSON_OPTION = typer.Option(False, "--json", help="Emit canonical JSON.")
 RUNS_OPTION = typer.Option(30, "--runs", min=1)
 BYTE_EQUAL_OPTION = typer.Option(False, "--byte-equal")
+REPORT_OUTPUT_DIR_OPTION = typer.Option(Path("reports/m10"), "--output-dir")
 
 app = typer.Typer(
     name="truth",
@@ -36,9 +38,11 @@ app = typer.Typer(
 )
 ledger_app = typer.Typer(help="Inspect the continuity ledger.")
 fixtures_app = typer.Typer(help="Author deterministic fixtures.")
+demo_app = typer.Typer(help="Run the integration demos.")
 serve_app = typer.Typer(help="Run the HTTP sidecar or MCP server.")
 app.add_typer(ledger_app, name="ledger")
 app.add_typer(fixtures_app, name="fixtures")
+app.add_typer(demo_app, name="demo")
 app.add_typer(serve_app, name="serve")
 
 
@@ -185,6 +189,47 @@ def replay(
         typer.echo("replay passed")
 
 
+@app.command()
+def report(
+    output_dir: Path = REPORT_OUTPUT_DIR_OPTION,
+    json_output: bool = JSON_OPTION,
+) -> None:
+    """Generate the M10 evaluation report."""
+    report_model = build_m10_report()
+    markdown_path, json_path = write_report(report_model, output_dir)
+    if json_output:
+        typer.echo(
+            canonical_text(
+                {
+                    "output_dir": str(output_dir),
+                    "markdown_path": str(markdown_path),
+                    "json_path": str(json_path),
+                    "report": report_model,
+                }
+            )
+        )
+    else:
+        typer.echo(str(markdown_path))
+
+
+@demo_app.command("openclaw")
+def demo_openclaw(json_output: bool = JSON_OPTION) -> None:
+    """Run the OpenClaw-style memory-write demo."""
+    _emit_demo_result(demo_payload("openclaw"), json_output)
+
+
+@demo_app.command("hermes")
+def demo_hermes(json_output: bool = JSON_OPTION) -> None:
+    """Run the Hermes-style tool integration demo."""
+    _emit_demo_result(demo_payload("hermes"), json_output)
+
+
+@demo_app.command("dcir")
+def demo_dcir(json_output: bool = JSON_OPTION) -> None:
+    """Run the DCIR-A repair loop demo."""
+    _emit_demo_result(demo_payload("dcir"), json_output)
+
+
 @fixtures_app.command("make")
 def fixtures_make(
     source_path: Path = PACK_ARGUMENT,
@@ -285,3 +330,15 @@ def _emit_error(message: str, code: int, json_output: bool) -> None:
         typer.echo(canonical_text({"error": message, "code": code}))
     else:
         typer.echo(message, err=True)
+
+
+def _emit_demo_result(summary: object, json_output: bool) -> None:
+    if json_output:
+        typer.echo(canonical_text(summary))
+    elif isinstance(summary, DemoSummary):
+        typer.echo(
+            f"{summary.name}: {summary.final_decision.value} "
+            f"after {summary.iterations_to_acceptance} attempt(s)"
+        )
+    else:
+        typer.echo(str(summary))

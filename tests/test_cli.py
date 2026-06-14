@@ -83,6 +83,26 @@ def test_truth_fixtures_make_writes_bundle(tmp_path: Path) -> None:
     assert output_path.read_text(encoding="utf-8").endswith("\n")
 
 
+def test_truth_demo_openclaw_smoke() -> None:
+    result = run_truth("demo", "openclaw", "--json")
+
+    assert result.returncode == 0
+    payload = json.loads(result.stdout)
+    assert payload["name"] == "OpenClaw memory-write verification"
+    assert payload["final_decision"] == "accept"
+
+
+def test_truth_report_writes_files(tmp_path: Path) -> None:
+    output_dir = tmp_path / "reports" / "m10"
+    result = run_truth("report", "--output-dir", str(output_dir), "--json")
+
+    assert result.returncode == 0
+    payload = json.loads(result.stdout)
+    assert payload["output_dir"] == str(output_dir)
+    assert Path(payload["markdown_path"]).exists()
+    assert Path(payload["json_path"]).exists()
+
+
 def run_truth(*args: str) -> subprocess.CompletedProcess[str]:
     env = os.environ.copy()
     env["PYTHONHASHSEED"] = "1"
