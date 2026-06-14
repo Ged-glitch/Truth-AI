@@ -1,4 +1,4 @@
-.PHONY: gate lint type test replay freeze-check
+.PHONY: gate lint type test replay freeze-check frontend
 
 gate: lint type test replay freeze-check
 
@@ -17,3 +17,6 @@ replay:
 
 freeze-check:
 	uv run python tools/schema_freeze_check.py
+
+frontend:
+	uv run python -m http.server 4173 --directory frontend
