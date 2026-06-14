@@ -2,9 +2,6 @@
 
 Truth-AI is a deterministic truth kernel and continuity ledger for LLM agents.
 
-This repository contains the deterministic Python kernel plus a static frontend
-preview under `frontend/`.
-
 ## Setup
 
 ```bash
@@ -24,11 +21,37 @@ uv run ruff check .
 uv run ruff format --check .
 uv run mypy --strict src/
 uv run pytest -q
-uv run python tools/schema_freeze_check.py
+uv run truth replay fixtures/golden --runs 30 --byte-equal
 ```
 
-The replay target is intentionally stubbed until M2, as defined in
-`CODEX_HARNESS.md`.
+## CLI Quickstart
+
+Verify the canonical minimal pack against the strict rule pack and write
+accepted facts to an explicit ledger path:
+
+```bash
+uv run truth verify fixtures/golden/m1/minimal-supported.pack.json rulepacks/strict-default/rulepack.json .truth-ledger
+```
+
+Inspect the resulting ledger:
+
+```bash
+uv run truth ledger facts .truth-ledger
+uv run truth ledger show .truth-ledger --json
+uv run truth ledger snapshot .truth-ledger --json
+```
+
+Replay committed fixtures:
+
+```bash
+uv run truth replay fixtures/golden --runs 30 --byte-equal
+```
+
+Author a deterministic fixture bundle:
+
+```bash
+uv run truth fixtures make fixtures/golden/m1/minimal-supported.pack.json rulepacks/strict-default/rulepack.json ./tmp/minimal.bundle.json
+```
 
 ## Frontend Preview
 
