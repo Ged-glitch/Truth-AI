@@ -15,6 +15,7 @@ from adapters.verified_chat import (
     VerifiedChatRequest,
     VerifiedChatRun,
     save_verified_chat_run,
+    verified_chat_run_path,
 )
 from adapters.verified_chat.replay import kernel_replay_inputs, load_verified_chat_run
 from truthkernel.canonical import canonical_text, sha256_of
@@ -38,8 +39,9 @@ from truthkernel.schemas import (
 
 def test_verified_chat_run_round_trips_through_canonical_json(tmp_path: Path) -> None:
     run = sample_verified_chat_run()
-    path = tmp_path / "verified-chat.json"
+    path = verified_chat_run_path(tmp_path, run.request)
 
+    assert path.name == f"{run.request.request_hash}.json"
     save_verified_chat_run(run, path)
 
     loaded = load_verified_chat_run(path)
@@ -47,6 +49,7 @@ def test_verified_chat_run_round_trips_through_canonical_json(tmp_path: Path) ->
     assert loaded == run
     assert canonical_text(loaded) == canonical_text(run)
     assert kernel_replay_inputs(loaded) == run.replay_inputs
+    assert run.request.request_hash == sha256_of(run.request)
 
 
 def test_kernel_replay_inputs_exclude_live_provider_credentials() -> None:

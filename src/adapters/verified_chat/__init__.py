@@ -11,6 +11,7 @@ from adapters.verified_chat.contracts import (
     VerifiedChatRequest,
     VerifiedChatRun,
     save_verified_chat_run,
+    verified_chat_run_path,
 )
 
 __all__ = [
@@ -23,5 +24,6 @@ __all__ = [
     "ReferenceKind",
     "VerifiedChatRequest",
     "VerifiedChatRun",
+    "verified_chat_run_path",
     "save_verified_chat_run",
 ]

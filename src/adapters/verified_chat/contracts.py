@@ -71,6 +71,10 @@ class VerifiedChatRequest(StrictBaseModel):
     references: tuple[ChatReference, ...] = ()
     uploaded_file_hashes: tuple[str, ...] = ()
 
+    @property
+    def request_hash(self) -> str:
+        return sha256_of(self)
+
 
 class ModelResponse(StrictBaseModel):
     """Raw provider output persisted outside the kernel."""
@@ -110,6 +114,12 @@ class VerifiedChatRun(StrictBaseModel):
         return sha256_of(self)
 
 
+def verified_chat_run_path(root: Path, request: VerifiedChatRequest) -> Path:
+    """Return the canonical file path for a verified-chat run bundle."""
+    return root / f"{request.request_hash}.json"
+
+
 def save_verified_chat_run(run: VerifiedChatRun, path: Path) -> None:
     """Write a canonical verified-chat bundle for deterministic replay."""
+    path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(canonical_text(run) + "\n", encoding="utf-8")
