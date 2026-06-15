@@ -1,0 +1,129 @@
+{
+  "sources": [
+    {
+      "access": "public",
+      "clauses": [
+        {
+          "clause_id": "NASA-HDBK-8719.14",
+          "source_locator": "NASA Technical Standards System",
+          "summary": "Public NASA handbook source suitable for orbital-debris compliance examples.",
+          "title": "Handbook for Limiting Orbital Debris"
+        }
+      ],
+      "domain": "aerospace",
+      "id": "nasa-technical-standards",
+      "licence_note": "Public NASA and centre standards authorised for public release can be referenced from the official NASA site.",
+      "publisher": "NASA",
+      "retrieval_policy": "Load only from standards.nasa.gov and preserve source URL plus content hash.",
+      "source_url": "https://standards.nasa.gov/all-standards",
+      "title": "NASA Technical Standards System",
+      "version": "public-release"
+    },
+    {
+      "access": "public",
+      "clauses": [
+        {
+          "clause_id": "NIST-SP-800-series",
+          "source_locator": "NIST CSRC Publications",
+          "summary": "Cybersecurity and privacy publications for controls, risk and assurance examples.",
+          "title": "NIST Special Publications"
+        }
+      ],
+      "domain": "cybersecurity",
+      "id": "nist-csrc-publications",
+      "licence_note": "Use official NIST publication pages and PDFs; cite publication identifiers and revision dates.",
+      "publisher": "NIST",
+      "retrieval_policy": "Load from nist.gov or csrc.nist.gov only, then snapshot retrieved text.",
+      "source_url": "https://csrc.nist.gov/publications",
+      "title": "NIST CSRC Publications",
+      "version": "current"
+    },
+    {
+      "access": "public",
+      "clauses": [
+        {
+          "clause_id": "RFC-index",
+          "source_locator": "RFC Editor",
+          "summary": "Freely available RFCs for internet protocol and security checks.",
+          "title": "RFC Series"
+        }
+      ],
+      "domain": "internet-standards",
+      "id": "ietf-rfc-editor",
+      "licence_note": "RFCs are freely available with IETF Trust licence restrictions, including restrictions on modification outside the standards process.",
+      "publisher": "IETF",
+      "retrieval_policy": "Load from rfc-editor.org and preserve the RFC number, status and obsoletes/supersedes metadata.",
+      "source_url": "https://www.rfc-editor.org/",
+      "title": "IETF RFC Editor",
+      "version": "official"
+    },
+    {
+      "access": "public",
+      "clauses": [
+        {
+          "clause_id": "W3C-recommendations",
+          "source_locator": "W3C Standards",
+          "summary": "Web recommendations for accessibility, privacy, internationalisation and platform behaviour.",
+          "title": "W3C Recommendations"
+        }
+      ],
+      "domain": "web",
+      "id": "w3c-standards",
+      "licence_note": "Use W3C standards and recommendation pages from the official W3C site.",
+      "publisher": "W3C",
+      "retrieval_policy": "Load from w3.org and preserve recommendation status and publication date.",
+      "source_url": "https://www.w3.org/standards/",
+      "title": "W3C Standards",
+      "version": "current"
+    },
+    {
+      "access": "paid",
+      "clauses": [],
+      "domain": "engineering",
+      "id": "bsi-knowledge",
+      "licence_note": "British Standards are usually licensed. Register a source link or ingest only a user-uploaded/subscription-authorised copy.",
+      "publisher": "BSI",
+      "retrieval_policy": "Do not scrape. Link to BSI Knowledge or process a licensed user upload with an explicit content hash.",
+      "source_url": "https://knowledge.bsigroup.com/",
+      "title": "BSI Knowledge",
+      "version": "licensed"
+    },
+    {
+      "access": "paid",
+      "clauses": [],
+      "domain": "international-standards",
+      "id": "iso-obp",
+      "licence_note": "Many ISO standards require purchase or account access. Public browsing metadata can be linked, but full text must come from licensed access.",
+      "publisher": "ISO",
+      "retrieval_policy": "Link to ISO OBP or process a licensed user upload; never redistribute purchased text.",
+      "source_url": "https://www.iso.org/obp/ui/",
+      "title": "ISO Online Browsing Platform",
+      "version": "licensed"
+    },
+    {
+      "access": "paid",
+      "clauses": [],
+      "domain": "electrical",
+      "id": "iec-webstore",
+      "licence_note": "IEC standards are generally purchased through the IEC Webstore or national standards bodies.",
+      "publisher": "IEC",
+      "retrieval_policy": "Link to IEC Webstore or process licensed user uploads only.",
+      "source_url": "https://webstore.iec.ch/",
+      "title": "IEC Webstore",
+      "version": "licensed"
+    },
+    {
+      "access": "institutional",
+      "clauses": [],
+      "domain": "engineering",
+      "id": "ieee-standards",
+      "licence_note": "Some IEEE standards are available through sponsored read access, but many require institutional or paid access.",
+      "publisher": "IEEE",
+      "retrieval_policy": "Link to official IEEE access pages or process standards through authorised institutional access.",
+      "source_url": "https://standards.ieee.org/access-standards/",
+      "title": "IEEE Standards Access",
+      "version": "licensed"
+    }
+  ],
+  "version": "0.1"
+}

@@ -82,6 +82,11 @@ uv run truth serve mcp .truth-ledger rulepacks/strict-default/rulepack.json
 Advisory adapter contracts live under `src/adapters/`, with committed frozen
 artefacts stored under `adapters/`.
 
+Sample standards sources live in `standards/library/sample-standard-library.json`.
+The Rule Packs page loads this catalogue and lets users register official
+standards links, including paid sources such as BSI/ISO/IEC that must be linked
+or uploaded under an existing licence rather than scraped.
+
 Run the integration demos:
 
 ```bash
