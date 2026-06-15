@@ -16,6 +16,7 @@ dependencies = [
 
 [project.scripts]
 truth = "truthkernel.cli:app"
+truth-verified-chat = "adapters.verified_chat.service:main"
 
 [tool.ruff]
 target-version = "py312"

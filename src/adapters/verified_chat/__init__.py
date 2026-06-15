@@ -13,6 +13,15 @@ from adapters.verified_chat.contracts import (
     VerifiedChatRun,
     verified_chat_run_path,
 )
+from adapters.verified_chat.extraction import extract_model_response_pack
+from adapters.verified_chat.llm import (
+    DeterministicStubLLMAdapter,
+    GeminiHTTPAdapter,
+    LLMAdapterError,
+    UserOwnedHTTPAdapter,
+    adapter_for_provider,
+    model_response_for_text,
+)
 from adapters.verified_chat.replay import kernel_replay_inputs, load_verified_chat_run
 from adapters.verified_chat.runner import (
     VerifiedChatArtifactPaths,
@@ -21,6 +30,15 @@ from adapters.verified_chat.runner import (
     build_verified_chat_run,
     load_verified_chat_run_bundle,
     persist_verified_chat_run,
+)
+from adapters.verified_chat.service import (
+    VerifiedChatLatestResponse,
+    VerifiedChatRunRequest,
+    VerifiedChatRunResponse,
+    VerifiedChatService,
+    VerifiedChatServiceConfig,
+    create_verified_chat_http_server,
+    run_verified_chat_http_service,
 )
 from adapters.verified_chat.storage import (
     load_verified_chat_cleaned_output,
@@ -52,9 +70,21 @@ __all__ = [
     "VerifiedChatRequest",
     "VerifiedChatRun",
     "VerifiedChatArtifactPaths",
+    "VerifiedChatLatestResponse",
     "VerifiedChatPipelineResult",
+    "VerifiedChatRunRequest",
+    "VerifiedChatRunResponse",
+    "VerifiedChatService",
+    "VerifiedChatServiceConfig",
+    "DeterministicStubLLMAdapter",
+    "GeminiHTTPAdapter",
+    "LLMAdapterError",
+    "UserOwnedHTTPAdapter",
+    "adapter_for_provider",
     "build_and_persist_verified_chat_run",
     "build_verified_chat_run",
+    "create_verified_chat_http_server",
+    "extract_model_response_pack",
     "kernel_replay_inputs",
     "load_verified_chat_cleaned_output",
     "load_verified_chat_extracted_pack",
@@ -64,6 +94,8 @@ __all__ = [
     "load_verified_chat_run_at_root",
     "load_verified_chat_run_bundle",
     "persist_verified_chat_run",
+    "model_response_for_text",
+    "run_verified_chat_http_service",
     "save_verified_chat_run_at_root",
     "save_verified_chat_cleaned_output",
     "save_verified_chat_extracted_pack",

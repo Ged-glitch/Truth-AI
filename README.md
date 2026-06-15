@@ -59,6 +59,16 @@ Run the HTTP sidecar:
 uv run truth serve http .truth-ledger rulepacks/strict-default/rulepack.json --host 127.0.0.1 --port 8000
 ```
 
+Run the verified-chat adapter service for the console input and output pages:
+
+```bash
+uv run truth-verified-chat --store-root adapters/verified-chat --rulepack rulepacks/strict-default/rulepack.json --host 127.0.0.1 --port 8010
+```
+
+The adapter service keeps live model calls outside `src/truthkernel/`, writes
+frozen request, response, extraction and run artefacts under the store root, and
+serves `/verified-chat/run` plus `/verified-chat/latest` for the app UI.
+
 Run the line-delimited MCP session server:
 
 ```bash
