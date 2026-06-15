@@ -69,6 +69,10 @@ The adapter service keeps live model calls outside `src/truthkernel/`, writes
 frozen request, response, extraction and run artefacts under the store root, and
 serves `/verified-chat/run` plus `/verified-chat/latest` for the app UI.
 
+For the live Vercel site, set `VERIFIED_CHAT_BACKEND_URL` to the deployed
+adapter service URL. The browser UI will send requests to `/api/verified-chat/*`
+and the website API will proxy them through without storing API keys.
+
 Run the line-delimited MCP session server:
 
 ```bash
