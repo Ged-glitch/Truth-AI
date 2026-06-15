@@ -8,6 +8,7 @@ from pathlib import Path
 from pydantic import field_validator
 
 from truthkernel.canonical import canonical_text, sha256_of
+from truthkernel.schemas import Pack
 from truthkernel.schemas.models import StrictBaseModel
 
 
@@ -80,6 +81,42 @@ class StandardImportRequest(StrictBaseModel):
 
     @property
     def request_hash(self) -> str:
+        return sha256_of(self)
+
+
+class StandardTextSegment(StrictBaseModel):
+    """Authorised standard text segment ready to freeze as evidence."""
+
+    clause_id: str
+    title: str
+    text: str
+    source_locator: str
+
+    @property
+    def segment_hash(self) -> str:
+        return sha256_of(self)
+
+
+class StandardIngestRequest(StrictBaseModel):
+    """Request to convert authorised standard text into a kernel evidence pack."""
+
+    source: StandardSource
+    segments: tuple[StandardTextSegment, ...]
+    uploaded_file_hash: str | None = None
+
+    @property
+    def request_hash(self) -> str:
+        return sha256_of(self)
+
+
+class StandardEvidenceBundle(StrictBaseModel):
+    """Frozen evidence pack produced from an authorised standards source."""
+
+    request: StandardIngestRequest
+    pack: Pack
+
+    @property
+    def bundle_hash(self) -> str:
         return sha256_of(self)
 
 

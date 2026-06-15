@@ -1,0 +1,17 @@
+{
+  "source_id": "nasa-technical-standards",
+  "segments": [
+    {
+      "clause_id": "NASA-HDBK-8719.14-sample-1",
+      "source_locator": "sample:purpose",
+      "text": "Orbital debris mitigation planning should identify mission-related debris sources and define controls before launch approval.",
+      "title": "Orbital debris mitigation planning"
+    },
+    {
+      "clause_id": "NASA-HDBK-8719.14-sample-2",
+      "source_locator": "sample:disposal",
+      "text": "End-of-mission disposal planning should be evaluated against the applicable orbital lifetime and disposal orbit requirements.",
+      "title": "End-of-mission disposal planning"
+    }
+  ]
+}

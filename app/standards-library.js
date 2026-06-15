@@ -119,6 +119,13 @@
   function sourceCard(source) {
     const access = String(source.access || "public");
     const badge = access === "public" ? ["#047857", "#ecfdf5", "#c7ead7"] : ["#92400e", "#fffbeb", "#fde68a"];
+    const clauseCount = Array.isArray(source.clauses) ? source.clauses.length : 0;
+    const ingestState =
+      clauseCount > 0
+        ? `${clauseCount} sample clause${clauseCount === 1 ? "" : "s"} - evidence pack ready`
+        : access === "public"
+          ? "Link registered - authorised text needed"
+          : "Upload required before ingestion";
     return `
       <a href="${escapeHtml(source.source_url)}" target="_blank" rel="noopener" style="display:block;border:1px solid #e6ecf4;border-radius:12px;padding:14px;background:#fff;color:inherit;text-decoration:none;">
         <div style="display:flex;justify-content:space-between;gap:10px;align-items:start;">
@@ -129,6 +136,7 @@
           <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:${badge[0]};background:${badge[1]};border:1px solid ${badge[2]};border-radius:7px;padding:3px 7px;text-transform:uppercase;">${escapeHtml(access)}</span>
         </div>
         <p style="margin:10px 0 0;font-size:12.5px;line-height:1.45;color:#64748b;">${escapeHtml(source.retrieval_policy)}</p>
+        <div style="margin-top:10px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#2563eb;background:#eef4ff;border:1px solid #dbe7ff;border-radius:7px;padding:5px 8px;">${escapeHtml(ingestState)}</div>
       </a>`;
   }
 

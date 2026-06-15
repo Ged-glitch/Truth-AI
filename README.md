@@ -86,6 +86,9 @@ Sample standards sources live in `standards/library/sample-standard-library.json
 The Rule Packs page loads this catalogue and lets users register official
 standards links, including paid sources such as BSI/ISO/IEC that must be linked
 or uploaded under an existing licence rather than scraped.
+Authorised standard text can be frozen into document-segment evidence packs via
+the `adapters.standards` ingestion helpers; paid/institutional standards require
+an uploaded file hash before ingestion.
 
 Advisory evaluator sources live in
 `standards/evaluators/sample-evaluator-library.json`. These describe optional
