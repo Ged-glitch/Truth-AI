@@ -20,5 +20,11 @@ The adapter side persists the full `VerifiedChatRun`, which also holds:
 - the frozen extraction bundle that turns the raw response into a `Pack`
 - the cleaned output shown in `/app/truth-output`
 
+Use the hash-keyed helpers when writing to disk:
+
+- `verified_chat_run_path(root, request)`
+- `save_verified_chat_run_at_root(root, run)`
+- `load_verified_chat_run_at_root(root, request)`
+
 This boundary keeps Gemini, user-owned API keys and local model calls outside the
 kernel package while giving replay a single frozen artefact to consume.

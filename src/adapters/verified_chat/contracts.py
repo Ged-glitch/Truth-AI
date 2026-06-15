@@ -129,3 +129,10 @@ def save_verified_chat_run(run: VerifiedChatRun, path: Path) -> None:
     """Write a canonical verified-chat bundle for deterministic replay."""
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(canonical_text(run) + "\n", encoding="utf-8")
+
+
+def save_verified_chat_run_at_root(root: Path, run: VerifiedChatRun) -> Path:
+    """Write a canonical verified-chat bundle to its hash-keyed path."""
+    path = verified_chat_run_path(root, run.request)
+    save_verified_chat_run(run, path)
+    return path
