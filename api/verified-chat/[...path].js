@@ -1,4 +1,6 @@
 const DEFAULT_BACKEND_URL = process.env.VERIFIED_CHAT_BACKEND_URL;
+const LOCAL_BACKEND_URL = "http://127.0.0.1:8010";
+const RESOLVED_BACKEND_URL = DEFAULT_BACKEND_URL || (process.env.VERCEL ? null : LOCAL_BACKEND_URL);
 
 module.exports = async function handler(req, res) {
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -10,7 +12,7 @@ module.exports = async function handler(req, res) {
     return;
   }
 
-  if (!DEFAULT_BACKEND_URL) {
+  if (!RESOLVED_BACKEND_URL) {
     res.status(503).json({
       error: "VERIFIED_CHAT_BACKEND_URL is not configured for the website API",
     });
@@ -24,7 +26,7 @@ module.exports = async function handler(req, res) {
     return;
   }
 
-  const upstreamUrl = `${DEFAULT_BACKEND_URL.replace(/\/$/, "")}/verified-chat/${suffix}`;
+  const upstreamUrl = `${RESOLVED_BACKEND_URL.replace(/\/$/, "")}/verified-chat/${suffix}`;
   const init = {
     method: req.method,
     headers: {

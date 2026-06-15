@@ -1,5 +1,4 @@
 (() => {
-  const DEFAULT_ENDPOINT = "http://127.0.0.1:8010";
   const DEFAULT_API_ROUTE = "/api/verified-chat";
   const storageKey = "truthAiVerifiedChatLatest";
   const settingsKey = "truthAiVerifiedChatSettings";
@@ -15,9 +14,7 @@
   }
 
   function defaultEndpoint() {
-    const host = window.location.hostname;
-    const isLocal = host === "127.0.0.1" || host === "localhost" || host === "::1";
-    return isLocal ? DEFAULT_ENDPOINT : DEFAULT_API_ROUTE;
+    return DEFAULT_API_ROUTE;
   }
 
   function findText(selector, needle) {

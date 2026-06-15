@@ -69,6 +69,10 @@ The adapter service keeps live model calls outside `src/truthkernel/`, writes
 frozen request, response, extraction and run artefacts under the store root, and
 serves `/verified-chat/run` plus `/verified-chat/latest` for the app UI.
 
+The browser UI always calls `/api/verified-chat/*`. In local development that
+route falls back to `http://127.0.0.1:8010`; in Vercel production it requires
+`VERIFIED_CHAT_BACKEND_URL` to point at the deployed adapter service.
+
 For the live Vercel site, set `VERIFIED_CHAT_BACKEND_URL` to the deployed
 adapter service URL. The browser UI will send requests to `/api/verified-chat/*`
 and the website API will proxy them through without storing API keys.

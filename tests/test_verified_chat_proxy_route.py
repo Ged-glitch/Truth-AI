@@ -9,7 +9,12 @@ ROUTE = ROOT / "api" / "verified-chat" / "[...path].js"
 
 
 def test_verified_chat_proxy_requires_backend_url() -> None:
-    payload = invoke_route(env_backend=None, method="GET", suffix="latest")
+    payload = invoke_route(
+        env_backend=None,
+        method="GET",
+        suffix="latest",
+        vercel_env="1",
+    )
 
     assert payload["status"] == 503
     assert payload["json"]["error"] == (
@@ -36,6 +41,13 @@ def test_verified_chat_proxy_forwards_run_request() -> None:
     assert payload["upstream_init"]["body"] == '{"prompt_text":"Verify this prompt."}'
 
 
+def test_verified_chat_proxy_falls_back_to_local_backend_in_dev() -> None:
+    payload = invoke_route(env_backend=None, method="GET", suffix="latest")
+
+    assert payload["status"] == 200
+    assert payload["upstream_url"] == "http://127.0.0.1:8010/verified-chat/latest"
+
+
 def test_verified_chat_proxy_rejects_unknown_suffix() -> None:
     payload = invoke_route(
         env_backend="https://backend.example.test",
@@ -56,12 +68,18 @@ def invoke_route(
     upstream_status: int = 200,
     upstream_text: str = '{"ok":true}',
     upstream_content_type: str = "application/json",
+    vercel_env: str | None = None,
 ) -> dict[str, object]:
     script = f"""
 if ({json.dumps(env_backend)} === null) {{
   delete process.env.VERIFIED_CHAT_BACKEND_URL;
 }} else {{
   process.env.VERIFIED_CHAT_BACKEND_URL = {json.dumps(env_backend)};
+}}
+if ({json.dumps(vercel_env)} === null) {{
+  delete process.env.VERCEL;
+}} else {{
+  process.env.VERCEL = {json.dumps(vercel_env)};
 }}
 const handler = require({json.dumps(ROUTE.as_posix())});
 const state = {{
