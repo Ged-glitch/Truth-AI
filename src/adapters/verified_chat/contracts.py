@@ -13,6 +13,7 @@ from typing import Literal
 
 from pydantic import Field
 
+from adapters.extract import ExtractedPackBundle
 from truthkernel.canonical import canonical_text, sha256_of
 from truthkernel.schemas import DecisionBundle, Pack, RulePack
 from truthkernel.schemas.models import StrictBaseModel
@@ -102,6 +103,7 @@ class VerifiedChatRun(StrictBaseModel):
 
     request: VerifiedChatRequest
     model_response: ModelResponse
+    extracted_pack_bundle: ExtractedPackBundle
     replay_inputs: FrozenReplayInputs
     cleaned_output: str
 
@@ -112,6 +114,10 @@ class VerifiedChatRun(StrictBaseModel):
     @property
     def run_hash(self) -> str:
         return sha256_of(self)
+
+    @property
+    def extracted_pack_hash(self) -> str:
+        return sha256_of(self.extracted_pack_bundle)
 
 
 def verified_chat_run_path(root: Path, request: VerifiedChatRequest) -> Path:

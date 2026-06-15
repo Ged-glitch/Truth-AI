@@ -1,5 +1,6 @@
 """Verified-chat adapter boundary for model calls and frozen replay artefacts."""
 
+from adapters.extract import ExtractedPackBundle
 from adapters.verified_chat.contracts import (
     ChatReference,
     FrozenReplayInputs,
@@ -16,6 +17,7 @@ from adapters.verified_chat.contracts import (
 
 __all__ = [
     "ChatReference",
+    "ExtractedPackBundle",
     "FrozenReplayInputs",
     "ModelResponse",
     "ModelSelection",

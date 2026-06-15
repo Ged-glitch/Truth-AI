@@ -17,6 +17,7 @@ The adapter side persists the full `VerifiedChatRun`, which also holds:
 - provider selection and settings
 - provider credentials by reference only
 - the raw provider response
+- the frozen extraction bundle that turns the raw response into a `Pack`
 - the cleaned output shown in `/app/truth-output`
 
 This boundary keeps Gemini, user-owned API keys and local model calls outside the

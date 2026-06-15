@@ -4,6 +4,7 @@ import ast
 from decimal import Decimal
 from pathlib import Path
 
+from adapters.extract import ExtractedPackBundle, ExtractionRequest
 from adapters.verified_chat import (
     ChatReference,
     FrozenReplayInputs,
@@ -50,6 +51,7 @@ def test_verified_chat_run_round_trips_through_canonical_json(tmp_path: Path) ->
     assert canonical_text(loaded) == canonical_text(run)
     assert kernel_replay_inputs(loaded) == run.replay_inputs
     assert run.request.request_hash == sha256_of(run.request)
+    assert run.extracted_pack_hash == sha256_of(run.extracted_pack_bundle)
 
 
 def test_kernel_replay_inputs_exclude_live_provider_credentials() -> None:
@@ -180,9 +182,20 @@ def sample_verified_chat_run() -> VerifiedChatRun:
         response_hash="response-verified-chat",
         content_type="text/plain",
     )
+    extracted_pack_bundle = ExtractedPackBundle(
+        request=ExtractionRequest(
+            prompt_text=request.prompt_text,
+            model_id=request.selection.model_id,
+            settings_hash=sha256_of(request.selection.settings),
+            source_uri="file://technical-spec.pdf",
+        ),
+        raw_model_output=model_response.raw_text,
+        pack=pack,
+    )
     return VerifiedChatRun(
         request=request,
         model_response=model_response,
+        extracted_pack_bundle=extracted_pack_bundle,
         replay_inputs=FrozenReplayInputs(
             pack=pack,
             rulepack=rulepack,
