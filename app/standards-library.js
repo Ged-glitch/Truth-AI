@@ -1,5 +1,6 @@
 (() => {
   const LIBRARY_URL = "/standards/library/sample-standard-library.json";
+  const EVALUATORS_URL = "/standards/evaluators/sample-evaluator-library.json";
   const IMPORTS_KEY = "truthAiStandardImports";
 
   function routeKey() {
@@ -17,6 +18,7 @@
     placeholder.style.display = "";
     placeholder.innerHTML = layoutMarkup();
     loadLibrary();
+    loadEvaluators();
     renderImports();
   }
 
@@ -32,6 +34,22 @@
       if (count) count.textContent = `${library.sources.length} sources`;
     } catch (error) {
       host.innerHTML = `<div style="padding:18px;color:#b91c1c;background:#fef2f2;border:1px solid #fecaca;border-radius:10px;">Standards library unavailable: ${escapeHtml(error.message)}</div>`;
+    }
+  }
+
+  async function loadEvaluators() {
+    const enginesHost = document.querySelector("[data-evaluator-engines]");
+    const benchmarksHost = document.querySelector("[data-evaluator-benchmarks]");
+    if (!enginesHost || !benchmarksHost) return;
+    try {
+      const response = await fetch(EVALUATORS_URL, { cache: "no-store" });
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const library = await response.json();
+      enginesHost.innerHTML = library.engines.map(evaluatorCard).join("");
+      benchmarksHost.innerHTML = library.benchmarks.map(benchmarkCard).join("");
+    } catch (error) {
+      enginesHost.innerHTML = `<div style="padding:14px;color:#b91c1c;background:#fef2f2;border:1px solid #fecaca;border-radius:10px;">Evaluator library unavailable: ${escapeHtml(error.message)}</div>`;
+      benchmarksHost.innerHTML = "";
     }
   }
 
@@ -75,6 +93,25 @@
               <div data-standard-imports style="display:grid;gap:10px;margin-top:12px;"></div>
             </div>
           </div>
+          <div style="border-top:1px solid #e6ecf4;background:#f8fafd;padding:22px 24px;">
+            <div style="display:flex;align-items:start;justify-content:space-between;gap:18px;">
+              <div>
+                <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:#94a3b8;">Advisory context evaluators</div>
+                <h3 style="margin:7px 0 0;font-size:16px;font-weight:700;color:#0f172a;">Score context quality after standards evidence is retrieved</h3>
+              </div>
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#92400e;background:#fffbeb;border:1px solid #fde68a;border-radius:7px;padding:4px 9px;text-transform:uppercase;">Advisory only</span>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 0.8fr;gap:16px;margin-top:16px;">
+              <div>
+                <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:#94a3b8;">Runtime engines</div>
+                <div data-evaluator-engines style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:10px;"></div>
+              </div>
+              <div>
+                <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:#94a3b8;">Benchmark packs</div>
+                <div data-evaluator-benchmarks style="display:grid;gap:10px;margin-top:10px;"></div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>`;
   }
@@ -92,6 +129,35 @@
           <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:${badge[0]};background:${badge[1]};border:1px solid ${badge[2]};border-radius:7px;padding:3px 7px;text-transform:uppercase;">${escapeHtml(access)}</span>
         </div>
         <p style="margin:10px 0 0;font-size:12.5px;line-height:1.45;color:#64748b;">${escapeHtml(source.retrieval_policy)}</p>
+      </a>`;
+  }
+
+  function evaluatorCard(engine) {
+    const metrics = (engine.metrics || [])
+      .map((metric) => `<span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#475569;background:#f8fafd;border:1px solid #eef2f7;border-radius:6px;padding:3px 7px;">${escapeHtml(metric.label)}</span>`)
+      .join("");
+    return `
+      <a href="${escapeHtml(engine.source_url)}" target="_blank" rel="noopener" style="display:block;border:1px solid #e6ecf4;border-radius:12px;padding:14px;background:#fff;color:inherit;text-decoration:none;">
+        <div style="display:flex;justify-content:space-between;gap:10px;align-items:start;">
+          <div>
+            <div style="font-size:14px;font-weight:700;color:#0f172a;">${escapeHtml(engine.name)}</div>
+            <div style="margin-top:3px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#94a3b8;">${escapeHtml(engine.package_name)} - ${escapeHtml(engine.access)}</div>
+          </div>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#92400e;background:#fffbeb;border:1px solid #fde68a;border-radius:7px;padding:3px 7px;">non-det</span>
+        </div>
+        <p style="margin:10px 0 0;font-size:12.5px;line-height:1.45;color:#64748b;">${escapeHtml(engine.role)}</p>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;">${metrics}</div>
+      </a>`;
+  }
+
+  function benchmarkCard(dataset) {
+    return `
+      <a href="${escapeHtml(dataset.source_url)}" target="_blank" rel="noopener" style="display:block;border:1px solid #e6ecf4;border-radius:11px;background:#fff;padding:13px;color:inherit;text-decoration:none;">
+        <div style="display:flex;justify-content:space-between;gap:10px;">
+          <strong style="font-size:13.5px;color:#0f172a;">${escapeHtml(dataset.name)}</strong>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#64748b;text-transform:uppercase;">benchmark</span>
+        </div>
+        <p style="margin:8px 0 0;font-size:12px;line-height:1.45;color:#64748b;">${escapeHtml(dataset.use_case)}</p>
       </a>`;
   }
 

@@ -1,0 +1,98 @@
+{
+  "benchmarks": [
+    {
+      "domain": "rag-hallucination",
+      "id": "ragtruth",
+      "licence_note": "Use as an evaluation benchmark for verifier quality, not as a live authority for arbitrary user claims.",
+      "name": "RAGTruth",
+      "source_url": "https://aclanthology.org/2024.acl-long.585/",
+      "use_case": "Benchmark hallucination detection against human-annotated RAG responses."
+    },
+    {
+      "domain": "rag-faithfulness",
+      "id": "vectara-ragbench",
+      "licence_note": "Use benchmark records according to the dataset licence and preserve dataset version metadata.",
+      "name": "Vectara RAGBench",
+      "source_url": "https://huggingface.co/datasets/vectara/RAGBench",
+      "use_case": "Stress-test retrieval faithfulness over complex document, table and generated-answer examples."
+    }
+  ],
+  "engines": [
+    {
+      "access": "optional-dependency",
+      "id": "deepeval",
+      "licence_note": "Optional advisory dependency. LLM-as-judge outputs must be frozen and labelled non-deterministic before kernel use.",
+      "metrics": [
+        {
+          "deterministic": false,
+          "id": "deepeval-hallucination",
+          "label": "Hallucination",
+          "output_scale": "0-1",
+          "signal": "Checks whether generated text conflicts with provided context."
+        },
+        {
+          "deterministic": false,
+          "id": "deepeval-g-eval",
+          "label": "G-Eval",
+          "output_scale": "0-1",
+          "signal": "LLM-as-judge rubric scoring for custom truth criteria."
+        }
+      ],
+      "name": "DeepEval",
+      "package_name": "deepeval",
+      "role": "Advisory hallucination and rubric scoring after standards evidence is retrieved.",
+      "source_url": "https://deepeval.com/docs/metrics-llm-evals"
+    },
+    {
+      "access": "optional-dependency",
+      "id": "ragas",
+      "licence_note": "Optional advisory dependency for RAG quality metrics. Scores are stored as evaluator artefacts, not final truth.",
+      "metrics": [
+        {
+          "deterministic": false,
+          "id": "ragas-faithfulness",
+          "label": "Faithfulness",
+          "output_scale": "0-1",
+          "signal": "Measures whether answer claims are supported by retrieved contexts."
+        },
+        {
+          "deterministic": false,
+          "id": "ragas-answer-relevancy",
+          "label": "Answer relevancy",
+          "output_scale": "0-1",
+          "signal": "Measures alignment between the answer and the original user question."
+        }
+      ],
+      "name": "Ragas",
+      "package_name": "ragas",
+      "role": "Advisory RAG quality scoring for standards, uploads and retrieved evidence contexts.",
+      "source_url": "https://docs.ragas.io/en/latest/concepts/metrics/available_metrics/faithfulness/"
+    },
+    {
+      "access": "open-source",
+      "id": "open-rag-eval",
+      "licence_note": "Use as an optional evaluator for nugget and citation-faithfulness style checks.",
+      "metrics": [
+        {
+          "deterministic": false,
+          "id": "open-rag-eval-autonuggetizer",
+          "label": "AutoNuggetizer",
+          "output_scale": "0-1",
+          "signal": "Checks information nuggets in an answer without requiring golden answers."
+        },
+        {
+          "deterministic": false,
+          "id": "open-rag-eval-citation-faithfulness",
+          "label": "Citation faithfulness",
+          "output_scale": "0-1",
+          "signal": "Checks whether cited passages support generated claims."
+        }
+      ],
+      "name": "Open RAG Eval",
+      "package_name": "open-rag-eval",
+      "role": "Advisory citation and nugget-level context validation.",
+      "source_url": "https://github.com/vectara/open-rag-eval"
+    }
+  ],
+  "version": "0.1"
+}

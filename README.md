@@ -87,6 +87,12 @@ The Rule Packs page loads this catalogue and lets users register official
 standards links, including paid sources such as BSI/ISO/IEC that must be linked
 or uploaded under an existing licence rather than scraped.
 
+Advisory evaluator sources live in
+`standards/evaluators/sample-evaluator-library.json`. These describe optional
+DeepEval, Ragas and Open RAG Eval context checks, plus RAGTruth/RAGBench
+benchmark packs. Their scores are frozen as advisory artefacts; the
+deterministic Truth Kernel still makes the replayable decision.
+
 Run the integration demos:
 
 ```bash
