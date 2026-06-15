@@ -38,5 +38,12 @@ Use the hash-keyed helpers when writing to disk:
 - `load_verified_chat_cleaned_output(path)`
 - `load_verified_chat_run_at_root(root, request)`
 
+Use the runner when compiling and persisting a verified-chat session:
+
+- `build_verified_chat_run(...)`
+- `persist_verified_chat_run(root, run)`
+- `build_and_persist_verified_chat_run(...)`
+- `load_verified_chat_run_bundle(root, request)`
+
 This boundary keeps Gemini, user-owned API keys and local model calls outside the
 kernel package while giving replay a single frozen artefact to consume.

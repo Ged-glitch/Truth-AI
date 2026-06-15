@@ -7,7 +7,6 @@ from pathlib import Path
 from adapters.extract import ExtractedPackBundle, ExtractionRequest
 from adapters.verified_chat import (
     ChatReference,
-    FrozenReplayInputs,
     ModelResponse,
     ModelSelection,
     ModelSettings,
@@ -15,11 +14,14 @@ from adapters.verified_chat import (
     ReferenceKind,
     VerifiedChatRequest,
     VerifiedChatRun,
+    build_and_persist_verified_chat_run,
+    build_verified_chat_run,
     load_verified_chat_cleaned_output,
     load_verified_chat_extracted_pack,
     load_verified_chat_request,
     load_verified_chat_response,
     load_verified_chat_run_at_root,
+    load_verified_chat_run_bundle,
     save_verified_chat_cleaned_output,
     save_verified_chat_extracted_pack,
     save_verified_chat_request,
@@ -35,17 +37,12 @@ from truthkernel.canonical import canonical_text, sha256_of
 from truthkernel.schemas import (
     Claim,
     ClaimType,
-    Decision,
-    DecisionBundle,
     Entity,
     Evidence,
     EvidenceKind,
-    Finding,
     Pack,
     Provenance,
-    RemedyType,
     RulePack,
-    Severity,
     TruthClass,
 )
 
@@ -84,6 +81,36 @@ def test_verified_chat_storage_helpers_round_trip(tmp_path: Path) -> None:
     assert load_verified_chat_response(response_path) == run.model_response
     assert load_verified_chat_extracted_pack(extracted_pack_path) == run.extracted_pack_bundle
     assert load_verified_chat_cleaned_output(cleaned_output_path) == run.cleaned_output
+
+
+def test_verified_chat_runner_builds_and_persists_run(tmp_path: Path) -> None:
+    run = sample_verified_chat_run()
+
+    built = build_verified_chat_run(
+        request=run.request,
+        model_response=run.model_response,
+        extracted_pack_bundle=run.extracted_pack_bundle,
+        cleaned_output=run.cleaned_output,
+        rulepack=run.replay_inputs.rulepack,
+    )
+    assert built == run
+
+    pipeline = build_and_persist_verified_chat_run(
+        root=tmp_path,
+        request=run.request,
+        model_response=run.model_response,
+        extracted_pack_bundle=run.extracted_pack_bundle,
+        cleaned_output=run.cleaned_output,
+        rulepack=run.replay_inputs.rulepack,
+    )
+
+    assert pipeline.run == run
+    assert pipeline.paths.run_path.exists()
+    assert pipeline.paths.request_path.exists()
+    assert pipeline.paths.response_path.exists()
+    assert pipeline.paths.extracted_pack_path.exists()
+    assert pipeline.paths.cleaned_output_path.exists()
+    assert load_verified_chat_run_bundle(tmp_path, run.request) == run
 
 
 def test_kernel_replay_inputs_exclude_live_provider_credentials() -> None:
@@ -150,34 +177,6 @@ def sample_verified_chat_run() -> VerifiedChatRun:
         verifier_weights={},
         retrieval_permissions={},
     )
-    decision_bundle = DecisionBundle(
-        id="decision-bundle-verified-chat",
-        pack_hash=sha256_of(pack),
-        claim_graph_hash="graph-verified-chat",
-        evidence_snapshot_hashes=(evidence.snapshot_hash,),
-        ledger_root=None,
-        policy_hash=rulepack.policy_hash,
-        taxonomy_hash=rulepack.taxonomy_hash,
-        kernel_version="0.1.0",
-        compiler_id="verified-chat-adapter",
-        verifier_ids=(),
-        verifier_weights={},
-        findings=(
-            Finding(
-                id="finding-verified-chat",
-                truth_class=TruthClass.TC_01,
-                severity=Severity.MAJOR,
-                claim_ids=(claim.id,),
-                evidence_ids=(evidence.id,),
-                message="Claim is grounded in a frozen replay bundle.",
-                remedy_type=RemedyType.SUPPLY_EVIDENCE,
-                conflicting_ledger_entry_ids=(),
-            ),
-        ),
-        finding_counts={TruthClass.TC_01: 1},
-        decision=Decision.REVIEW,
-        repair_contract_id=None,
-    )
     request = VerifiedChatRequest(
         prompt_text="Verify this technical claim against the supplied sources.",
         rulepack_id=rulepack.id,
@@ -224,14 +223,10 @@ def sample_verified_chat_run() -> VerifiedChatRun:
         raw_model_output=model_response.raw_text,
         pack=pack,
     )
-    return VerifiedChatRun(
+    return build_verified_chat_run(
         request=request,
         model_response=model_response,
         extracted_pack_bundle=extracted_pack_bundle,
-        replay_inputs=FrozenReplayInputs(
-            pack=pack,
-            rulepack=rulepack,
-            decision_bundle=decision_bundle,
-        ),
         cleaned_output="The system uses a frozen replay bundle.",
+        rulepack=rulepack,
     )

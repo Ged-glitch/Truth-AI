@@ -14,7 +14,7 @@ from typing import Literal
 from pydantic import Field
 
 from adapters.extract import ExtractedPackBundle
-from truthkernel.canonical import canonical_text, sha256_of
+from truthkernel.canonical import sha256_of
 from truthkernel.schemas import DecisionBundle, Pack, RulePack
 from truthkernel.schemas.models import StrictBaseModel
 
@@ -123,16 +123,3 @@ class VerifiedChatRun(StrictBaseModel):
 def verified_chat_run_path(root: Path, request: VerifiedChatRequest) -> Path:
     """Return the canonical file path for a verified-chat run bundle."""
     return root / f"{request.request_hash}.json"
-
-
-def save_verified_chat_run(run: VerifiedChatRun, path: Path) -> None:
-    """Write a canonical verified-chat bundle for deterministic replay."""
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(canonical_text(run) + "\n", encoding="utf-8")
-
-
-def save_verified_chat_run_at_root(root: Path, run: VerifiedChatRun) -> Path:
-    """Write a canonical verified-chat bundle to its hash-keyed path."""
-    path = verified_chat_run_path(root, run.request)
-    save_verified_chat_run(run, path)
-    return path
