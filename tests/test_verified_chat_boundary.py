@@ -15,8 +15,20 @@ from adapters.verified_chat import (
     ReferenceKind,
     VerifiedChatRequest,
     VerifiedChatRun,
+    load_verified_chat_cleaned_output,
+    load_verified_chat_extracted_pack,
+    load_verified_chat_request,
+    load_verified_chat_response,
     load_verified_chat_run_at_root,
+    save_verified_chat_cleaned_output,
+    save_verified_chat_extracted_pack,
+    save_verified_chat_request,
+    save_verified_chat_response,
     save_verified_chat_run_at_root,
+    verified_chat_cleaned_output_path,
+    verified_chat_extracted_pack_path,
+    verified_chat_request_path,
+    verified_chat_response_path,
 )
 from adapters.verified_chat.replay import kernel_replay_inputs, load_verified_chat_run
 from truthkernel.canonical import canonical_text, sha256_of
@@ -53,6 +65,25 @@ def test_verified_chat_run_round_trips_through_canonical_json(tmp_path: Path) ->
     assert kernel_replay_inputs(loaded) == run.replay_inputs
     assert run.request.request_hash == sha256_of(run.request)
     assert run.extracted_pack_hash == sha256_of(run.extracted_pack_bundle)
+
+
+def test_verified_chat_storage_helpers_round_trip(tmp_path: Path) -> None:
+    run = sample_verified_chat_run()
+
+    request_path = verified_chat_request_path(tmp_path, run.request)
+    response_path = verified_chat_response_path(tmp_path, run.request)
+    extracted_pack_path = verified_chat_extracted_pack_path(tmp_path, run.request)
+    cleaned_output_path = verified_chat_cleaned_output_path(tmp_path, run.request)
+
+    save_verified_chat_request(run.request, request_path)
+    save_verified_chat_response(run.model_response, response_path)
+    save_verified_chat_extracted_pack(run.extracted_pack_bundle, extracted_pack_path)
+    save_verified_chat_cleaned_output(run.cleaned_output, cleaned_output_path)
+
+    assert load_verified_chat_request(request_path) == run.request
+    assert load_verified_chat_response(response_path) == run.model_response
+    assert load_verified_chat_extracted_pack(extracted_pack_path) == run.extracted_pack_bundle
+    assert load_verified_chat_cleaned_output(cleaned_output_path) == run.cleaned_output
 
 
 def test_kernel_replay_inputs_exclude_live_provider_credentials() -> None:
