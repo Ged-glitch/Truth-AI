@@ -70,12 +70,13 @@ frozen request, response, extraction and run artefacts under the store root, and
 serves `/verified-chat/run` plus `/verified-chat/latest` for the app UI.
 
 The browser UI always calls `/api/verified-chat/*`. In local development that
-route falls back to `http://127.0.0.1:8010`; in Vercel production it requires
-`VERIFIED_CHAT_BACKEND_URL` to point at the deployed adapter service.
+route falls back to `http://127.0.0.1:8010`; in Vercel production it proxies to
+`/api/verified-chat-backend` when `VERIFIED_CHAT_BACKEND_URL` is set.
 
-For the live Vercel site, set `VERIFIED_CHAT_BACKEND_URL` to the deployed
-adapter service URL. The browser UI will send requests to `/api/verified-chat/*`
-and the website API will proxy them through without storing API keys.
+For the live Vercel site, set `VERIFIED_CHAT_BACKEND_URL` to
+`https://www.truthai.tech/api/verified-chat-backend`. The browser UI will send
+requests to `/api/verified-chat/*` and the website API will proxy them through
+without storing API keys.
 
 Run the line-delimited MCP session server:
 

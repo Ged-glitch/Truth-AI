@@ -12,3 +12,5 @@ TruthAi.zip
 .env
 .env.*
 !.env.example
+
+.vercel

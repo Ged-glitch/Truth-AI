@@ -24,7 +24,7 @@ def test_verified_chat_proxy_requires_backend_url() -> None:
 
 def test_verified_chat_proxy_forwards_run_request() -> None:
     payload = invoke_route(
-        env_backend="https://backend.example.test/",
+        env_backend="https://backend.example.test/api/verified-chat-backend",
         method="POST",
         suffix="run",
         body={"prompt_text": "Verify this prompt."},
@@ -35,7 +35,9 @@ def test_verified_chat_proxy_forwards_run_request() -> None:
 
     assert payload["status"] == 202
     assert payload["send"] == '{"decision":"accept"}'
-    assert payload["upstream_url"] == "https://backend.example.test/verified-chat/run"
+    assert (
+        payload["upstream_url"] == "https://backend.example.test/api/verified-chat-backend?path=run"
+    )
     assert payload["upstream_init"]["method"] == "POST"
     assert payload["upstream_init"]["headers"]["Content-Type"] == "application/json"
     assert payload["upstream_init"]["body"] == '{"prompt_text":"Verify this prompt."}'
@@ -50,7 +52,7 @@ def test_verified_chat_proxy_falls_back_to_local_backend_in_dev() -> None:
 
 def test_verified_chat_proxy_rejects_unknown_suffix() -> None:
     payload = invoke_route(
-        env_backend="https://backend.example.test",
+        env_backend="https://backend.example.test/api/verified-chat-backend",
         method="GET",
         suffix="unexpected",
     )

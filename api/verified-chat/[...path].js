@@ -26,7 +26,7 @@ module.exports = async function handler(req, res) {
     return;
   }
 
-  const upstreamUrl = `${RESOLVED_BACKEND_URL.replace(/\/$/, "")}/verified-chat/${suffix}`;
+  const upstreamUrl = buildUpstreamUrl(RESOLVED_BACKEND_URL, suffix);
   const init = {
     method: req.method,
     headers: {
@@ -43,3 +43,13 @@ module.exports = async function handler(req, res) {
   res.setHeader("Content-Type", upstream.headers.get("content-type") || "application/json");
   res.send(text);
 };
+
+function buildUpstreamUrl(baseUrl, suffix) {
+  if (baseUrl === LOCAL_BACKEND_URL) {
+    return `${baseUrl.replace(/\/$/, "")}/verified-chat/${suffix}`;
+  }
+
+  const upstream = new URL(baseUrl);
+  upstream.searchParams.set("path", suffix);
+  return upstream.toString();
+}
