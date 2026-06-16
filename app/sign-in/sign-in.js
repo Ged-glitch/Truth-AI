@@ -109,7 +109,15 @@ async function performSignUp() {
   const payload = await postAuth(config, "/auth/v1/signup", { email, password });
   saveSession(payload);
   renderSession();
-  setStatus("Account created and session stored locally.", "success");
+  if (state.session?.access_token) {
+    setStatus("Account created and signed in.", "success");
+    window.location.assign(resolveReturnPath());
+    return;
+  }
+  setStatus(
+    "Account created. Check your email to confirm the account, then sign in.",
+    "success",
+  );
 }
 
 async function runAction(action) {
@@ -189,11 +197,12 @@ function requireConfig() {
 }
 
 function saveSession(payload) {
+  const sessionPayload = payload?.session || payload;
   const session = {
-    access_token: payload.access_token,
-    refresh_token: payload.refresh_token || null,
-    expires_at: payload.expires_at || null,
-    user: payload.user || null,
+    access_token: sessionPayload?.access_token || null,
+    refresh_token: sessionPayload?.refresh_token || null,
+    expires_at: sessionPayload?.expires_at || null,
+    user: payload?.user || sessionPayload?.user || null,
   };
   state.session = session;
   persistSession();
