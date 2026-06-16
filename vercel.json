@@ -1,6 +1,18 @@
 {
   "cleanUrls": true,
   "trailingSlash": false,
+  "redirects": [
+    {
+      "source": "/frontend/Truth-AI.dc",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/frontend/Truth-AI.dc.html",
+      "destination": "/",
+      "permanent": true
+    }
+  ],
   "headers": [
     {
       "source": "/(.*)",
