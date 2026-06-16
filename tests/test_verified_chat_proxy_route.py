@@ -8,18 +8,15 @@ ROOT = Path(__file__).resolve().parents[1]
 ROUTE = ROOT / "api" / "verified-chat" / "[...path].js"
 
 
-def test_verified_chat_proxy_requires_backend_url() -> None:
+def test_verified_chat_proxy_uses_local_backend_in_dev_when_unset() -> None:
     payload = invoke_route(
         env_backend=None,
         method="GET",
         suffix="latest",
-        vercel_env="1",
     )
 
-    assert payload["status"] == 503
-    assert payload["json"]["error"] == (
-        "VERIFIED_CHAT_BACKEND_URL is not configured for the website API"
-    )
+    assert payload["status"] == 200
+    assert payload["upstream_url"] == "http://127.0.0.1:8010/verified-chat/latest"
 
 
 def test_verified_chat_proxy_forwards_run_request() -> None:
@@ -43,11 +40,20 @@ def test_verified_chat_proxy_forwards_run_request() -> None:
     assert payload["upstream_init"]["body"] == '{"prompt_text":"Verify this prompt."}'
 
 
-def test_verified_chat_proxy_falls_back_to_local_backend_in_dev() -> None:
-    payload = invoke_route(env_backend=None, method="GET", suffix="latest")
+def test_verified_chat_proxy_uses_deployed_backend_on_vercel_when_unset() -> None:
+    payload = invoke_route(
+        env_backend=None,
+        method="GET",
+        suffix="latest",
+        vercel_env="1",
+        host="www.truthai.tech",
+        forwarded_proto="https",
+    )
 
     assert payload["status"] == 200
-    assert payload["upstream_url"] == "http://127.0.0.1:8010/verified-chat/latest"
+    assert (
+        payload["upstream_url"] == "https://www.truthai.tech/api/verified-chat-backend?path=latest"
+    )
 
 
 def test_verified_chat_proxy_rejects_unknown_suffix() -> None:
@@ -71,6 +77,8 @@ def invoke_route(
     upstream_text: str = '{"ok":true}',
     upstream_content_type: str = "application/json",
     vercel_env: str | None = None,
+    host: str = "localhost",
+    forwarded_proto: str = "http",
 ) -> dict[str, object]:
     script = f"""
 if ({json.dumps(env_backend)} === null) {{
@@ -91,6 +99,10 @@ const state = {{
   headers: null,
   upstream_url: null,
   upstream_init: null,
+}};
+const reqHeaders = {{
+  host: {json.dumps(host)},
+  "x-forwarded-proto": {json.dumps(forwarded_proto)},
 }};
 global.fetch = async (url, init) => {{
   state.upstream_url = url;
@@ -127,6 +139,7 @@ const req = {{
   method: {json.dumps(method)},
   query: {{ path: {json.dumps([part for part in suffix.split("/") if part])} }},
   body: {json.dumps(body)},
+  headers: reqHeaders,
 }};
 (async () => {{
   await handler(req, res);

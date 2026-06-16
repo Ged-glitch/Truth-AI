@@ -1,6 +1,5 @@
 const DEFAULT_BACKEND_URL = process.env.VERIFIED_CHAT_BACKEND_URL;
 const LOCAL_BACKEND_URL = "http://127.0.0.1:8010";
-const RESOLVED_BACKEND_URL = DEFAULT_BACKEND_URL || (process.env.VERCEL ? null : LOCAL_BACKEND_URL);
 
 module.exports = async function handler(req, res) {
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -12,13 +11,6 @@ module.exports = async function handler(req, res) {
     return;
   }
 
-  if (!RESOLVED_BACKEND_URL) {
-    res.status(503).json({
-      error: "VERIFIED_CHAT_BACKEND_URL is not configured for the website API",
-    });
-    return;
-  }
-
   const parts = Array.isArray(req.query.path) ? req.query.path : [];
   const suffix = parts.join("/");
   if (suffix !== "run" && suffix !== "latest") {
@@ -26,7 +18,7 @@ module.exports = async function handler(req, res) {
     return;
   }
 
-  const upstreamUrl = buildUpstreamUrl(RESOLVED_BACKEND_URL, suffix);
+  const upstreamUrl = buildUpstreamUrl(resolveBackendUrl(req), suffix);
   const init = {
     method: req.method,
     headers: {
@@ -44,9 +36,31 @@ module.exports = async function handler(req, res) {
   res.send(text);
 };
 
+function resolveBackendUrl(req) {
+  if (DEFAULT_BACKEND_URL) {
+    return DEFAULT_BACKEND_URL;
+  }
+  if (process.env.VERCEL) {
+    return resolveProductionBackendUrl(req);
+  }
+  return LOCAL_BACKEND_URL;
+}
+
+function resolveProductionBackendUrl(req) {
+  const host = req.headers?.host || "www.truthai.tech";
+  const forwardedProto = req.headers?.["x-forwarded-proto"] || "https";
+  return `${forwardedProto}://${host}/api/verified-chat-backend`;
+}
+
 function buildUpstreamUrl(baseUrl, suffix) {
   if (baseUrl === LOCAL_BACKEND_URL) {
     return `${baseUrl.replace(/\/$/, "")}/verified-chat/${suffix}`;
+  }
+
+  if (baseUrl.endsWith("/api/verified-chat-backend")) {
+    const upstream = new URL(baseUrl);
+    upstream.searchParams.set("path", suffix);
+    return upstream.toString();
   }
 
   const upstream = new URL(baseUrl);
