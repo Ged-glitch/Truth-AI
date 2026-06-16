@@ -140,5 +140,15 @@ uv run python -m http.server 4173 --directory frontend
 
 The Supabase project is recorded under `supabase/`.
 
+Sign-in lives at `/app/sign-in` and uses the public Supabase project config
+endpoint exposed at `/api/public-config`.
+
+Required environment variables:
+
+- `SUPABASE_URL`
+- `SUPABASE_ANON_KEY`
+
+Keep `SUPABASE_SERVICE_ROLE_KEY` server-side only. The frontend never needs it.
+
 Local secrets belong in `.env`, using `.env.example` as the template. Do not
 commit Supabase keys.
