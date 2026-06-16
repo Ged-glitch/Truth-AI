@@ -210,8 +210,7 @@
     if (routeKey() !== "truth-output" || document.querySelector("[data-live-output-panel]")) {
       return;
     }
-    const marker = findText("span", "05 · Verification Result");
-    const screen = marker ? marker.closest("[data-screen-label]") : null;
+    const screen = document.querySelector("[data-verified-output-screen]");
     const frame = screen ? screen.querySelector(".ta-frame") : null;
     if (!frame) return;
     const panel = document.createElement("div");
