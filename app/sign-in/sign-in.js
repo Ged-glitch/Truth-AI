@@ -93,7 +93,7 @@ async function performSignIn() {
   saveSession(payload);
   renderSession();
   setStatus("Signed in successfully.", "success");
-  window.location.assign("/app/overview");
+  window.location.assign(resolveReturnPath());
 }
 
 async function performSignUp() {
@@ -229,4 +229,13 @@ function renderSession() {
 function setStatus(message, tone) {
   elements.status.textContent = message;
   elements.status.dataset.tone = tone || "";
+}
+
+function resolveReturnPath() {
+  const params = new URLSearchParams(window.location.search);
+  const returnTo = params.get("return");
+  if (typeof returnTo === "string" && returnTo.startsWith("/app/")) {
+    return returnTo;
+  }
+  return "/app/overview";
 }

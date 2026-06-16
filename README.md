@@ -143,6 +143,9 @@ The Supabase project is recorded under `supabase/`.
 Sign-in lives at `/app/sign-in` and uses the public Supabase project config
 endpoint exposed at `/api/public-config`.
 
+Unauthenticated `/app/*` routes now redirect to `/app/sign-in` and return to
+the requested page after login.
+
 Required environment variables:
 
 - `SUPABASE_URL`

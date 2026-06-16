@@ -1,6 +1,16 @@
 (async () => {
   try {
     const pathname = location.pathname.replace(/\/$/, "") || "/";
+    if (pathname.startsWith("/app") && pathname !== "/app/sign-in") {
+      const session = readSession();
+      if (!session) {
+        const signInUrl = new URL("/app/sign-in", location.origin);
+        const returnTo = `${location.pathname}${location.search}${location.hash}`;
+        signInUrl.searchParams.set("return", returnTo);
+        location.replace(signInUrl.toString());
+        return;
+      }
+    }
     const source = pathname === "/"
       ? "/frontend/Truth-Kernel-Studio.dc.html"
       : "/frontend/Truth-AI-App.dc.html";
@@ -20,3 +30,17 @@
     console.error(error);
   }
 })();
+
+function readSession() {
+  try {
+    const raw = localStorage.getItem("truthai.supabase.session");
+    if (!raw) {
+      return null;
+    }
+    const session = JSON.parse(raw);
+    return session && typeof session.access_token === "string" ? session : null;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+}
