@@ -26,7 +26,7 @@
     document.write(html);
     document.close();
   } catch (error) {
-    document.body.innerHTML = '<main style="font-family:system-ui,sans-serif;padding:32px;"><h1>Truth-AI</h1><p>The console could not be loaded.</p><p><a href="/app/overview">Return to the app</a></p></main>';
+    document.body.innerHTML = '<main style="font-family:system-ui,sans-serif;padding:32px;"><h1>Truth-AI</h1><p>The console could not be loaded.</p><p><a href="/">Return to the site</a></p></main>';
     console.error(error);
   }
 })();
