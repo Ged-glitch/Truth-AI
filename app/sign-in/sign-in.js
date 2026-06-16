@@ -106,7 +106,11 @@ async function performSignUp() {
   }
 
   setStatus("Creating account...", "");
-  const payload = await postAuth(config, "/auth/v1/signup", { email, password });
+  const payload = await postAuth(
+    config,
+    "/auth/v1/signup",
+    buildSignUpBody(email, password),
+  );
   saveSession(payload);
   renderSession();
   if (state.session?.access_token) {
@@ -247,4 +251,18 @@ function resolveReturnPath() {
     return returnTo;
   }
   return "/app/overview";
+}
+
+function resolveEmailRedirectTo() {
+  return `${window.location.origin}/app/sign-in?confirmed=1`;
+}
+
+function buildSignUpBody(email, password) {
+  return {
+    email,
+    password,
+    options: {
+      emailRedirectTo: resolveEmailRedirectTo(),
+    },
+  };
 }
