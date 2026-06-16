@@ -3,7 +3,7 @@
     const pathname = location.pathname.replace(/\/$/, "") || "/";
     const source = pathname === "/"
       ? "/frontend/Truth-Kernel-Studio.dc.html"
-      : "/frontend/Truth-AI.dc.html";
+      : "/frontend/Truth-AI-App.dc.html";
     const response = await fetch(source, {
       cache: "no-store"
     });
@@ -16,7 +16,7 @@
     document.write(html);
     document.close();
   } catch (error) {
-    document.body.innerHTML = '<main style="font-family:system-ui,sans-serif;padding:32px;"><h1>Truth-AI</h1><p>The console could not be loaded.</p><p><a href="/frontend/Truth-AI.dc.html">Open the frontend directly</a></p></main>';
+    document.body.innerHTML = '<main style="font-family:system-ui,sans-serif;padding:32px;"><h1>Truth-AI</h1><p>The console could not be loaded.</p><p><a href="/app/overview">Return to the app</a></p></main>';
     console.error(error);
   }
 })();

@@ -127,7 +127,7 @@ make frontend
 Then open:
 
 ```text
-http://127.0.0.1:4173/Truth-AI.dc.html
+http://127.0.0.1:4173/Truth-AI-App.dc.html
 ```
 
 On Windows without `make`:

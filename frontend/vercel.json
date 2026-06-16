@@ -4,7 +4,7 @@
   "rewrites": [
     {
       "source": "/app/:screen",
-      "destination": "/Truth-AI.dc.html"
+      "destination": "/Truth-AI-App.dc.html"
     },
     {
       "source": "/frontend/:path*",
