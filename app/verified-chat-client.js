@@ -8,6 +8,11 @@
     return parts[0] === "app" ? parts[1] || "overview" : "overview";
   }
 
+  function isAssistantRoute() {
+    const route = routeKey();
+    return route === "chat" || route === "assistant";
+  }
+
   function endpointRoot() {
     const settings = loadSettings();
     return settings.endpointUrl || defaultEndpoint();
@@ -24,7 +29,7 @@
   }
 
   function installChatComposer() {
-    if (routeKey() !== "chat" || document.querySelector("[data-verified-chat-form]")) return;
+    if (!isAssistantRoute() || document.querySelector("[data-verified-chat-form]")) return;
     const placeholder = findText("span", "Ask anything");
     if (!placeholder || !placeholder.parentElement) return;
     const shell = placeholder.parentElement;
