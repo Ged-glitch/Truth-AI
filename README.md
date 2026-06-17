@@ -150,6 +150,7 @@ Required environment variables:
 
 - `SUPABASE_URL`
 - `SUPABASE_ANON_KEY`
+- `PUBLIC_SITE_ORIGIN` (defaults to `https://www.truthai.tech` for confirmation links)
 
 Keep `SUPABASE_SERVICE_ROLE_KEY` server-side only. The frontend never needs it.
 

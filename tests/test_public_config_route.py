@@ -12,6 +12,7 @@ def test_public_config_route_returns_supabase_env_values() -> None:
     payload = invoke_route(
         supabase_url="https://example.supabase.co",
         supabase_anon_key="anon-key",
+        site_origin="https://app.example.com",
     )
 
     assert payload["status"] == 200
@@ -19,20 +20,28 @@ def test_public_config_route_returns_supabase_env_values() -> None:
         "ready": True,
         "supabaseUrl": "https://example.supabase.co",
         "supabaseAnonKey": "anon-key",
+        "siteOrigin": "https://app.example.com",
     }
 
 
 def test_public_config_route_marks_missing_env_as_not_ready() -> None:
-    payload = invoke_route(supabase_url="", supabase_anon_key="")
+    payload = invoke_route(supabase_url="", supabase_anon_key="", site_origin="")
 
     assert payload["status"] == 200
     assert payload["json"]["ready"] is False
+    assert payload["json"]["siteOrigin"] == "https://www.truthai.tech"
 
 
-def invoke_route(*, supabase_url: str, supabase_anon_key: str) -> dict[str, object]:
+def invoke_route(
+    *,
+    supabase_url: str,
+    supabase_anon_key: str,
+    site_origin: str,
+) -> dict[str, object]:
     script = f"""
 process.env.SUPABASE_URL = {json.dumps(supabase_url)};
 process.env.SUPABASE_ANON_KEY = {json.dumps(supabase_anon_key)};
+process.env.PUBLIC_SITE_ORIGIN = {json.dumps(site_origin)};
 const handler = require({json.dumps(ROUTE.as_posix())});
 const state = {{
   status: null,

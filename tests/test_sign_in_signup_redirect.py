@@ -55,6 +55,7 @@ global.fetch = async () => ({{
     ready: true,
     supabaseUrl: "https://example.supabase.co",
     supabaseAnonKey: "anon",
+    siteOrigin: "https://www.truthai.tech",
   }}),
 }});
 global.console = {{

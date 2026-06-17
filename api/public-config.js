@@ -1,5 +1,6 @@
 const SUPABASE_URL = process.env.SUPABASE_URL || "";
 const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY || "";
+const PUBLIC_SITE_ORIGIN = process.env.PUBLIC_SITE_ORIGIN || "https://www.truthai.tech";
 
 module.exports = function handler(req, res) {
   res.setHeader("Content-Type", "application/json; charset=utf-8");
@@ -16,5 +17,6 @@ module.exports = function handler(req, res) {
     ready: Boolean(SUPABASE_URL && SUPABASE_ANON_KEY),
     supabaseUrl: SUPABASE_URL,
     supabaseAnonKey: SUPABASE_ANON_KEY,
+    siteOrigin: PUBLIC_SITE_ORIGIN,
   });
 };

@@ -68,6 +68,7 @@ async function loadConfig() {
     ready: Boolean(payload.ready),
     supabaseUrl: String(payload.supabaseUrl || ""),
     supabaseAnonKey: String(payload.supabaseAnonKey || ""),
+    siteOrigin: String(payload.siteOrigin || "https://www.truthai.tech"),
   };
   elements.configBanner.textContent = config.ready
     ? "Supabase is configured for this deployment."
@@ -254,7 +255,8 @@ function resolveReturnPath() {
 }
 
 function resolveEmailRedirectTo() {
-  return `${window.location.origin}/app/sign-in?confirmed=1`;
+  const origin = state.config?.siteOrigin || "https://www.truthai.tech";
+  return `${origin}/app/sign-in?confirmed=1`;
 }
 
 function buildSignUpBody(email, password) {
