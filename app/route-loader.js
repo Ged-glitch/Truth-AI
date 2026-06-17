@@ -20,7 +20,7 @@
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     const html = (await response.text()).replace(
       '<script src="./support.js"></script>',
-      '<script src="/frontend/support.js"></script><script src="/app/verified-chat-client.js"></script><script src="/app/standards-library.js?v=standards-ingest-1"></script>'
+      '<script src="/frontend/support.js"></script><script src="/app/auth-client.js"></script><script src="/app/verified-chat-client.js"></script><script src="/app/standards-library.js?v=standards-ingest-1"></script>'
     );
     document.open();
     document.write(html);
