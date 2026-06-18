@@ -37,6 +37,7 @@ function bindElements() {
   elements.password = document.getElementById("password");
   elements.signup = document.getElementById("signup-button");
   elements.signout = document.getElementById("signout-button");
+  elements.backToApp = document.getElementById("back-to-app");
   elements.status = document.getElementById("status");
   elements.configBanner = document.getElementById("config-banner");
   elements.sessionUser = document.getElementById("session-user");
@@ -56,6 +57,7 @@ function bindEvents() {
     renderSession();
     setStatus("Signed out locally.", "success");
   });
+  renderBackToAppLink();
 }
 
 async function loadConfig() {
@@ -253,6 +255,13 @@ function resolveReturnPath() {
     return returnTo;
   }
   return "/app/overview";
+}
+
+function renderBackToAppLink() {
+  if (!elements.backToApp) {
+    return;
+  }
+  elements.backToApp.href = resolveReturnPath();
 }
 
 function resolveEmailRedirectTo() {

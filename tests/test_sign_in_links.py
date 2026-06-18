@@ -13,7 +13,7 @@ AUTH_CLIENT = ROOT / "app" / "auth-client.js"
 
 def test_sign_in_back_to_app_links_to_public_site() -> None:
     html = SIGN_IN_PAGE.read_text(encoding="utf-8")
-    assert '<a class="ghost-link" href="/">Back to app</a>' in html
+    assert '<a class="ghost-link" id="back-to-app" href="/app/overview">Back to app</a>' in html
 
 
 def test_route_loader_fallback_links_to_public_site() -> None:

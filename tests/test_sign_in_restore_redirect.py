@@ -15,6 +15,12 @@ def test_restore_session_redirects_signed_in_users_back_to_app() -> None:
     assert payload["status_text"] == "Session restored from local storage."
 
 
+def test_back_to_app_link_prefers_return_path() -> None:
+    payload = invoke_back_to_app_link()
+
+    assert payload["href"] == "/app/overview?studio=1#app"
+
+
 def invoke_restore_session() -> dict[str, object]:
     script = f"""
 const fs = require("fs");
@@ -83,6 +89,67 @@ global.console = {{
   state.session_user = elements["session-user"].textContent;
   process.stdout.write(JSON.stringify(state));
 }})();
+"""
+    completed = subprocess.run(
+        ["node", "-e", script],
+        cwd=ROOT,
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    return json.loads(completed.stdout)
+
+
+def invoke_back_to_app_link() -> dict[str, object]:
+    script = f"""
+const fs = require("fs");
+const source = fs.readFileSync({json.dumps(SCRIPT.as_posix())}, "utf8").replace("boot();", "");
+const state = {{}};
+const elements = {{
+  "auth-form": {{ addEventListener() {{}} }},
+  email: {{ value: "" }},
+  password: {{ value: "" }},
+  "signup-button": {{ addEventListener() {{}} }},
+  "signout-button": {{ addEventListener() {{}} }},
+  "back-to-app": {{ href: "" }},
+  status: {{ textContent: "", dataset: {{}} }},
+  "config-banner": {{ textContent: "" }},
+  "session-user": {{ textContent: "" }},
+  "session-token": {{ textContent: "" }},
+}};
+global.localStorage = {{
+  getItem() {{
+    return null;
+  }},
+  setItem() {{}},
+  removeItem() {{}},
+}};
+global.document = {{
+  getElementById(id) {{
+    return elements[id] || null;
+  }},
+}};
+global.window = {{
+  location: {{
+    origin: "https://www.truthai.tech",
+    search: "?return=%2Fapp%2Foverview%3Fstudio%3D1%23app",
+  }},
+}};
+global.fetch = async () => ({{
+  ok: true,
+  json: async () => ({{
+    ready: false,
+    supabaseUrl: "",
+    supabaseAnonKey: "",
+    siteOrigin: "https://www.truthai.tech",
+  }}),
+}});
+global.console = {{
+  error() {{}},
+}};
+eval(source);
+renderBackToAppLink();
+process.stdout.write(JSON.stringify({{ href: elements["back-to-app"].href }}));
 """
     completed = subprocess.run(
         ["node", "-e", script],
