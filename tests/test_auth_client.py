@@ -19,6 +19,13 @@ def test_auth_client_replaces_sign_in_with_session_controls() -> None:
     assert payload["button_has_click"] is True
 
 
+def test_auth_client_restores_sign_in_link_when_session_is_removed() -> None:
+    payload = invoke_auth_client_storage_transition()
+
+    assert payload["after_first_render"] == ""
+    assert payload["after_storage_restore"] == '<a href="/app/sign-in">Sign in</a>'
+
+
 def invoke_auth_client(*, session: dict[str, object] | None) -> dict[str, object]:
     script = f"""
 const fs = require("fs");
@@ -27,7 +34,8 @@ const state = {{
   replaced_to: null,
 }};
 const controls = {{
-  innerHTML: "",
+  innerHTML: '<a href="/app/sign-in">Sign in</a>',
+  dataset: {{}},
   style: {{}},
   children: [],
   appendChild(node) {{
@@ -61,14 +69,21 @@ global.document = {{
     }};
   }},
 }};
-global.location = {{
-  pathname: "/app/overview",
-  search: "?studio=1",
-  hash: "#app",
-  assign(url) {{
-    state.replaced_to = url;
+global.window = {{
+  addEventListener(type, handler) {{
+    state.window_handlers = state.window_handlers || {{}};
+    state.window_handlers[type] = handler;
+  }},
+  location: {{
+    pathname: "/app/overview",
+    search: "?studio=1",
+    hash: "#app",
+    assign(url) {{
+      state.replaced_to = url;
+    }},
   }},
 }};
+global.location = global.window.location;
 global.localStorage = {{
   getItem(key) {{
     if (key !== "truthai.supabase.session") {{
@@ -87,6 +102,98 @@ state.badge_text = controls.children[0]?.children?.[1]?.textContent || "";
 state.button_text = controls.children[1]?.textContent || "";
 state.label_text = controls.children[0]?.children?.[1]?.textContent || "";
 state.button_has_click = Boolean(controls.children[1]?._handlers?.click);
+process.stdout.write(JSON.stringify(state));
+"""
+    completed = subprocess.run(
+        ["node", "-e", script],
+        cwd=ROOT,
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    return json.loads(completed.stdout)
+
+
+def invoke_auth_client_storage_transition() -> dict[str, object]:
+    script = f"""
+const fs = require("fs");
+const source = fs.readFileSync({json.dumps(SCRIPT.as_posix())}, "utf8");
+const state = {{}};
+const controls = {{
+  innerHTML: '<a href="/app/sign-in">Sign in</a>',
+  dataset: {{}},
+  style: {{}},
+  children: [],
+  appendChild(node) {{
+    this.children.push(node);
+  }},
+  querySelector(selector) {{
+    return null;
+  }},
+}};
+const session = {{
+  access_token: "token-123",
+  user: {{ email: "user@example.com" }},
+}};
+global.document = {{
+  readyState: "complete",
+  querySelector(selector) {{
+    if (selector === "[data-auth-controls]") return controls;
+    return null;
+  }},
+  addEventListener() {{}},
+  createElement(tag) {{
+    return {{
+      tagName: tag,
+      style: {{}},
+      textContent: "",
+      children: [],
+      innerHTML: "",
+      appendChild(node) {{
+        this.children.push(node);
+      }},
+      addEventListener(type, handler) {{
+        this._handlers = this._handlers || {{}};
+        this._handlers[type] = handler;
+      }},
+    }};
+  }},
+}};
+global.window = {{
+  addEventListener(type, handler) {{
+    state.window_handlers = state.window_handlers || {{}};
+    state.window_handlers[type] = handler;
+  }},
+  location: {{
+    pathname: "/app/overview",
+    search: "?studio=1",
+    hash: "#app",
+    assign(url) {{
+      state.replaced_to = url;
+    }},
+  }},
+}};
+global.location = global.window.location;
+global.localStorage = {{
+  getItem(key) {{
+    if (key !== "truthai.supabase.session") {{
+      return null;
+    }}
+    return state.session_raw;
+  }},
+  removeItem() {{
+    state.session_raw = null;
+  }},
+}};
+state.session_raw = JSON.stringify(session);
+global.console = {{
+  error() {{}},
+}};
+eval(source);
+state.after_first_render = controls.innerHTML;
+state.session_raw = null;
+state.window_handlers.storage({{ key: "truthai.supabase.session" }});
+state.after_storage_restore = controls.innerHTML;
 process.stdout.write(JSON.stringify(state));
 """
     completed = subprocess.run(

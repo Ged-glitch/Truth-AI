@@ -5,9 +5,10 @@ boot();
 function boot() {
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", renderAuthControls, { once: true });
-    return;
+  } else {
+    renderAuthControls();
   }
-  renderAuthControls();
+  window.addEventListener("storage", handleSessionStorageChange);
 }
 
 function renderAuthControls() {
@@ -15,11 +16,15 @@ function renderAuthControls() {
   if (!controls) {
     return;
   }
+  if (!controls.dataset.authDefaultHtml) {
+    controls.dataset.authDefaultHtml = controls.innerHTML;
+  }
   controls.style.flexWrap = "wrap";
   controls.style.justifyContent = "flex-end";
 
   const session = readSession();
   if (!session) {
+    controls.innerHTML = controls.dataset.authDefaultHtml;
     return;
   }
 
@@ -52,6 +57,13 @@ function renderAuthControls() {
 
   controls.appendChild(badge);
   controls.appendChild(signOut);
+}
+
+function handleSessionStorageChange(event) {
+  if (event.key && event.key !== SESSION_STORAGE_KEY) {
+    return;
+  }
+  renderAuthControls();
 }
 
 function readSession() {
