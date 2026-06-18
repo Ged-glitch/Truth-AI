@@ -1,7 +1,7 @@
 (() => {
   const DEFAULT_API_ROUTE = "/api/verified-chat";
-  const storageKey = "truthAiVerifiedChatLatest";
-  const settingsKey = "truthAiVerifiedChatSettings";
+  const storageKeyPrefix = "truthAiVerifiedChatLatest";
+  const settingsKeyPrefix = "truthAiVerifiedChatSettings";
 
   function routeKey() {
     const parts = window.location.pathname.split("/").filter(Boolean);
@@ -16,6 +16,43 @@
   function endpointRoot() {
     const settings = loadSettings();
     return settings.endpointUrl || defaultEndpoint();
+  }
+
+  function sessionScope() {
+    const session = readSession();
+    const scope =
+      session?.user?.email ||
+      session?.user?.id ||
+      session?.access_token?.slice(0, 12) ||
+      "anonymous";
+    return String(scope).replace(/[^A-Za-z0-9_.-]/g, "_");
+  }
+
+  function scopedStorageKey() {
+    return `${storageKeyPrefix}:${sessionScope()}`;
+  }
+
+  function scopedSettingsKey() {
+    return `${settingsKeyPrefix}:${sessionScope()}`;
+  }
+
+  function readSession() {
+    try {
+      const raw = window.localStorage.getItem("truthai.supabase.session");
+      if (!raw) return null;
+      const session = JSON.parse(raw);
+      return session && typeof session.access_token === "string" ? session : null;
+    } catch {
+      return null;
+    }
+  }
+
+  function authHeaders() {
+    const session = readSession();
+    if (!session?.access_token) {
+      return {};
+    }
+    return { Authorization: `Bearer ${session.access_token}` };
   }
 
   function defaultEndpoint() {
@@ -88,7 +125,7 @@
       if (!submit) return;
       const shell = submit.closest("[data-verified-chat-form]");
       const panel = document.querySelector("[data-verified-chat-status]");
-      if (shell && panel) submitPrompt(shell, panel);
+      if (shell && panel) return submitPrompt(shell, panel);
       return;
     });
     document.addEventListener("click", (event) => {
@@ -114,7 +151,7 @@
       const settings = readSettings(shell);
       const response = await fetch(runUrl(settings.endpointUrl || defaultEndpoint()), {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", ...authHeaders() },
         body: JSON.stringify({
           prompt_text: prompt,
           provider: settings.provider,
@@ -126,7 +163,7 @@
       });
       const payload = await response.json();
       if (!response.ok) throw new Error(payload.error || "adapter request failed");
-      window.localStorage.setItem(storageKey, JSON.stringify(payload));
+      window.localStorage.setItem(scopedStorageKey(), JSON.stringify(payload));
       panel.innerHTML = resultMarkup(payload);
     } catch (error) {
       panel.textContent = "Adapter unavailable: " + error.message;
@@ -167,7 +204,7 @@
 
   function loadSettings() {
     try {
-      const parsed = JSON.parse(window.localStorage.getItem(settingsKey) || "null");
+      const parsed = JSON.parse(window.localStorage.getItem(scopedSettingsKey()) || "null");
       if (!parsed || typeof parsed !== "object") throw new Error("missing settings");
       return {
         provider: parsed.provider || "local",
@@ -189,11 +226,11 @@
 
   function persistSettings(settings) {
     if (!settings.remember) {
-      window.localStorage.removeItem(settingsKey);
+      window.localStorage.removeItem(scopedSettingsKey());
       return;
     }
     window.localStorage.setItem(
-      settingsKey,
+      scopedSettingsKey(),
       JSON.stringify({
         provider: settings.provider,
         modelId: settings.modelId,
@@ -224,13 +261,16 @@
 
   async function loadLatest(panel) {
     try {
-      const response = await fetch(latestUrl(endpointRoot()), { cache: "no-store" });
+      const response = await fetch(latestUrl(endpointRoot()), {
+        cache: "no-store",
+        headers: { ...authHeaders() },
+      });
       const payload = await response.json();
       if (!response.ok) throw new Error(payload.error || "latest output unavailable");
-      window.localStorage.setItem(storageKey, JSON.stringify(payload));
+      window.localStorage.setItem(scopedStorageKey(), JSON.stringify(payload));
       panel.innerHTML = resultMarkup(payload);
     } catch {
-      const cached = window.localStorage.getItem(storageKey);
+      const cached = window.localStorage.getItem(scopedStorageKey());
       panel.innerHTML = cached
         ? resultMarkup(JSON.parse(cached))
         : "<strong>No verified output yet.</strong> Run a prompt from the Assistant screen.";

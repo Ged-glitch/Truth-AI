@@ -25,6 +25,10 @@ module.exports = async function handler(req, res) {
       "Content-Type": "application/json",
     },
   };
+  const authorization = req.headers?.authorization || req.headers?.Authorization;
+  if (authorization) {
+    init.headers.Authorization = authorization;
+  }
   if (req.method !== "GET") {
     init.body = JSON.stringify(req.body ?? {});
   }

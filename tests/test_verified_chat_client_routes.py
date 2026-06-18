@@ -22,6 +22,14 @@ def test_verified_chat_output_mounts_on_truth_output_route() -> None:
     assert payload["panel_text"] == "Loading latest verified output..."
 
 
+def test_verified_chat_submit_uses_session_authorization_and_scoped_storage() -> None:
+    payload = invoke_submit_client("/app/assistant")
+
+    assert payload["mounted"] is True
+    assert payload["upstream_init"]["headers"]["Authorization"] == "Bearer token-123"
+    assert payload["storage_key"] == "truthAiVerifiedChatLatest:user_example.com"
+
+
 def invoke_client(pathname: str) -> dict[str, object]:
     script = f"""
 const fs = require("fs");
@@ -190,6 +198,175 @@ global.console = {{
 eval(source);
 state.interval();
 process.stdout.write(JSON.stringify(state));
+"""
+    completed = subprocess.run(
+        ["node", "-e", script],
+        cwd=ROOT,
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    return json.loads(completed.stdout)
+
+
+def invoke_submit_client(pathname: str) -> dict[str, object]:
+    script = f"""
+const fs = require("fs");
+const source = fs.readFileSync({json.dumps(CLIENT.as_posix())}, "utf8");
+const state = {{}};
+const panel = {{
+  innerHTML: "",
+  textContent: "",
+  setAttribute() {{}},
+}};
+const submit = {{
+  disabled: false,
+  style: {{}},
+  closest(selector) {{
+    if (selector === "[data-verified-chat-form]") return shell;
+    return null;
+  }},
+}};
+const input = {{ value: "Verify the prompt." }};
+const provider = {{ value: "local" }};
+const model = {{ value: "truth-ai-local-adapter" }};
+const key = {{ value: "session-token-123" }};
+const endpoint = {{ value: "" }};
+const remember = {{ checked: true }};
+const shell = {{
+  attrs: {{}},
+  innerHTML: "",
+  setAttribute(name, value) {{
+    this.attrs[name] = value;
+    state.mounted = true;
+  }},
+  parentElement: {{
+    appendChild(node) {{
+      state.panel = node;
+      state.panel_text = node.textContent;
+    }},
+  }},
+  querySelector(selector) {{
+    if (selector === "[data-verified-chat-input]") return input;
+    if (selector === "[data-verified-chat-submit]") return submit;
+    if (selector === "[data-verified-chat-provider]") return provider;
+    if (selector === "[data-verified-chat-model]") return model;
+    if (selector === "[data-verified-chat-key]") return key;
+    if (selector === "[data-verified-chat-endpoint]") return endpoint;
+    if (selector === "[data-verified-chat-remember]") return remember;
+    return null;
+  }},
+}};
+const placeholder = {{
+  textContent: "Ask anything",
+  parentElement: shell,
+}};
+global.window = {{
+  location: {{
+    pathname: {json.dumps(pathname)},
+  }},
+  localStorage: {{
+    getItem(key) {{
+      if (key === "truthai.supabase.session") {{
+        return JSON.stringify({{
+          access_token: "token-123",
+          user: {{ email: "user@example.com" }},
+        }});
+      }}
+      return null;
+    }},
+    setItem(key, value) {{
+      if (key.startsWith("truthAiVerifiedChatSettings:")) {{
+        state.settings_key = key;
+      }}
+      if (key.startsWith("truthAiVerifiedChatLatest:")) {{
+        state.storage_key = key;
+      }}
+      state.storage_value = value;
+    }},
+    removeItem() {{}},
+  }},
+}};
+global.location = global.window.location;
+global.document = {{
+  querySelectorAll(selector) {{
+    if (selector === "span") return [placeholder];
+    if (selector === "[data-verified-chat-form]" && state.mounted) return [shell];
+    if (selector === "[data-verified-chat-status]" && state.panel) return [state.panel];
+    return [];
+  }},
+  querySelector(selector) {{
+    if (selector === "[data-verified-chat-form]" && state.mounted) return shell;
+    if (selector === "[data-verified-chat-status]" && state.panel) return state.panel;
+    return null;
+  }},
+  addEventListener(type, handler) {{
+    state.handlers = state.handlers || {{}};
+    state.handlers[type] = state.handlers[type] || [];
+    state.handlers[type].push(handler);
+  }},
+  createElement() {{
+    return {{
+      setAttribute() {{}},
+      style: {{}},
+      textContent: "",
+      innerHTML: "",
+      appendChild() {{}},
+    }};
+  }},
+}};
+global.setInterval = (fn) => {{
+  state.interval = fn;
+  return 1;
+}};
+global.clearInterval = () => {{}};
+global.fetch = async (url, init) => {{
+  state.upstream_url = url;
+  state.upstream_init = init;
+  return {{
+    ok: true,
+    json: async () => ({{
+      cleaned_output: "Verified response",
+      decision: "accept",
+      run_hash: "run-1234567890abcdef",
+    }}),
+  }};
+}};
+global.console = {{
+  error() {{}},
+}};
+eval(source);
+state.interval();
+(async () => {{
+  if (state.handlers.click[1]) {{
+    state.handlers.click[1]({{
+      target: {{
+        closest(selector) {{
+          if (selector === "[data-verified-chat-save]") return {{
+            closest(innerSelector) {{
+              if (innerSelector === "[data-verified-chat-form]") return shell;
+              return null;
+            }},
+          }};
+          return null;
+        }},
+      }},
+    }});
+  }}
+  const maybePromise = state.handlers.click[0]({{
+    target: {{
+      closest(selector) {{
+        if (selector === "[data-verified-chat-submit]") return submit;
+        return null;
+      }},
+    }},
+  }});
+  if (maybePromise && typeof maybePromise.then === "function") {{
+    await maybePromise;
+  }}
+  await Promise.resolve();
+  process.stdout.write(JSON.stringify(state));
+}})();
 """
     completed = subprocess.run(
         ["node", "-e", script],

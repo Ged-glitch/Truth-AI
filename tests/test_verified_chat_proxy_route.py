@@ -25,6 +25,7 @@ def test_verified_chat_proxy_forwards_run_request() -> None:
         method="POST",
         suffix="run",
         body={"prompt_text": "Verify this prompt."},
+        auth_header="Bearer session-token-123",
         upstream_status=202,
         upstream_text='{"decision":"accept"}',
         upstream_content_type="application/json",
@@ -37,6 +38,7 @@ def test_verified_chat_proxy_forwards_run_request() -> None:
     )
     assert payload["upstream_init"]["method"] == "POST"
     assert payload["upstream_init"]["headers"]["Content-Type"] == "application/json"
+    assert payload["upstream_init"]["headers"]["Authorization"] == "Bearer session-token-123"
     assert payload["upstream_init"]["body"] == '{"prompt_text":"Verify this prompt."}'
 
 
@@ -79,6 +81,7 @@ def invoke_route(
     vercel_env: str | None = None,
     host: str = "localhost",
     forwarded_proto: str = "http",
+    auth_header: str | None = None,
 ) -> dict[str, object]:
     script = f"""
 if ({json.dumps(env_backend)} === null) {{
@@ -103,6 +106,7 @@ const state = {{
 const reqHeaders = {{
   host: {json.dumps(host)},
   "x-forwarded-proto": {json.dumps(forwarded_proto)},
+  ...( {json.dumps(auth_header)} === null ? {{}} : {{ authorization: {json.dumps(auth_header)} }} ),
 }};
 global.fetch = async (url, init) => {{
   state.upstream_url = url;
