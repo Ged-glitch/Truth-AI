@@ -24,14 +24,18 @@
     #ta-hero-grid, #ta-trust-grid, #ta-dash-grid { grid-template-columns: 1fr !important; }
     #ta-problem-grid, #ta-features-grid, #ta-workflow-grid, #ta-usecase-grid, #ta-footer-grid { grid-template-columns: repeat(2,1fr) !important; }
     #ta-workflow-line { display: none !important; }
-    .ta-shell { min-width: 880px; }
-    .ta-frame { overflow-x: auto !important; }
+    .ta-shell { min-width: 0 !important; flex-direction: column !important; }
+    .ta-shell > dc-import[name="TASidebar"] { display: none !important; }
+    .ta-shell > div { min-width: 0 !important; width: 100% !important; }
+    .ta-frame { overflow-x: hidden !important; }
     h1 { font-size: 42px !important; }
   }
   @media (max-width: 560px) {
     #ta-problem-grid, #ta-features-grid, #ta-workflow-grid, #ta-usecase-grid, #ta-footer-grid { grid-template-columns: 1fr !important; }
     h1 { font-size: 32px !important; }
     h2 { font-size: 28px !important; }
+    .ta-shell [style*="grid-template-columns:1.6fr 1fr"] { grid-template-columns: 1fr !important; }
+    .ta-shell [style*="grid-template-columns:1fr 1fr"] { grid-template-columns: 1fr !important; }
   }
 </style>
 </helmet>

@@ -9,6 +9,7 @@ TRUTH_KERNEL = ROOT / "frontend" / "TruthKernel.dc.html"
 TRUTH_STUDIO = ROOT / "frontend" / "Truth-Kernel-Studio.dc.html"
 APP_ROUTE = ROOT / "app" / "route-loader.js"
 AUTH_CLIENT = ROOT / "app" / "auth-client.js"
+APP_PAGE = ROOT / "frontend" / "Truth-AI-App.dc.html"
 
 
 def test_sign_in_back_to_app_links_to_public_site() -> None:
@@ -44,3 +45,10 @@ def test_auth_client_compacts_session_badge_for_mobile() -> None:
     source = AUTH_CLIENT.read_text(encoding="utf-8")
     assert "max-width:min(38vw,220px)" in source
     assert "text-overflow:ellipsis" in source
+
+
+def test_app_page_mobile_css_stacks_shells_and_hides_sidebar() -> None:
+    html = APP_PAGE.read_text(encoding="utf-8")
+    assert ".ta-shell { min-width: 0 !important; flex-direction: column !important; }" in html
+    assert '.ta-shell > dc-import[name="TASidebar"] { display: none !important; }' in html
+    assert ".ta-frame { overflow-x: hidden !important; }" in html

@@ -18,13 +18,14 @@
   .tks-panel { width: 100%; }
   .tks-panel-shell { border: 1px solid #d4deeb; border-radius: 18px; overflow: hidden; box-shadow: 0 1px 2px rgba(15,23,42,0.05), 0 40px 80px -36px rgba(15,23,42,0.4); background: #fff; }
   .tks-mobile-panel { display: none; }
+  .tks-desktop-panel > div:first-child,
+  .tks-mobile-panel > div:first-child { display: none !important; }
   @media (max-width: 1080px) {
     .tks-shell { padding: 0 !important; }
     .tks-topbar, .tks-hero, .tks-legend { display: none !important; }
     #tks-stack { margin-top: 0 !important; gap: 0 !important; }
     .tks-desktop-panel { display: none !important; }
     .tks-mobile-panel { display: block !important; }
-    .tks-mobile-panel > div:first-child { display: none !important; }
   }
   @media (min-width: 1081px) {
     .tks-mobile-panel { display: none !important; }
