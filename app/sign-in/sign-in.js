@@ -155,6 +155,7 @@ async function restoreSession() {
     persistSession();
     renderSession();
     setStatus("Session restored from local storage.", "success");
+    window.location.assign(resolveReturnPath());
   } catch (error) {
     console.error(error);
     clearSession();
