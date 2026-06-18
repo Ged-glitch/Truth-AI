@@ -32,6 +32,7 @@ def test_truth_studio_header_exposes_auth_controls() -> None:
     html = TRUTH_STUDIO.read_text(encoding="utf-8")
     assert "data-auth-controls" in html
     assert "data-auth-signin-link" in html
+    assert "/app/auth-client.js" in html
 
 
 def test_route_loader_injects_auth_client() -> None:
