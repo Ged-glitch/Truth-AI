@@ -132,6 +132,7 @@ process.stdout.write(JSON.stringify(state));
         check=True,
         capture_output=True,
         text=True,
+        encoding="utf-8",
     )
     return json.loads(completed.stdout)
 
@@ -205,6 +206,7 @@ process.stdout.write(JSON.stringify(state));
         check=True,
         capture_output=True,
         text=True,
+        encoding="utf-8",
     )
     return json.loads(completed.stdout)
 
@@ -374,5 +376,6 @@ state.interval();
         check=True,
         capture_output=True,
         text=True,
+        encoding="utf-8",
     )
     return json.loads(completed.stdout)
