@@ -7,6 +7,7 @@ SIGN_IN_PAGE = ROOT / "app" / "sign-in" / "index.html"
 ROUTE_LOADER = ROOT / "app" / "route-loader.js"
 TRUTH_KERNEL = ROOT / "frontend" / "TruthKernel.dc.html"
 APP_ROUTE = ROOT / "app" / "route-loader.js"
+AUTH_CLIENT = ROOT / "app" / "auth-client.js"
 
 
 def test_sign_in_back_to_app_links_to_public_site() -> None:
@@ -29,3 +30,9 @@ def test_truth_kernel_mobile_header_exposes_sign_in_link() -> None:
 def test_route_loader_injects_auth_client() -> None:
     source = APP_ROUTE.read_text(encoding="utf-8")
     assert "/app/auth-client.js" in source
+
+
+def test_auth_client_compacts_session_badge_for_mobile() -> None:
+    source = AUTH_CLIENT.read_text(encoding="utf-8")
+    assert "max-width:min(38vw,220px)" in source
+    assert "text-overflow:ellipsis" in source

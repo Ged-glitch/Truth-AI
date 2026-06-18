@@ -28,6 +28,7 @@ const state = {{
 }};
 const controls = {{
   innerHTML: "",
+  style: {{}},
   children: [],
   appendChild(node) {{
     this.children.push(node);
