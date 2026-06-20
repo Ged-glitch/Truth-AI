@@ -61,21 +61,34 @@ function bindEvents() {
 }
 
 async function loadConfig() {
-  const response = await fetch("/api/public-config", { cache: "no-store" });
-  if (!response.ok) {
-    throw new Error(`Could not load public config: HTTP ${response.status}`);
+  const fallbackSiteOrigin = window.location?.origin || "https://www.truthai.tech";
+  try {
+    const response = await fetch("/api/public-config", { cache: "no-store" });
+    if (!response.ok) {
+      throw new Error(`Could not load public config: HTTP ${response.status}`);
+    }
+    const payload = await response.json();
+    const config = {
+      ready: Boolean(payload.ready),
+      supabaseUrl: String(payload.supabaseUrl || ""),
+      supabaseAnonKey: String(payload.supabaseAnonKey || ""),
+      siteOrigin: String(payload.siteOrigin || fallbackSiteOrigin),
+    };
+    elements.configBanner.textContent = config.ready
+      ? "Supabase is configured for this deployment."
+      : "Supabase is not configured yet. Add the env vars first.";
+    return config;
+  } catch {
+    const config = {
+      ready: false,
+      supabaseUrl: "",
+      supabaseAnonKey: "",
+      siteOrigin: fallbackSiteOrigin,
+    };
+    elements.configBanner.textContent =
+      "Supabase config unavailable in this environment. Add the env vars to enable login.";
+    return config;
   }
-  const payload = await response.json();
-  const config = {
-    ready: Boolean(payload.ready),
-    supabaseUrl: String(payload.supabaseUrl || ""),
-    supabaseAnonKey: String(payload.supabaseAnonKey || ""),
-    siteOrigin: String(payload.siteOrigin || "https://www.truthai.tech"),
-  };
-  elements.configBanner.textContent = config.ready
-    ? "Supabase is configured for this deployment."
-    : "Supabase is not configured yet. Add the env vars first.";
-  return config;
 }
 
 async function performSignIn() {
