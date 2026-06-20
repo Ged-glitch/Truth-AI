@@ -543,14 +543,14 @@ class Component extends DCLogic {
 
     // layout / view (boxes always visible)
     let rowStyle, rawWrapStyle, alignedWrapStyle;
-    if (isMobile) {
-      rowStyle = "margin-top:12px;display:block;";
-      rawWrapStyle = "display:none;";
-      alignedWrapStyle = "display:flex;";
-    } else if (isDesktop) {
+    if (isDesktop) {
       rowStyle = "margin-top:16px;display:flex;gap:14px;align-items:stretch;";
       rawWrapStyle = "flex:1;min-width:0;display:flex;";
       alignedWrapStyle = "flex:1;min-width:0;display:flex;";
+    } else if (!isDone) {
+      rowStyle = "margin-top:16px;display:flex;flex-direction:column;gap:12px;";
+      rawWrapStyle = "display:flex;";
+      alignedWrapStyle = "display:flex;";
     } else if (st.view === "split") {
       rowStyle = "margin-top:12px;display:flex;gap:8px;align-items:stretch;";
       rawWrapStyle = "flex:1;min-width:0;display:flex;";
@@ -583,7 +583,7 @@ class Component extends DCLogic {
       phases,
       standardName, standardShort, confidencePct, rawText, alignedText, alignedTag,
       violations, violationCount, violationSummary,
-      showSeg: false,
+      showSeg: isMobile && isDone,
       viewRaw: () => this.setView("raw"), viewSplit: () => this.setView("split"), viewAligned: () => this.setView("aligned"),
       segRawStyle: seg("raw"), segSplitStyle: seg("split"), segAlignedStyle: seg("aligned"),
       rowStyle, rawWrapStyle, alignedWrapStyle,
