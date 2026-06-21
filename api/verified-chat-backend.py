@@ -7,6 +7,7 @@ behaviour through a Vercel Python function.
 from __future__ import annotations
 
 import json
+import os
 from http import HTTPStatus
 from pathlib import Path
 from typing import Any
@@ -38,9 +39,13 @@ def app(environ: dict[str, Any], start_response: Any) -> list[bytes]:
     service = _service()
     if method == "GET" and action == "latest":
         try:
-            payload = service.latest()
+            payload = service.latest(authorization_token=_authorization_token(environ))
         except ValueError as exc:
             return _json_response(start_response, HTTPStatus.NOT_FOUND, {"error": str(exc)})
+        except Exception as exc:  # pragma: no cover - surfaced by clients
+            return _json_response(
+                start_response, HTTPStatus.SERVICE_UNAVAILABLE, {"error": str(exc)}
+            )
         return _json_response(start_response, HTTPStatus.OK, payload)
 
     if method == "POST" and action == "run":
@@ -52,9 +57,16 @@ def app(environ: dict[str, Any], start_response: Any) -> list[bytes]:
         raw = body.read(length).decode("utf-8") if length and body is not None else "{}"
         try:
             payload = json.loads(raw) if raw else {}
-            response = service.run(VerifiedChatRunRequest.model_validate(payload))
+            response = service.run(
+                VerifiedChatRunRequest.model_validate(payload),
+                authorization_token=_authorization_token(environ),
+            )
         except (LLMAdapterError, ValueError) as exc:
             return _json_response(start_response, HTTPStatus.BAD_REQUEST, {"error": str(exc)})
+        except Exception as exc:  # pragma: no cover - surfaced by clients
+            return _json_response(
+                start_response, HTTPStatus.SERVICE_UNAVAILABLE, {"error": str(exc)}
+            )
         return _json_response(start_response, HTTPStatus.OK, response)
 
     return _json_response(
@@ -67,8 +79,10 @@ def app(environ: dict[str, Any], start_response: Any) -> list[bytes]:
 def _service() -> VerifiedChatService:
     return VerifiedChatService(
         VerifiedChatServiceConfig(
-            store_root=_DEFAULT_STORE_ROOT,
+            store_root=Path(os.getenv("VERIFIED_CHAT_STORE_ROOT", str(_DEFAULT_STORE_ROOT))),
             rulepack_path=_DEFAULT_RULEPACK_PATH,
+            supabase_url=os.getenv("SUPABASE_URL", ""),
+            supabase_anon_key=os.getenv("SUPABASE_ANON_KEY", ""),
         )
     )
 
@@ -78,6 +92,11 @@ def _resolve_action(query: dict[str, list[str]], path_info: str) -> str:
         return query["path"][0]
     cleaned = path_info.strip("/")
     return cleaned or "latest"
+
+
+def _authorization_token(environ: dict[str, Any]) -> str | None:
+    value = environ.get("HTTP_AUTHORIZATION") or environ.get("Authorization")
+    return str(value) if value else None
 
 
 def _json_response(

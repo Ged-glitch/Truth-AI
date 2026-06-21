@@ -84,6 +84,12 @@ For the live Vercel site, set `VERIFIED_CHAT_BACKEND_URL` to
 requests to `/api/verified-chat/*` and the website API will proxy them through
 without storing API keys.
 
+When `SUPABASE_URL` and `SUPABASE_ANON_KEY` are configured, the verified-chat
+backend also mirrors each frozen run into the `public.verified_chat_runs`
+Supabase table using the signed-in user's bearer token. Apply
+`supabase/migrations/20260621_verified_chat_runs.sql` to create the table and
+row-level policies.
+
 Run the line-delimited MCP session server:
 
 ```bash

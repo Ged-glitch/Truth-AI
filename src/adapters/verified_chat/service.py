@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import os
 from http import HTTPStatus
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
@@ -23,6 +24,12 @@ from adapters.verified_chat.runner import (
     VerifiedChatArtifactPaths,
     VerifiedChatPipelineResult,
     build_and_persist_verified_chat_run,
+)
+from adapters.verified_chat.supabase import (
+    SupabaseVerifiedChatStore,
+    SupabaseVerifiedChatStoreConfig,
+    SupabaseVerifiedChatStoreError,
+    VerifiedChatArchiveRecord,
 )
 from truthkernel.canonical import canonical_text
 from truthkernel.schemas import Decision, DecisionBundle, RulePack
@@ -45,6 +52,9 @@ class VerifiedChatServiceConfig(StrictBaseModel):
     host: str = "127.0.0.1"
     port: int = 8010
     credential_values: dict[str, str] = Field(default_factory=dict)
+    supabase_url: str = ""
+    supabase_anon_key: str = ""
+    supabase_table_name: str = "verified_chat_runs"
 
 
 class VerifiedChatRunRequest(StrictBaseModel):
@@ -90,8 +100,20 @@ class VerifiedChatService:
         self._rulepack = RulePack.model_validate_json(
             config.rulepack_path.read_text(encoding="utf-8")
         )
+        self._supabase_store = SupabaseVerifiedChatStore(
+            SupabaseVerifiedChatStoreConfig(
+                supabase_url=config.supabase_url,
+                supabase_anon_key=config.supabase_anon_key,
+                table_name=config.supabase_table_name,
+            )
+        )
 
-    def run(self, payload: VerifiedChatRunRequest) -> VerifiedChatRunResponse:
+    def run(
+        self,
+        payload: VerifiedChatRunRequest,
+        *,
+        authorization_token: str | None = None,
+    ) -> VerifiedChatRunResponse:
         request = VerifiedChatRequest(
             prompt_text=payload.prompt_text,
             rulepack_id=self._rulepack.id,
@@ -124,9 +146,15 @@ class VerifiedChatService:
         )
         response = _response_from_pipeline(pipeline)
         self._write_latest(response)
+        if authorization_token:
+            self._supabase_store.save(pipeline.run, authorization_token)
         return response
 
-    def latest(self) -> VerifiedChatLatestResponse:
+    def latest(self, *, authorization_token: str | None = None) -> VerifiedChatLatestResponse:
+        if authorization_token:
+            record = self._supabase_store.latest_record(authorization_token)
+            if record is not None:
+                return _response_from_archive_record(record)
         latest_path = self._latest_path()
         if not latest_path.exists():
             raise ValueError("no verified-chat run has been recorded")
@@ -171,9 +199,11 @@ def create_verified_chat_http_server(config: VerifiedChatServiceConfig) -> Threa
         def do_GET(self) -> None:  # noqa: N802
             try:
                 if self.path.rstrip("/") == "/verified-chat/latest":
-                    self._send_json(service.latest())
+                    self._send_json(service.latest(authorization_token=self._authorization_token()))
                     return
                 raise ValueError(f"unknown path: {self.path}")
+            except SupabaseVerifiedChatStoreError as exc:
+                self._send_json({"error": str(exc)}, HTTPStatus.SERVICE_UNAVAILABLE)
             except Exception as exc:  # pragma: no cover - surfaced by clients
                 self._send_json({"error": str(exc)}, HTTPStatus.BAD_REQUEST)
 
@@ -183,7 +213,13 @@ def create_verified_chat_http_server(config: VerifiedChatServiceConfig) -> Threa
             try:
                 if self.path.rstrip("/") != "/verified-chat/run":
                     raise ValueError(f"unknown path: {self.path}")
-                response = service.run(VerifiedChatRunRequest.model_validate(payload))
+                response = service.run(
+                    VerifiedChatRunRequest.model_validate(payload),
+                    authorization_token=self._authorization_token(),
+                )
+            except SupabaseVerifiedChatStoreError as exc:
+                self._send_json({"error": str(exc)}, HTTPStatus.SERVICE_UNAVAILABLE)
+                return
             except (LLMAdapterError, ValueError) as exc:
                 self._send_json({"error": str(exc)}, HTTPStatus.BAD_REQUEST)
                 return
@@ -191,6 +227,10 @@ def create_verified_chat_http_server(config: VerifiedChatServiceConfig) -> Threa
 
         def log_message(self, *_: object) -> None:
             return
+
+        def _authorization_token(self) -> str | None:
+            value = self.headers.get("Authorization") or self.headers.get("authorization")
+            return value if value else None
 
         def _send_json(self, payload: object, status: HTTPStatus = HTTPStatus.OK) -> None:
             body = canonical_text(payload).encode("utf-8")
@@ -235,6 +275,8 @@ def _serve(
             host=host,
             port=port,
             credential_values=credential_values,
+            supabase_url=os.getenv("SUPABASE_URL", ""),
+            supabase_anon_key=os.getenv("SUPABASE_ANON_KEY", ""),
         )
     )
 
@@ -259,3 +301,12 @@ def _artefact_paths(paths: VerifiedChatArtifactPaths) -> dict[str, str]:
         "response": str(paths.response_path),
         "run": str(paths.run_path),
     }
+
+
+def _response_from_archive_record(record: VerifiedChatArchiveRecord) -> VerifiedChatLatestResponse:
+    return VerifiedChatLatestResponse(
+        request_hash=record.request_hash,
+        run_hash=record.run_hash,
+        decision=record.decision,
+        cleaned_output=record.cleaned_output,
+    )
