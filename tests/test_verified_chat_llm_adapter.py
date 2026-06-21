@@ -66,7 +66,11 @@ def test_verified_chat_service_runs_model_adapter_and_persists_outputs(tmp_path:
     assert Path(response.artefacts["response"]).exists()
     assert Path(response.artefacts["extracted_pack"]).exists()
     assert Path(response.artefacts["cleaned_output"]).exists()
+    assert response.provider == ProviderKind.LOCAL.value
+    assert response.model_id == "truth-ai-local-adapter"
     assert service.latest().run_hash == response.run_hash
+    assert service.latest().provider == response.provider
+    assert service.latest().model_id == response.model_id
     assert service.latest().response_hash == response.response_hash
     assert service.latest().replay_hash == response.replay_hash
     assert service.latest().decision_bundle_id == response.decision_bundle.id
@@ -110,6 +114,8 @@ def test_verified_chat_http_server_accepts_prompt_and_returns_latest(tmp_path: P
         assert response.status == 200
         assert body["decision"] == "accept"
         assert body["cleaned_output"].startswith("Truth AI received the prompt")
+        assert body["provider"] == ProviderKind.LOCAL.value
+        assert body["model_id"] == "truth-ai-local-adapter"
         assert body["replay_hash"]
 
         connection.request("GET", "/verified-chat/latest")
@@ -117,6 +123,8 @@ def test_verified_chat_http_server_accepts_prompt_and_returns_latest(tmp_path: P
         latest_body = json.loads(latest_response.read().decode("utf-8"))
         assert latest_response.status == 200
         assert latest_body["run_hash"] == body["run_hash"]
+        assert latest_body["provider"] == body["provider"]
+        assert latest_body["model_id"] == body["model_id"]
         assert latest_body["response_hash"] == body["response_hash"]
         assert latest_body["replay_hash"] == body["replay_hash"]
         assert latest_body["decision_bundle_id"] == body["decision_bundle"]["id"]

@@ -76,6 +76,8 @@ class VerifiedChatRunResponse(StrictBaseModel):
     """Response returned to the app after generation and verification."""
 
     request_hash: str
+    provider: str
+    model_id: str
     response_hash: str
     run_hash: str
     replay_hash: str
@@ -89,6 +91,8 @@ class VerifiedChatLatestResponse(StrictBaseModel):
     """Latest successful adapter run recorded under the store root."""
 
     request_hash: str
+    provider: str | None = None
+    model_id: str | None = None
     response_hash: str | None = None
     run_hash: str
     replay_hash: str | None = None
@@ -181,6 +185,8 @@ class VerifiedChatService:
         self.config.store_root.mkdir(parents=True, exist_ok=True)
         latest = VerifiedChatLatestResponse(
             request_hash=response.request_hash,
+            provider=response.provider,
+            model_id=response.model_id,
             response_hash=response.response_hash,
             run_hash=response.run_hash,
             replay_hash=response.replay_hash,
@@ -292,6 +298,8 @@ def _serve(
 def _response_from_pipeline(pipeline: VerifiedChatPipelineResult) -> VerifiedChatRunResponse:
     return VerifiedChatRunResponse(
         request_hash=pipeline.run.request_hash,
+        provider=pipeline.run.request.selection.provider.value,
+        model_id=pipeline.run.request.selection.model_id,
         response_hash=pipeline.run.model_response.response_hash,
         run_hash=pipeline.run.run_hash,
         replay_hash=pipeline.run.replay_inputs.replay_hash,
@@ -316,6 +324,8 @@ def _response_from_archive_record(record: VerifiedChatArchiveRecord) -> Verified
     run = VerifiedChatRun.model_validate_json(record.run_json)
     return VerifiedChatLatestResponse(
         request_hash=record.request_hash,
+        provider=run.request.selection.provider.value,
+        model_id=run.request.selection.model_id,
         response_hash=run.model_response.response_hash,
         run_hash=record.run_hash,
         replay_hash=run.replay_inputs.replay_hash,

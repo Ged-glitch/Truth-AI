@@ -418,6 +418,8 @@
     const decision = escapeHtml(payload.decision || "review");
     const runHash = escapeHtml((payload.run_hash || "").slice(0, 16));
     const requestHash = escapeHtml((payload.request_hash || "").slice(0, 16));
+    const provider = escapeHtml(payload.provider || "");
+    const modelId = escapeHtml(payload.model_id || "");
     const responseHash = escapeHtml((payload.response_hash || "").slice(0, 16));
     const replayHash = escapeHtml((payload.replay_hash || "").slice(0, 16));
     const decisionBundleId = escapeHtml(
@@ -432,6 +434,14 @@
       <div style="margin-top:14px;border-top:1px solid #e6ecf4;padding-top:12px;">
         <div style="font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#64748b;margin-bottom:8px;">Frozen artefacts</div>
         <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;">
+          <div style="padding:10px 12px;border:1px solid #e6ecf4;border-radius:10px;background:#fff;">
+            <div style="font-size:10px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#64748b;">Provider</div>
+            <div style="margin-top:4px;font-family:'IBM Plex Mono',monospace;font-size:12px;color:#0f172a;word-break:break-all;">${provider || "Unavailable"}</div>
+          </div>
+          <div style="padding:10px 12px;border:1px solid #e6ecf4;border-radius:10px;background:#fff;">
+            <div style="font-size:10px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#64748b;">Model id</div>
+            <div style="margin-top:4px;font-family:'IBM Plex Mono',monospace;font-size:12px;color:#0f172a;word-break:break-all;">${modelId || "Unavailable"}</div>
+          </div>
           <div style="padding:10px 12px;border:1px solid #e6ecf4;border-radius:10px;background:#fff;">
             <div style="font-size:10px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#64748b;">Request hash</div>
             <div style="margin-top:4px;font-family:'IBM Plex Mono',monospace;font-size:12px;color:#0f172a;word-break:break-all;">${requestHash || "Unavailable"}</div>
