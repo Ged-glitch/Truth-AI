@@ -56,6 +56,10 @@
   }
 
   function defaultEndpoint() {
+    const hostname = window.location && window.location.hostname ? String(window.location.hostname) : "";
+    if (hostname === "localhost" || hostname === "127.0.0.1") {
+      return "http://127.0.0.1:8010";
+    }
     return DEFAULT_API_ROUTE;
   }
 

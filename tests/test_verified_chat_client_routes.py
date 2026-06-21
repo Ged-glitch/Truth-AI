@@ -15,6 +15,17 @@ def test_verified_chat_composer_mounts_on_assistant_route() -> None:
     assert payload["panel_text"] == "Adapter ready at /api/verified-chat"
 
 
+def test_verified_chat_defaults_to_local_adapter_on_localhost_preview() -> None:
+    payload = invoke_client(
+        "/app/assistant",
+        host="127.0.0.1:4174",
+        hostname="127.0.0.1",
+    )
+
+    assert payload["mounted"] is True
+    assert payload["panel_text"] == "Adapter ready at http://127.0.0.1:8010"
+
+
 def test_verified_chat_output_mounts_on_truth_output_route() -> None:
     payload = invoke_output_client("/app/truth-output")
 
@@ -30,7 +41,13 @@ def test_verified_chat_submit_uses_session_authorization_and_scoped_storage() ->
     assert payload["storage_key"] == "truthAiVerifiedChatLatest:user_example.com"
 
 
-def invoke_client(pathname: str) -> dict[str, object]:
+def invoke_client(
+    pathname: str,
+    *,
+    host: str | None = None,
+    hostname: str | None = None,
+    port: str | None = None,
+) -> dict[str, object]:
     script = f"""
 const fs = require("fs");
 const source = fs.readFileSync({json.dumps(CLIENT.as_posix())}, "utf8");
@@ -78,6 +95,9 @@ const placeholder = {{
 global.window = {{
   location: {{
     pathname: {json.dumps(pathname)},
+    host: {json.dumps(host)},
+    hostname: {json.dumps(hostname)},
+    port: {json.dumps(port)},
     localStorage: null,
   }},
   localStorage: {{
