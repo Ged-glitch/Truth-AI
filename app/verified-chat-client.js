@@ -2,6 +2,7 @@
   const DEFAULT_API_ROUTE = "/api/verified-chat";
   const storageKeyPrefix = "truthAiVerifiedChatLatest";
   const settingsKeyPrefix = "truthAiVerifiedChatSettings";
+  const secretKeyPrefix = "truthAiVerifiedChatSecret";
 
   function routeKey() {
     const parts = window.location.pathname.split("/").filter(Boolean);
@@ -34,6 +35,10 @@
 
   function scopedSettingsKey() {
     return `${settingsKeyPrefix}:${sessionScope()}`;
+  }
+
+  function scopedSecretKey() {
+    return `${secretKeyPrefix}:${sessionScope()}`;
   }
 
   function readSession() {
@@ -102,6 +107,10 @@
         <label style="display:flex;align-items:center;gap:8px;font-size:13px;color:#475569;">
           <input data-verified-chat-remember type="checkbox" />
           Remember settings on this device
+        </label>
+        <label style="display:flex;align-items:center;gap:8px;font-size:13px;color:#475569;">
+          <input data-verified-chat-remember-key type="checkbox" checked />
+          Keep API key in this tab only
         </label>
         <button type="button" data-verified-chat-save title="Save settings" style="height:38px;border:1px solid #d6e0ee;border-radius:9px;background:#fff;color:#0f172a;padding:0 14px;font-size:13px;font-weight:600;cursor:pointer;">Save</button>
       </div>
@@ -184,11 +193,13 @@
     const key = shell.querySelector("[data-verified-chat-key]");
     const endpointInput = shell.querySelector("[data-verified-chat-endpoint]");
     const remember = shell.querySelector("[data-verified-chat-remember]");
+    const rememberKey = shell.querySelector("[data-verified-chat-remember-key]");
     if (provider) provider.value = settings.provider;
     if (model) model.value = settings.modelId;
     if (key) key.value = settings.apiKey;
     if (endpointInput) endpointInput.value = settings.endpointUrl;
     if (remember) remember.checked = settings.remember;
+    if (rememberKey) rememberKey.checked = settings.rememberKey;
   }
 
   function readSettings(shell) {
@@ -197,12 +208,14 @@
     const key = shell.querySelector("[data-verified-chat-key]");
     const endpointInput = shell.querySelector("[data-verified-chat-endpoint]");
     const remember = shell.querySelector("[data-verified-chat-remember]");
+    const rememberKey = shell.querySelector("[data-verified-chat-remember-key]");
     return {
       provider: provider ? provider.value : "local",
       modelId: model ? model.value.trim() : "truth-ai-local-adapter",
       apiKey: key ? key.value.trim() : "",
       endpointUrl: endpointInput ? endpointInput.value.trim() : "",
       remember: Boolean(remember && remember.checked),
+      rememberKey: Boolean(rememberKey && rememberKey.checked),
     };
   }
 
@@ -210,20 +223,38 @@
     try {
       const parsed = JSON.parse(window.localStorage.getItem(scopedSettingsKey()) || "null");
       if (!parsed || typeof parsed !== "object") throw new Error("missing settings");
+      const migratedSecret = typeof parsed.apiKey === "string" ? parsed.apiKey : "";
+      if (migratedSecret) {
+        window.sessionStorage.setItem(scopedSecretKey(), migratedSecret);
+        window.localStorage.setItem(
+          scopedSettingsKey(),
+          JSON.stringify({
+            provider: parsed.provider || "local",
+            modelId: parsed.modelId || "truth-ai-local-adapter",
+            endpointUrl: parsed.endpointUrl || defaultEndpoint(),
+            remember: Boolean(parsed.remember),
+            rememberKey: true,
+          }),
+        );
+      }
+      const secret = JSON.parse(window.sessionStorage.getItem(scopedSecretKey()) || "null");
       return {
         provider: parsed.provider || "local",
         modelId: parsed.modelId || "truth-ai-local-adapter",
-        apiKey: parsed.apiKey || "",
+        apiKey: typeof secret === "string" ? secret : "",
         endpointUrl: parsed.endpointUrl || defaultEndpoint(),
         remember: Boolean(parsed.remember),
+        rememberKey: parsed.rememberKey !== false,
       };
     } catch {
+      const secret = loadSecret();
       return {
         provider: "local",
         modelId: "truth-ai-local-adapter",
-        apiKey: "",
+        apiKey: secret,
         endpointUrl: defaultEndpoint(),
         remember: false,
+        rememberKey: true,
       };
     }
   }
@@ -231,20 +262,45 @@
   function persistSettings(settings) {
     if (!settings.remember) {
       window.localStorage.removeItem(scopedSettingsKey());
+    } else {
+      window.localStorage.setItem(
+        scopedSettingsKey(),
+        JSON.stringify({
+          provider: settings.provider,
+          modelId: settings.modelId,
+          endpointUrl: settings.endpointUrl,
+          remember: settings.remember,
+          rememberKey: settings.rememberKey,
+        }),
+      );
+    }
+    persistSecret(settings);
+    const panel = document.querySelector("[data-verified-chat-status]");
+    if (panel) {
+      const keyState = settings.apiKey
+        ? settings.rememberKey
+          ? "API key stored in this tab"
+          : "API key not stored"
+        : "No API key set";
+      panel.textContent = "Settings saved for " + settings.provider + " at " + endpointRoot() + ". " + keyState + ".";
+    }
+  }
+
+  function loadSecret() {
+    try {
+      const value = window.sessionStorage.getItem(scopedSecretKey());
+      return typeof value === "string" ? value : "";
+    } catch {
+      return "";
+    }
+  }
+
+  function persistSecret(settings) {
+    if (!settings.rememberKey || !settings.apiKey) {
+      window.sessionStorage.removeItem(scopedSecretKey());
       return;
     }
-    window.localStorage.setItem(
-      scopedSettingsKey(),
-      JSON.stringify({
-        provider: settings.provider,
-        modelId: settings.modelId,
-        apiKey: settings.apiKey,
-        endpointUrl: settings.endpointUrl,
-        remember: settings.remember,
-      }),
-    );
-    const panel = document.querySelector("[data-verified-chat-status]");
-    if (panel) panel.textContent = "Settings saved for " + settings.provider + " at " + endpointRoot();
+    window.sessionStorage.setItem(scopedSecretKey(), settings.apiKey);
   }
 
   function installOutputPanel() {

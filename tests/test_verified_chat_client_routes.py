@@ -39,6 +39,12 @@ def test_verified_chat_submit_uses_session_authorization_and_scoped_storage() ->
     assert payload["mounted"] is True
     assert payload["upstream_init"]["headers"]["Authorization"] == "Bearer token-123"
     assert payload["storage_key"] == "truthAiVerifiedChatLatest:user_example.com"
+    assert payload["secret_key"] == "truthAiVerifiedChatSecret:user_example.com"
+    assert payload["secret_writes"][0]["value"] == "legacy-local-key"
+    assert payload["settings_value"] == (
+        '{"provider":"local","modelId":"truth-ai-local-adapter",'
+        '"endpointUrl":"/api/verified-chat","remember":true,"rememberKey":true}'
+    )
 
 
 def invoke_client(
@@ -101,6 +107,13 @@ global.window = {{
     localStorage: null,
   }},
   localStorage: {{
+    getItem() {{
+      return null;
+    }},
+    setItem() {{}},
+    removeItem() {{}},
+  }},
+  sessionStorage: {{
     getItem() {{
       return null;
     }},
@@ -255,6 +268,7 @@ const model = {{ value: "truth-ai-local-adapter" }};
 const key = {{ value: "session-token-123" }};
 const endpoint = {{ value: "" }};
 const remember = {{ checked: true }};
+const rememberKey = {{ checked: true }};
 const shell = {{
   attrs: {{}},
   innerHTML: "",
@@ -276,6 +290,7 @@ const shell = {{
     if (selector === "[data-verified-chat-key]") return key;
     if (selector === "[data-verified-chat-endpoint]") return endpoint;
     if (selector === "[data-verified-chat-remember]") return remember;
+    if (selector === "[data-verified-chat-remember-key]") return rememberKey;
     return null;
   }},
 }};
@@ -295,11 +310,22 @@ global.window = {{
           user: {{ email: "user@example.com" }},
         }});
       }}
+      if (key === "truthAiVerifiedChatSettings:user_example.com") {{
+        return JSON.stringify({{
+          provider: "local",
+          modelId: "truth-ai-local-adapter",
+          endpointUrl: "",
+          remember: true,
+          rememberKey: true,
+          apiKey: "legacy-local-key",
+        }});
+      }}
       return null;
     }},
     setItem(key, value) {{
       if (key.startsWith("truthAiVerifiedChatSettings:")) {{
         state.settings_key = key;
+        state.settings_value = value;
       }}
       if (key.startsWith("truthAiVerifiedChatLatest:")) {{
         state.storage_key = key;
@@ -307,6 +333,27 @@ global.window = {{
       state.storage_value = value;
     }},
     removeItem() {{}},
+  }},
+    sessionStorage: {{
+      getItem(key) {{
+        if (key === "truthAiVerifiedChatSecret:user_example.com") {{
+          return "session-token-123";
+        }}
+        return null;
+      }},
+      setItem(key, value) {{
+        if (key.startsWith("truthAiVerifiedChatSecret:")) {{
+          state.secret_key = key;
+          state.secret_value = value;
+          state.secret_writes = state.secret_writes || [];
+          state.secret_writes.push({{ key, value }});
+        }}
+      }},
+    removeItem(key) {{
+      if (key.startsWith("truthAiVerifiedChatSecret:")) {{
+        state.secret_removed = key;
+      }}
+    }},
   }},
 }};
 global.location = global.window.location;
