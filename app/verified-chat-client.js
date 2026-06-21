@@ -419,13 +419,14 @@
     const runHash = escapeHtml((payload.run_hash || "").slice(0, 16));
     const requestHash = escapeHtml((payload.request_hash || "").slice(0, 16));
     const responseHash = escapeHtml((payload.response_hash || "").slice(0, 16));
+    const replayHash = escapeHtml((payload.replay_hash || "").slice(0, 16));
     const decisionBundleId = escapeHtml(
       ((payload.decision_bundle && payload.decision_bundle.id) || payload.decision_bundle_id || "").slice(0, 16),
     );
     return `
       <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;">
         <strong style="font-size:14px;color:#0f172a;">Truth AI output</strong>
-        <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#047857;background:#ecfdf5;border:1px solid #c7ead7;border-radius:7px;padding:4px 9px;">${decision} · ${runHash}</span>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#047857;background:#ecfdf5;border:1px solid #c7ead7;border-radius:7px;padding:4px 9px;">${decision} - ${runHash}</span>
       </div>
       <div style="margin-top:10px;white-space:pre-wrap;font-size:14px;line-height:1.6;color:#334155;">${output}</div>
       <div style="margin-top:14px;border-top:1px solid #e6ecf4;padding-top:12px;">
@@ -442,6 +443,10 @@
           <div style="padding:10px 12px;border:1px solid #e6ecf4;border-radius:10px;background:#fff;">
             <div style="font-size:10px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#64748b;">Decision bundle</div>
             <div style="margin-top:4px;font-family:'IBM Plex Mono',monospace;font-size:12px;color:#0f172a;word-break:break-all;">${decisionBundleId || "Unavailable"}</div>
+          </div>
+          <div style="padding:10px 12px;border:1px solid #e6ecf4;border-radius:10px;background:#fff;">
+            <div style="font-size:10px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#64748b;">Replay hash</div>
+            <div style="margin-top:4px;font-family:'IBM Plex Mono',monospace;font-size:12px;color:#0f172a;word-break:break-all;">${replayHash || "Unavailable"}</div>
           </div>
           <div style="padding:10px 12px;border:1px solid #e6ecf4;border-radius:10px;background:#fff;">
             <div style="font-size:10px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#64748b;">Run hash</div>

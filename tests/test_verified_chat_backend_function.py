@@ -37,6 +37,7 @@ def test_verified_chat_backend_run_and_latest_round_trip(tmp_path: Path) -> None
     assert latest_payload["status"] == 200
     assert latest_payload["json"]["run_hash"] == run_payload["json"]["run_hash"]
     assert latest_payload["json"]["response_hash"] == run_payload["json"]["response_hash"]
+    assert latest_payload["json"]["replay_hash"] == run_payload["json"]["replay_hash"]
     assert (
         latest_payload["json"]["decision_bundle_id"] == run_payload["json"]["decision_bundle"]["id"]
     )

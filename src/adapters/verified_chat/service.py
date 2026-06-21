@@ -78,6 +78,7 @@ class VerifiedChatRunResponse(StrictBaseModel):
     request_hash: str
     response_hash: str
     run_hash: str
+    replay_hash: str
     decision: Decision
     cleaned_output: str
     decision_bundle: DecisionBundle
@@ -90,6 +91,7 @@ class VerifiedChatLatestResponse(StrictBaseModel):
     request_hash: str
     response_hash: str | None = None
     run_hash: str
+    replay_hash: str | None = None
     decision: Decision
     decision_bundle_id: str | None = None
     cleaned_output: str
@@ -181,6 +183,7 @@ class VerifiedChatService:
             request_hash=response.request_hash,
             response_hash=response.response_hash,
             run_hash=response.run_hash,
+            replay_hash=response.replay_hash,
             decision=response.decision,
             decision_bundle_id=response.decision_bundle.id,
             cleaned_output=response.cleaned_output,
@@ -291,6 +294,7 @@ def _response_from_pipeline(pipeline: VerifiedChatPipelineResult) -> VerifiedCha
         request_hash=pipeline.run.request_hash,
         response_hash=pipeline.run.model_response.response_hash,
         run_hash=pipeline.run.run_hash,
+        replay_hash=pipeline.run.replay_inputs.replay_hash,
         decision=pipeline.run.replay_inputs.decision_bundle.decision,
         cleaned_output=pipeline.run.cleaned_output,
         decision_bundle=pipeline.run.replay_inputs.decision_bundle,
@@ -314,6 +318,7 @@ def _response_from_archive_record(record: VerifiedChatArchiveRecord) -> Verified
         request_hash=record.request_hash,
         response_hash=run.model_response.response_hash,
         run_hash=record.run_hash,
+        replay_hash=run.replay_inputs.replay_hash,
         decision=record.decision,
         decision_bundle_id=run.replay_inputs.decision_bundle.id,
         cleaned_output=record.cleaned_output,
