@@ -13,9 +13,9 @@ def test_load_config_falls_back_to_current_origin_when_public_config_is_unavaila
 
     assert payload["config"]["ready"] is False
     assert payload["config"]["siteOrigin"] == "http://127.0.0.1:4174"
-    assert (
-        payload["config_banner"]
-        == "Supabase config unavailable in this environment. Add the env vars to enable login."
+    assert payload["config_banner"] == (
+        "Authentication settings are unavailable in this environment. Add the "
+        "environment variables to enable login."
     )
 
 

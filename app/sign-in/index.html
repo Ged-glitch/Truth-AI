@@ -6,7 +6,7 @@
     <title>Sign In | Truth-AI</title>
     <meta
       name="description"
-      content="Sign in to Truth-AI with Supabase-backed authentication."
+      content="Sign in to Truth-AI with workspace authentication."
     />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -412,7 +412,7 @@
           </div>
           <div class="brand-title">
             <strong>Truth-AI</strong>
-            <span>Supabase sign-in</span>
+            <span>Sign in</span>
           </div>
         </div>
         <a class="ghost-link" id="back-to-app" href="/app/overview">Back to app</a>
@@ -425,9 +425,9 @@
             <h1 class="headline">Sign in to your verified workspace.</h1>
             <p class="lede">
               Keep authenticated access separate from the deterministic kernel.
-              Supabase handles login, session storage and workspace membership,
-              while Truth-AI keeps verification, replay and evidence handling in
-              the product layer.
+              The authentication layer handles login, session storage and
+              workspace membership, while Truth-AI keeps verification, replay
+              and evidence handling in the product layer.
             </p>
             <ul class="bullets">
               <li>Email and password sign in</li>
@@ -436,22 +436,22 @@
             </ul>
           </div>
           <p class="small-note">
-            Set `SUPABASE_URL` and `SUPABASE_ANON_KEY` in `.env.local` and in
-            Vercel. The anon key is public and can be used in the browser; the
-            service role key must stay server-side.
+            Set the required authentication environment variables in
+            `.env.local` and in Vercel. Public browser credentials can be used
+            client-side; secret keys must stay server-side.
           </p>
         </section>
 
         <section class="panel" aria-labelledby="auth-title">
           <h2 id="auth-title" class="card-title">Account access</h2>
           <p class="card-copy">
-            Sign in with the email address linked to your Supabase project. If
-            you need a new account, the form can create one on the same project
-            without exposing any secret key in the frontend.
+            Sign in with the email address linked to your workspace. If you
+            need a new account, the form can create one without exposing any
+            secret key in the frontend.
           </p>
 
           <div id="config-banner" class="banner">
-            Loading Supabase configuration...
+            Loading authentication settings...
           </div>
 
           <form id="auth-form">

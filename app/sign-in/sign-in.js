@@ -20,12 +20,9 @@ async function boot() {
   state.config = config;
 
   if (config.ready) {
-    setStatus("Supabase configuration loaded.", "success");
+    setStatus("Authentication settings loaded.", "success");
   } else {
-    setStatus(
-      "Set SUPABASE_URL and SUPABASE_ANON_KEY in .env.local or Vercel to enable login.",
-      "error",
-    );
+    setStatus("Set the required environment variables to enable login.", "error");
   }
 
   await restoreSession();
@@ -75,8 +72,8 @@ async function loadConfig() {
       siteOrigin: String(payload.siteOrigin || fallbackSiteOrigin),
     };
     elements.configBanner.textContent = config.ready
-      ? "Supabase is configured for this deployment."
-      : "Supabase is not configured yet. Add the env vars first.";
+      ? "Authentication is configured for this deployment."
+      : "Authentication is not configured yet. Add the environment variables first.";
     return config;
   } catch {
     const config = {
@@ -86,7 +83,7 @@ async function loadConfig() {
       siteOrigin: fallbackSiteOrigin,
     };
     elements.configBanner.textContent =
-      "Supabase config unavailable in this environment. Add the env vars to enable login.";
+      "Authentication settings are unavailable in this environment. Add the environment variables to enable login.";
     return config;
   }
 }
@@ -212,7 +209,7 @@ function resolveAuthError(payload, status) {
 
 function requireConfig() {
   if (!state.config?.ready) {
-    throw new Error("Supabase is not configured yet.");
+    throw new Error("Authentication is not configured yet.");
   }
   return state.config;
 }

@@ -17,6 +17,7 @@ from adapters.verified_chat.contracts import (
     ModelSettings,
     ProviderKind,
     VerifiedChatRequest,
+    VerifiedChatRun,
 )
 from adapters.verified_chat.extraction import extract_model_response_pack
 from adapters.verified_chat.llm import LLMAdapterError, adapter_for_provider
@@ -87,8 +88,10 @@ class VerifiedChatLatestResponse(StrictBaseModel):
     """Latest successful adapter run recorded under the store root."""
 
     request_hash: str
+    response_hash: str | None = None
     run_hash: str
     decision: Decision
+    decision_bundle_id: str | None = None
     cleaned_output: str
 
 
@@ -176,8 +179,10 @@ class VerifiedChatService:
         self.config.store_root.mkdir(parents=True, exist_ok=True)
         latest = VerifiedChatLatestResponse(
             request_hash=response.request_hash,
+            response_hash=response.response_hash,
             run_hash=response.run_hash,
             decision=response.decision,
+            decision_bundle_id=response.decision_bundle.id,
             cleaned_output=response.cleaned_output,
         )
         self._latest_path().write_text(canonical_text(latest) + "\n", encoding="utf-8")
@@ -304,9 +309,12 @@ def _artefact_paths(paths: VerifiedChatArtifactPaths) -> dict[str, str]:
 
 
 def _response_from_archive_record(record: VerifiedChatArchiveRecord) -> VerifiedChatLatestResponse:
+    run = VerifiedChatRun.model_validate_json(record.run_json)
     return VerifiedChatLatestResponse(
         request_hash=record.request_hash,
+        response_hash=run.model_response.response_hash,
         run_hash=record.run_hash,
         decision=record.decision,
+        decision_bundle_id=run.replay_inputs.decision_bundle.id,
         cleaned_output=record.cleaned_output,
     )
