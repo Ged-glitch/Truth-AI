@@ -65,6 +65,12 @@ Run the verified-chat adapter service for the console input and output pages:
 uv run truth-verified-chat --store-root adapters/verified-chat --rulepack rulepacks/strict-default/rulepack.json --host 127.0.0.1 --port 8010
 ```
 
+If you are using `make`, the same adapter service is available as:
+
+```bash
+make adapter
+```
+
 The adapter service keeps live model calls outside `src/truthkernel/`, writes
 frozen request, response, extraction and run artefacts under the store root, and
 serves `/verified-chat/run` plus `/verified-chat/latest` for the app UI.
