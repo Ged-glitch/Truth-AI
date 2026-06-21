@@ -47,6 +47,18 @@ def test_verified_chat_submit_uses_session_authorization_and_scoped_storage() ->
     )
 
 
+def test_verified_chat_connections_panel_mounts_and_keeps_key_in_session_storage() -> None:
+    payload = invoke_connections_client("/app/connections")
+
+    assert payload["mounted"] is True
+    assert payload["secret_key"] == "truthAiVerifiedChatSecret:user_example.com"
+    assert payload["secret_value"] == "gemini-secret-123"
+    assert payload["settings_value"] == (
+        '{"provider":"gemini","modelId":"gemini-2.5-flash",'
+        '"endpointUrl":"http://127.0.0.1:8010","remember":true,"rememberKey":true}'
+    )
+
+
 def invoke_client(
     pathname: str,
     *,
@@ -432,6 +444,198 @@ state.interval();
   }});
   if (maybePromise && typeof maybePromise.then === "function") {{
     await maybePromise;
+  }}
+  await Promise.resolve();
+  process.stdout.write(JSON.stringify(state));
+}})();
+"""
+    completed = subprocess.run(
+        ["node", "-e", script],
+        cwd=ROOT,
+        check=True,
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+    )
+    return json.loads(completed.stdout)
+
+
+def invoke_connections_client(pathname: str) -> dict[str, object]:
+    script = f"""
+const fs = require("fs");
+const source = fs.readFileSync({json.dumps(CLIENT.as_posix())}, "utf8");
+const state = {{}};
+const provider = {{ value: "gemini" }};
+const model = {{ value: "gemini-2.5-flash" }};
+const key = {{ value: "gemini-secret-123" }};
+const endpoint = {{ value: "" }};
+const remember = {{ checked: true }};
+const rememberKey = {{ checked: true }};
+const shell = {{
+  querySelector(selector) {{
+    if (selector === "div:last-child") return content;
+    if (selector === "[data-verified-chat-provider]") return provider;
+    if (selector === "[data-verified-chat-model]") return model;
+    if (selector === "[data-verified-chat-key]") return key;
+    if (selector === "[data-verified-chat-endpoint]") return endpoint;
+    if (selector === "[data-verified-chat-remember]") return remember;
+    if (selector === "[data-verified-chat-remember-key]") return rememberKey;
+    return null;
+  }},
+}};
+const content = {{
+  prepend(node) {{
+    state.prepended = state.prepended || [];
+    state.prepended.unshift(node);
+    state.mounted = true;
+    if (node.getAttribute && node.getAttribute("data-verified-connection-panel") !== null) {{
+      state.panel = node;
+    }}
+    if (node.getAttribute && node.getAttribute("data-verified-chat-status") !== null) {{
+      state.status = node;
+    }}
+  }},
+}};
+const screen = {{
+  getAttribute(name) {{
+    if (name === "data-screen-label") return "App · Connections";
+    return null;
+  }},
+  querySelector(selector) {{
+    if (selector === ".ta-shell") return shell;
+    return null;
+  }},
+}};
+const placeholder = {{
+  textContent: "",
+  parentElement: null,
+}};
+global.window = {{
+  location: {{
+    pathname: {json.dumps(pathname)},
+    hostname: "127.0.0.1",
+  }},
+  localStorage: {{
+    getItem(key) {{
+      if (key === "truthai.supabase.session") {{
+        return JSON.stringify({{
+          access_token: "token-123",
+          user: {{ email: "user@example.com" }},
+        }});
+      }}
+      return null;
+    }},
+    setItem(key, value) {{
+      if (key.startsWith("truthAiVerifiedChatSettings:")) {{
+        state.settings_key = key;
+        state.settings_value = value;
+      }}
+      if (key.startsWith("truthAiVerifiedChatLatest:")) {{
+        state.storage_key = key;
+      }}
+    }},
+    removeItem() {{}},
+  }},
+  sessionStorage: {{
+    getItem() {{
+      return null;
+    }},
+    setItem(key, value) {{
+      if (key.startsWith("truthAiVerifiedChatSecret:")) {{
+        state.secret_key = key;
+        state.secret_value = value;
+      }}
+    }},
+    removeItem() {{}},
+  }},
+}};
+global.location = global.window.location;
+global.document = {{
+  querySelectorAll(selector) {{
+    if (selector === "[data-screen-label]") return [screen];
+    if (selector === "span") return [placeholder];
+    if (selector === "[data-verified-connection-panel]" && state.panel) return [state.panel];
+    if (selector === "[data-verified-chat-status]" && state.status) return [state.status];
+    return [];
+  }},
+  querySelector(selector) {{
+    if (selector === "[data-screen-label]") return screen;
+    if (selector === "[data-verified-connection-panel]" && state.panel) return state.panel;
+    if (selector === "[data-verified-chat-status]" && state.status) return state.status;
+    return null;
+  }},
+  addEventListener(type, handler) {{
+    state.handlers = state.handlers || {{}};
+    state.handlers[type] = state.handlers[type] || [];
+    state.handlers[type].push(handler);
+  }},
+  createElement() {{
+    return {{
+      attrs: {{}},
+      setAttribute(name, value) {{
+        this.attrs[name] = value;
+        if (name === "data-verified-connection-panel") {{
+          state.mounted = true;
+        }}
+      }},
+      getAttribute(name) {{
+        return this.attrs[name] ?? null;
+      }},
+      style: {{}},
+      textContent: "",
+      innerHTML: "",
+      querySelector(selector) {{
+        if (selector === "[data-verified-chat-provider]") return provider;
+        if (selector === "[data-verified-chat-model]") return model;
+        if (selector === "[data-verified-chat-key]") return key;
+        if (selector === "[data-verified-chat-endpoint]") return endpoint;
+        if (selector === "[data-verified-chat-remember]") return remember;
+        if (selector === "[data-verified-chat-remember-key]") return rememberKey;
+        return null;
+      }},
+    }};
+  }},
+}};
+global.setInterval = (fn) => {{
+  state.interval = fn;
+  return 1;
+}};
+global.clearInterval = () => {{}};
+global.fetch = async () => {{
+  throw new Error("fetch should not be called");
+}};
+global.console = {{
+  error() {{}},
+}};
+eval(source);
+state.interval();
+(async () => {{
+  if (state.panel) {{
+    state.panel.querySelector("[data-verified-chat-provider]").value = "gemini";
+    state.panel.querySelector("[data-verified-chat-model]").value = "gemini-2.5-flash";
+    state.panel.querySelector("[data-verified-chat-key]").value = "gemini-secret-123";
+    state.panel.querySelector("[data-verified-chat-endpoint]").value = "http://127.0.0.1:8010";
+    state.panel.querySelector("[data-verified-chat-remember]").checked = true;
+    state.panel.querySelector("[data-verified-chat-remember-key]").checked = true;
+  }}
+  const saveTarget = {{
+    closest(selector) {{
+      if (selector === "[data-verified-chat-save]") return {{
+        closest(innerSelector) {{
+          if (innerSelector === "[data-verified-chat-form]") return state.panel;
+          return null;
+        }},
+      }};
+      return null;
+    }},
+  }};
+  for (const handler of state.handlers?.click || []) {{
+    const maybePromise = handler({{
+      target: saveTarget,
+    }});
+    if (maybePromise && typeof maybePromise.then === "function") {{
+      await maybePromise;
+    }}
   }}
   await Promise.resolve();
   process.stdout.write(JSON.stringify(state));

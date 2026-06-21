@@ -14,6 +14,11 @@
     return route === "chat" || route === "assistant";
   }
 
+  function isConnectionsRoute() {
+    const route = routeKey();
+    return route === "connections" || route === "settings";
+  }
+
   function endpointRoot() {
     const settings = loadSettings();
     return settings.endpointUrl || defaultEndpoint();
@@ -81,7 +86,7 @@
     const shell = placeholder.parentElement;
     shell.setAttribute("data-verified-chat-form", "");
     shell.innerHTML = `
-      <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:12px;">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-bottom:12px;">
         <label style="display:flex;flex-direction:column;gap:6px;font-size:11px;font-family:'IBM Plex Mono',monospace;color:#64748b;text-transform:uppercase;letter-spacing:0.08em;">
           Provider
           <select data-verified-chat-provider style="height:38px;border:1px solid #d6e0ee;border-radius:9px;background:#fff;padding:0 10px;font-family:'IBM Plex Sans',system-ui,sans-serif;font-size:13px;color:#0f172a;">
@@ -126,6 +131,77 @@
     panel.textContent = "Adapter ready at " + endpointRoot();
     shell.parentElement.appendChild(panel);
     hydrateSettings(shell);
+  }
+
+  function installConnectionsPanel() {
+    if (!isConnectionsRoute() || document.querySelector("[data-verified-connection-panel]")) return;
+    const screen = Array.from(document.querySelectorAll("[data-screen-label]")).find((element) => {
+      const label = String(element.getAttribute("data-screen-label") || "").toLowerCase();
+      return label.includes("connections") || label.includes("settings");
+    });
+    if (!screen) return;
+    const shell = screen.querySelector(".ta-shell");
+    const content = shell ? shell.querySelector("div:last-child") : null;
+    if (!content) return;
+
+    const panel = document.createElement("div");
+    panel.setAttribute("data-verified-connection-panel", "");
+    panel.setAttribute("data-verified-chat-form", "");
+    panel.style.cssText =
+      "width:100%;background:#fff;border:1px solid #dbe4ef;border-radius:15px;padding:18px;box-shadow:0 1px 2px rgba(15,23,42,0.04),0 18px 40px -28px rgba(15,23,42,0.24);margin:0 0 16px 0;";
+    panel.innerHTML = `
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:14px;">
+        <div>
+          <div style="font-size:18px;font-weight:700;color:#0f172a;letter-spacing:-0.01em;">Provider connections</div>
+          <div style="margin-top:4px;font-size:12.5px;line-height:1.5;color:#64748b;max-width:620px;">Model routing lives here. Keys stay out of the kernel and remain in this browser tab unless you explicitly remember them on this device.</div>
+        </div>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:600;letter-spacing:0.08em;color:#047857;background:#ecfdf5;border:1px solid #c7ead7;border-radius:9px;padding:8px 10px;white-space:nowrap;">TAB-LOCAL</span>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-bottom:12px;">
+        <label style="display:flex;flex-direction:column;gap:6px;font-size:11px;font-family:'IBM Plex Mono',monospace;color:#64748b;text-transform:uppercase;letter-spacing:0.08em;">
+          Provider
+          <select data-verified-chat-provider style="height:38px;border:1px solid #d6e0ee;border-radius:9px;background:#fff;padding:0 10px;font-family:'IBM Plex Sans',system-ui,sans-serif;font-size:13px;color:#0f172a;">
+            <option value="local">Local</option>
+            <option value="gemini">Gemini</option>
+            <option value="user-owned">Custom endpoint</option>
+          </select>
+        </label>
+        <label style="display:flex;flex-direction:column;gap:6px;font-size:11px;font-family:'IBM Plex Mono',monospace;color:#64748b;text-transform:uppercase;letter-spacing:0.08em;">
+          Model
+          <input data-verified-chat-model type="text" placeholder="truth-ai-local-adapter" style="height:38px;border:1px solid #d6e0ee;border-radius:9px;background:#fff;padding:0 10px;font-family:'IBM Plex Sans',system-ui,sans-serif;font-size:13px;color:#0f172a;" />
+        </label>
+        <label style="display:flex;flex-direction:column;gap:6px;font-size:11px;font-family:'IBM Plex Mono',monospace;color:#64748b;text-transform:uppercase;letter-spacing:0.08em;">
+          API key
+          <input data-verified-chat-key type="password" placeholder="Optional" style="height:38px;border:1px solid #d6e0ee;border-radius:9px;background:#fff;padding:0 10px;font-family:'IBM Plex Sans',system-ui,sans-serif;font-size:13px;color:#0f172a;" />
+        </label>
+        <label style="display:flex;flex-direction:column;gap:6px;font-size:11px;font-family:'IBM Plex Mono',monospace;color:#64748b;text-transform:uppercase;letter-spacing:0.08em;">
+          Endpoint
+          <input data-verified-chat-endpoint type="url" placeholder="http://127.0.0.1:8010" style="height:38px;border:1px solid #d6e0ee;border-radius:9px;background:#fff;padding:0 10px;font-family:'IBM Plex Sans',system-ui,sans-serif;font-size:13px;color:#0f172a;" />
+        </label>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+        <label style="display:flex;align-items:center;gap:8px;font-size:13px;color:#475569;">
+          <input data-verified-chat-remember type="checkbox" />
+          Remember settings on this device
+        </label>
+        <label style="display:flex;align-items:center;gap:8px;font-size:13px;color:#475569;">
+          <input data-verified-chat-remember-key type="checkbox" checked />
+          Keep API key in this tab only
+        </label>
+        <button type="button" data-verified-chat-save title="Save settings" style="height:38px;border:1px solid #d6e0ee;border-radius:9px;background:#fff;color:#0f172a;padding:0 14px;font-size:13px;font-weight:600;cursor:pointer;">Save</button>
+      </div>
+    `;
+    const status = document.createElement("div");
+    status.setAttribute("data-verified-chat-status", "");
+    status.style.cssText =
+      "margin-top:10px;border:1px solid #e0e7f0;border-radius:11px;background:#f8fafd;padding:12px 14px;font-size:13px;line-height:1.5;color:#64748b;";
+    const current = loadSettings();
+    status.textContent = current.apiKey
+      ? `Provider ready at ${endpointRoot()}. API key stored in this tab.`
+      : `Provider ready at ${endpointRoot()}. No API key stored.`;
+    content.prepend(status);
+    content.prepend(panel);
+    hydrateSettings(panel);
   }
 
   let delegatedSubmitInstalled = false;
@@ -379,12 +455,14 @@
     tries += 1;
     installDelegatedSubmit();
     installChatComposer();
+    installConnectionsPanel();
     installOutputPanel();
     if (tries > 80) clearInterval(timer);
   }, 75);
   document.addEventListener("DOMContentLoaded", () => {
     installDelegatedSubmit();
     installChatComposer();
+    installConnectionsPanel();
     installOutputPanel();
   });
 })();
