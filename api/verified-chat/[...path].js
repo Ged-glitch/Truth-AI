@@ -11,7 +11,7 @@ module.exports = async function handler(req, res) {
     return;
   }
 
-  const parts = Array.isArray(req.query.path) ? req.query.path : [];
+  const parts = normalizePathParts(req.query.path);
   const suffix = parts.join("/");
   if (suffix !== "run" && suffix !== "latest") {
     res.status(404).json({ error: `unknown endpoint: ${suffix}` });
@@ -48,6 +48,16 @@ function resolveBackendUrl(req) {
     return resolveProductionBackendUrl(req);
   }
   return LOCAL_BACKEND_URL;
+}
+
+function normalizePathParts(path) {
+  if (Array.isArray(path)) {
+    return path;
+  }
+  if (typeof path === "string" && path.length > 0) {
+    return [path];
+  }
+  return [];
 }
 
 function resolveProductionBackendUrl(req) {

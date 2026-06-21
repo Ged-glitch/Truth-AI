@@ -58,6 +58,21 @@ def test_verified_chat_proxy_uses_deployed_backend_on_vercel_when_unset() -> Non
     )
 
 
+def test_verified_chat_proxy_accepts_string_catch_all_path() -> None:
+    payload = invoke_route(
+        env_backend="https://backend.example.test/api/verified-chat-backend",
+        method="GET",
+        suffix="latest",
+        query_path_as_string=True,
+    )
+
+    assert payload["status"] == 200
+    assert (
+        payload["upstream_url"]
+        == "https://backend.example.test/api/verified-chat-backend?path=latest"
+    )
+
+
 def test_verified_chat_proxy_rejects_unknown_suffix() -> None:
     payload = invoke_route(
         env_backend="https://backend.example.test/api/verified-chat-backend",
@@ -82,7 +97,11 @@ def invoke_route(
     host: str = "localhost",
     forwarded_proto: str = "http",
     auth_header: str | None = None,
+    query_path_as_string: bool = False,
 ) -> dict[str, object]:
+    query_path: object = (
+        suffix if query_path_as_string else [part for part in suffix.split("/") if part]
+    )
     script = f"""
 if ({json.dumps(env_backend)} === null) {{
   delete process.env.VERIFIED_CHAT_BACKEND_URL;
@@ -141,7 +160,7 @@ const res = {{
 }};
 const req = {{
   method: {json.dumps(method)},
-  query: {{ path: {json.dumps([part for part in suffix.split("/") if part])} }},
+  query: {{ path: {json.dumps(query_path)} }},
   body: {json.dumps(body)},
   headers: reqHeaders,
 }};
