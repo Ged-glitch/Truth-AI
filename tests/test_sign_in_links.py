@@ -40,6 +40,8 @@ def test_truth_studio_hides_mobile_preview_on_desktop() -> None:
     html = TRUTH_STUDIO.read_text(encoding="utf-8")
     assert "#tks-mobile { display: none; }" in html
     assert "#tks-desktop { display: none !important; }" in html
+    assert ">Desktop<" not in html
+    assert ">Mobile<" not in html
 
 
 def test_route_loader_injects_auth_client() -> None:
