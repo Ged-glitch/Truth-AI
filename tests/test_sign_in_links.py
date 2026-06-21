@@ -36,6 +36,12 @@ def test_truth_studio_header_exposes_auth_controls() -> None:
     assert "/app/auth-client.js" in html
 
 
+def test_truth_studio_hides_mobile_preview_on_desktop() -> None:
+    html = TRUTH_STUDIO.read_text(encoding="utf-8")
+    assert "#tks-mobile { display: none; }" in html
+    assert "#tks-desktop { display: none !important; }" in html
+
+
 def test_route_loader_injects_auth_client() -> None:
     source = APP_ROUTE.read_text(encoding="utf-8")
     assert "/app/auth-client.js" in source

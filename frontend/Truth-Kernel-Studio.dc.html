@@ -14,12 +14,14 @@
 <style>
   *, *::before, *::after { box-sizing: border-box; }
   body { margin: 0; }
+  #tks-mobile { display: none; }
   @media (max-width: 1080px) {
     #tks-stage { flex-direction: column !important; align-items: center !important; }
     #tks-desktop { width: 100% !important; max-width: 760px !important; }
   }
   @media (max-width: 760px) {
     #tks-desktop { display: none !important; }
+    #tks-mobile { display: block !important; }
     #tks-stage { margin-top: 28px !important; gap: 22px !important; }
     #tks-mobile-label { margin-bottom: 8px !important; }
     #tks-mobile-shell { transform: scale(0.96); transform-origin: top center; }
@@ -98,7 +100,7 @@
         </div>
       </div>
 
-      <div style="flex-shrink:0;">
+      <div id="tks-mobile" style="flex-shrink:0;">
         <div id="tks-mobile-label" style="display:flex;align-items:center;gap:10px;margin-bottom:13px;justify-content:center;">
           <span style="width:30px;height:30px;border-radius:8px;background:#fff;border:1px solid #dde5ef;display:flex;align-items:center;justify-content:center;color:#2563eb;box-shadow:0 1px 2px rgba(15,23,42,0.04);"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2" width="12" height="20" rx="3"/><path d="M11 18h2"/></svg></span>
           <div>
