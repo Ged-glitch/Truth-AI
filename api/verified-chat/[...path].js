@@ -11,8 +11,7 @@ module.exports = async function handler(req, res) {
     return;
   }
 
-  const parts = normalizePathParts(req.query.path);
-  const suffix = parts.join("/");
+  const suffix = resolveSuffix(req);
   if (suffix !== "run" && suffix !== "latest") {
     res.status(404).json({ error: `unknown endpoint: ${suffix}` });
     return;
@@ -58,6 +57,16 @@ function normalizePathParts(path) {
     return [path];
   }
   return [];
+}
+
+function resolveSuffix(req) {
+  const parts = normalizePathParts(req.query?.path);
+  if (parts.length > 0) {
+    return parts.join("/");
+  }
+
+  const pathname = new URL(req.url || "", "https://truthai.local").pathname;
+  return pathname.replace(/^\/api\/verified-chat\/?/, "").replace(/\/$/, "");
 }
 
 function resolveProductionBackendUrl(req) {
