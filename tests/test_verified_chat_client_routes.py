@@ -43,8 +43,13 @@ def test_verified_chat_submit_uses_session_authorization_and_scoped_storage() ->
     assert payload["secret_writes"][0]["value"] == "legacy-local-key"
     assert payload["settings_value"] == (
         '{"provider":"local","modelId":"truth-ai-local-adapter",'
+        '"referenceUrl":"https://example.com/bs7671",'
         '"endpointUrl":"/api/verified-chat","remember":true,"rememberKey":true}'
     )
+    assert payload["upstream_body"]["references"][0]["kind"] == "retrieval"
+    assert payload["upstream_body"]["references"][0]["source_uri"] == "https://example.com/bs7671"
+    assert payload["upstream_body"]["references"][0]["label"] == "BS 7671"
+    assert payload["upstream_body"]["references"][0]["content_hash"]
 
 
 def test_verified_chat_connections_panel_mounts_and_keeps_key_in_session_storage() -> None:
@@ -55,6 +60,7 @@ def test_verified_chat_connections_panel_mounts_and_keeps_key_in_session_storage
     assert payload["secret_value"] == "gemini-secret-123"
     assert payload["settings_value"] == (
         '{"provider":"gemini","modelId":"gemini-2.5-flash",'
+        '"referenceUrl":"https://example.com/bs7671",'
         '"endpointUrl":"http://127.0.0.1:8010","remember":true,"rememberKey":true}'
     )
 
@@ -279,6 +285,12 @@ const provider = {{ value: "local" }};
 const model = {{ value: "truth-ai-local-adapter" }};
 const key = {{ value: "session-token-123" }};
 const endpoint = {{ value: "" }};
+const reference = {{
+  value: "https://example.com/bs7671",
+  disabled: false,
+  innerHTML: "",
+  options: [],
+}};
 const remember = {{ checked: true }};
 const rememberKey = {{ checked: true }};
 const shell = {{
@@ -298,6 +310,7 @@ const shell = {{
     if (selector === "[data-verified-chat-input]") return input;
     if (selector === "[data-verified-chat-submit]") return submit;
     if (selector === "[data-verified-chat-provider]") return provider;
+    if (selector === "[data-verified-chat-reference]") return reference;
     if (selector === "[data-verified-chat-model]") return model;
     if (selector === "[data-verified-chat-key]") return key;
     if (selector === "[data-verified-chat-endpoint]") return endpoint;
@@ -325,12 +338,23 @@ global.window = {{
       if (key === "truthAiVerifiedChatSettings:user_example.com") {{
         return JSON.stringify({{
           provider: "local",
+          referenceUrl: "https://example.com/bs7671",
           modelId: "truth-ai-local-adapter",
           endpointUrl: "",
           remember: true,
           rememberKey: true,
           apiKey: "legacy-local-key",
         }});
+      }}
+      if (key === "truthAiStandardImports") {{
+        return JSON.stringify([
+          {{
+            title: "BS 7671",
+            publisher: "BSI",
+            url: "https://example.com/bs7671",
+            access: "paid",
+          }},
+        ]);
       }}
       return null;
     }},
@@ -402,11 +426,12 @@ global.setInterval = (fn) => {{
 }};
 global.clearInterval = () => {{}};
 global.fetch = async (url, init) => {{
-  state.upstream_url = url;
-  state.upstream_init = init;
-  return {{
-    ok: true,
-    json: async () => ({{
+    state.upstream_url = url;
+    state.upstream_init = init;
+    state.upstream_body = JSON.parse(init.body);
+    return {{
+      ok: true,
+      json: async () => ({{
       cleaned_output: "Verified response",
       decision: "accept",
       run_hash: "run-1234567890abcdef",
@@ -469,12 +494,19 @@ const provider = {{ value: "gemini" }};
 const model = {{ value: "gemini-2.5-flash" }};
 const key = {{ value: "gemini-secret-123" }};
 const endpoint = {{ value: "" }};
+const reference = {{
+  value: "https://example.com/bs7671",
+  disabled: false,
+  innerHTML: "",
+  options: [],
+}};
 const remember = {{ checked: true }};
 const rememberKey = {{ checked: true }};
 const shell = {{
   querySelector(selector) {{
     if (selector === "div:last-child") return content;
     if (selector === "[data-verified-chat-provider]") return provider;
+    if (selector === "[data-verified-chat-reference]") return reference;
     if (selector === "[data-verified-chat-model]") return model;
     if (selector === "[data-verified-chat-key]") return key;
     if (selector === "[data-verified-chat-endpoint]") return endpoint;
@@ -522,6 +554,16 @@ global.window = {{
           access_token: "token-123",
           user: {{ email: "user@example.com" }},
         }});
+      }}
+      if (key === "truthAiStandardImports") {{
+        return JSON.stringify([
+          {{
+            title: "BS 7671",
+            publisher: "BSI",
+            url: "https://example.com/bs7671",
+            access: "paid",
+          }},
+        ]);
       }}
       return null;
     }},
@@ -586,6 +628,7 @@ global.document = {{
       innerHTML: "",
       querySelector(selector) {{
         if (selector === "[data-verified-chat-provider]") return provider;
+        if (selector === "[data-verified-chat-reference]") return reference;
         if (selector === "[data-verified-chat-model]") return model;
         if (selector === "[data-verified-chat-key]") return key;
         if (selector === "[data-verified-chat-endpoint]") return endpoint;

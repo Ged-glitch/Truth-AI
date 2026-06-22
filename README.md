@@ -100,6 +100,9 @@ The adapter keeps live model calls outside `src/truthkernel/`, writes frozen
 request, response, extraction and run artefacts under the store root, and only
 passes canonical artefacts into the deterministic kernel.
 
+When you import standards through the Rule Packs page, the assistant composer
+can attach one imported pack as a frozen reference in each verified-chat run.
+
 ## Supabase Auth And Persistence
 
 Sign-in lives at `/app/sign-in` and reads public Supabase config from

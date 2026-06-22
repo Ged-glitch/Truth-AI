@@ -3,6 +3,7 @@
   const storageKeyPrefix = "truthAiVerifiedChatLatest";
   const settingsKeyPrefix = "truthAiVerifiedChatSettings";
   const secretKeyPrefix = "truthAiVerifiedChatSecret";
+  const standardsImportsKey = "truthAiStandardImports";
 
   function routeKey() {
     const parts = window.location.pathname.split("/").filter(Boolean);
@@ -96,6 +97,10 @@
           </select>
         </label>
         <label style="display:flex;flex-direction:column;gap:6px;font-size:11px;font-family:'IBM Plex Mono',monospace;color:#64748b;text-transform:uppercase;letter-spacing:0.08em;">
+          Reference pack
+          <select data-verified-chat-reference style="height:38px;border:1px solid #d6e0ee;border-radius:9px;background:#fff;padding:0 10px;font-family:'IBM Plex Sans',system-ui,sans-serif;font-size:13px;color:#0f172a;"></select>
+        </label>
+        <label style="display:flex;flex-direction:column;gap:6px;font-size:11px;font-family:'IBM Plex Mono',monospace;color:#64748b;text-transform:uppercase;letter-spacing:0.08em;">
           Model
           <input data-verified-chat-model type="text" placeholder="truth-ai-local-adapter" style="height:38px;border:1px solid #d6e0ee;border-radius:9px;background:#fff;padding:0 10px;font-family:'IBM Plex Sans',system-ui,sans-serif;font-size:13px;color:#0f172a;" />
         </label>
@@ -165,6 +170,10 @@
             <option value="gemini">Gemini</option>
             <option value="user-owned">Custom endpoint</option>
           </select>
+        </label>
+        <label style="display:flex;flex-direction:column;gap:6px;font-size:11px;font-family:'IBM Plex Mono',monospace;color:#64748b;text-transform:uppercase;letter-spacing:0.08em;">
+          Reference pack
+          <select data-verified-chat-reference style="height:38px;border:1px solid #d6e0ee;border-radius:9px;background:#fff;padding:0 10px;font-family:'IBM Plex Sans',system-ui,sans-serif;font-size:13px;color:#0f172a;"></select>
         </label>
         <label style="display:flex;flex-direction:column;gap:6px;font-size:11px;font-family:'IBM Plex Mono',monospace;color:#64748b;text-transform:uppercase;letter-spacing:0.08em;">
           Model
@@ -238,6 +247,7 @@
     panel.textContent = "Calling adapter and freezing replay artefacts...";
     try {
       const settings = readSettings(shell);
+      const references = await buildReferences(settings);
       const response = await fetch(runUrl(settings.endpointUrl || defaultEndpoint()), {
         method: "POST",
         headers: { "Content-Type": "application/json", ...authHeaders() },
@@ -247,6 +257,7 @@
           model_id: settings.modelId || "truth-ai-local-adapter",
           credential_value: settings.apiKey || undefined,
           endpoint_url: settings.endpointUrl || undefined,
+          references,
           settings: { temperature: "0", top_p: "1", max_output_tokens: 1024 },
         }),
       });
@@ -265,12 +276,15 @@
   function hydrateSettings(shell) {
     const settings = loadSettings();
     const provider = shell.querySelector("[data-verified-chat-provider]");
+    const reference = shell.querySelector("[data-verified-chat-reference]");
     const model = shell.querySelector("[data-verified-chat-model]");
     const key = shell.querySelector("[data-verified-chat-key]");
     const endpointInput = shell.querySelector("[data-verified-chat-endpoint]");
     const remember = shell.querySelector("[data-verified-chat-remember]");
     const rememberKey = shell.querySelector("[data-verified-chat-remember-key]");
+    populateReferenceOptions(reference, settings.referenceUrl);
     if (provider) provider.value = settings.provider;
+    if (reference && settings.referenceUrl) reference.value = settings.referenceUrl;
     if (model) model.value = settings.modelId;
     if (key) key.value = settings.apiKey;
     if (endpointInput) endpointInput.value = settings.endpointUrl;
@@ -280,6 +294,7 @@
 
   function readSettings(shell) {
     const provider = shell.querySelector("[data-verified-chat-provider]");
+    const reference = shell.querySelector("[data-verified-chat-reference]");
     const model = shell.querySelector("[data-verified-chat-model]");
     const key = shell.querySelector("[data-verified-chat-key]");
     const endpointInput = shell.querySelector("[data-verified-chat-endpoint]");
@@ -287,6 +302,7 @@
     const rememberKey = shell.querySelector("[data-verified-chat-remember-key]");
     return {
       provider: provider ? provider.value : "local",
+      referenceUrl: reference ? reference.value.trim() : "",
       modelId: model ? model.value.trim() : "truth-ai-local-adapter",
       apiKey: key ? key.value.trim() : "",
       endpointUrl: endpointInput ? endpointInput.value.trim() : "",
@@ -307,6 +323,7 @@
           JSON.stringify({
             provider: parsed.provider || "local",
             modelId: parsed.modelId || "truth-ai-local-adapter",
+            referenceUrl: parsed.referenceUrl || firstStandardImportUrl(),
             endpointUrl: parsed.endpointUrl || defaultEndpoint(),
             remember: Boolean(parsed.remember),
             rememberKey: true,
@@ -316,6 +333,7 @@
       const secret = JSON.parse(window.sessionStorage.getItem(scopedSecretKey()) || "null");
       return {
         provider: parsed.provider || "local",
+        referenceUrl: parsed.referenceUrl || firstStandardImportUrl(),
         modelId: parsed.modelId || "truth-ai-local-adapter",
         apiKey: typeof secret === "string" ? secret : "",
         endpointUrl: parsed.endpointUrl || defaultEndpoint(),
@@ -326,6 +344,7 @@
       const secret = loadSecret();
       return {
         provider: "local",
+        referenceUrl: firstStandardImportUrl(),
         modelId: "truth-ai-local-adapter",
         apiKey: secret,
         endpointUrl: defaultEndpoint(),
@@ -341,13 +360,14 @@
     } else {
       window.localStorage.setItem(
         scopedSettingsKey(),
-        JSON.stringify({
-          provider: settings.provider,
-          modelId: settings.modelId,
-          endpointUrl: settings.endpointUrl,
-          remember: settings.remember,
-          rememberKey: settings.rememberKey,
-        }),
+          JSON.stringify({
+            provider: settings.provider,
+            modelId: settings.modelId,
+            referenceUrl: settings.referenceUrl,
+            endpointUrl: settings.endpointUrl,
+            remember: settings.remember,
+            rememberKey: settings.rememberKey,
+          }),
       );
     }
     persistSecret(settings);
@@ -377,6 +397,84 @@
       return;
     }
     window.sessionStorage.setItem(scopedSecretKey(), settings.apiKey);
+  }
+
+  function loadStandardImports() {
+    try {
+      const parsed = JSON.parse(window.localStorage.getItem(standardsImportsKey) || "[]");
+      return Array.isArray(parsed) ? parsed.filter((item) => item && typeof item === "object") : [];
+    } catch {
+      return [];
+    }
+  }
+
+  function firstStandardImportUrl() {
+    const imports = loadStandardImports();
+    for (const entry of imports) {
+      if (typeof entry.url === "string" && entry.url.trim()) {
+        return entry.url.trim();
+      }
+    }
+    return "";
+  }
+
+  function populateReferenceOptions(select, selectedUrl) {
+    if (!select) return;
+    const imports = loadStandardImports();
+    const options = ['<option value="">No standard pack selected</option>'];
+    for (const entry of imports) {
+      const title = typeof entry.title === "string" && entry.title.trim() ? entry.title.trim() : "Imported standard";
+      const url = typeof entry.url === "string" ? entry.url.trim() : "";
+      if (!url) continue;
+      options.push(`<option value="${escapeHtml(url)}">${escapeHtml(title)}</option>`);
+    }
+    select.innerHTML = options.join("");
+    if (selectedUrl) select.value = selectedUrl;
+    select.disabled = imports.length === 0;
+  }
+
+  async function buildReferences(settings) {
+    const referenceUrl = settings.referenceUrl.trim();
+    if (!referenceUrl) return [];
+    const imports = loadStandardImports();
+    const selected = imports.find((entry) => typeof entry.url === "string" && entry.url.trim() === referenceUrl);
+    if (!selected) return [];
+    const title = typeof selected.title === "string" && selected.title.trim() ? selected.title.trim() : "Imported standard";
+    const contentHash = await sha256Hex(
+      JSON.stringify({
+        title,
+        url: referenceUrl,
+        publisher: typeof selected.publisher === "string" ? selected.publisher : "",
+        access: typeof selected.access === "string" ? selected.access : "",
+      }),
+    );
+    return [
+      {
+        kind: "retrieval",
+        source_uri: referenceUrl,
+        label: title,
+        content_hash: contentHash,
+      },
+    ];
+  }
+
+  async function sha256Hex(value) {
+    const text = String(value);
+    if (globalThis.crypto && globalThis.crypto.subtle) {
+      const encoded = new TextEncoder().encode(text);
+      const digest = await globalThis.crypto.subtle.digest("SHA-256", encoded);
+      return Array.from(new Uint8Array(digest), (byte) => byte.toString(16).padStart(2, "0")).join("");
+    }
+    try {
+      const nodeCrypto = await import("node:crypto");
+      return nodeCrypto.createHash("sha256").update(text, "utf8").digest("hex");
+    } catch {
+      let hash = 0;
+      for (let index = 0; index < text.length; index += 1) {
+        hash = (hash * 33 + text.charCodeAt(index)) >>> 0;
+      }
+      return hash.toString(16).padStart(64, "0");
+    }
   }
 
   function installOutputPanel() {
